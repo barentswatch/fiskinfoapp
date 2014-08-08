@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" >
+
+    <EditText
+        android:id="@+id/LoginDialogEmailField"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="19dp"
+        android:ems="10"
+        android:hint="@string/userEmailFieldHintString"
+        android:inputType="textEmailAddress" >
+
+        <requestFocus />
+    </EditText>
+    
+    <EditText
+        android:id="@+id/loginDialogPasswordField"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/LoginDialogEmailField"
+        android:layout_below="@+id/LoginDialogEmailField"
+        android:layout_marginTop="15dp"
+        android:ems="10"
+        android:hint="@string/passwordFieldHintString"
+        android:inputType="textPassword" />
+    
+    <TextView
+        android:id="@+id/loginDialogForgottenPasswordTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/loginDialogPasswordField"
+        android:layout_below="@+id/loginDialogPasswordField"
+        android:layout_marginLeft="17dp"
+        android:text="@string/forgotPasswordTextViewString" />
+
+    <TextView
+        android:id="@+id/loginIncorrectCredentialsTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@+id/loginDialogForgottenPasswordTextView"
+        android:layout_marginTop="5dp"
+        android:text="@string/loginIncorrectCredentials"
+		android:visibility="invisible"
+        android:textColor="#d72323" />
+    
+    <Button
+        android:id="@+id/loginDialogButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/loginIncorrectCredentialsTextView"
+        android:layout_centerHorizontal="true"
+        android:text="@string/loginButtonText"
+        android:layout_marginBottom="10dp"
+        android:layout_marginTop="5dp" />
+
+
+</RelativeLayout>

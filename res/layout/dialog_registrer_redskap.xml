@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" >
+    
+    <TextView
+        android:id="@+id/exportMetadataHelpText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginTop="56dp"
+        android:gravity="center"
+        android:text="@string/map_register_popup_text" />
+    
+    <EditText
+        android:id="@+id/registerStartingCoordinatesOfObject"
+        android:layout_width="50dp"
+        android:layout_height="40dp"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@+id/exportMetadataHelpText"
+        android:layout_marginTop="33dp"
+        android:layout_toLeftOf="@+id/dialogFetchUserStartingCoordinates"
+        android:ems="10"
+        android:hint="@string/map_coordinates_start_hint"
+        android:inputType="text" >
+
+        <requestFocus />
+    </EditText>
+
+    <EditText
+        android:id="@+id/registerEndCoordinatesOfObject"
+        android:layout_width="50dp"
+        android:layout_height="40dp"
+        android:layout_alignParentLeft="true"
+        android:layout_toLeftOf="@+id/dialogFetchUserEndCoordinates"
+        android:ems="10"
+        android:layout_below="@+id/registerStartingCoordinatesOfObject"
+        android:hint="@string/map_coordinates_end_hint"
+        android:inputType="text" >
+    </EditText>
+
+    <Button
+        android:id="@+id/dialogFetchUserStartingCoordinates"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@+id/registerStartingCoordinatesOfObject"
+        android:layout_alignBaseline="@+id/registerStartingCoordinatesOfObject"
+        android:layout_alignBottom="@+id/registerStartingCoordinatesOfObject"
+        android:layout_alignParentRight="true"
+        android:textSize="17sp"
+        android:text="@string/map_grab_user_position_start" />
+
+    <Button
+        android:id="@+id/dialogFetchUserEndCoordinates"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/registerEndCoordinatesOfObject"
+        android:layout_below="@+id/dialogFetchUserStartingCoordinates"
+        android:layout_alignBottom="@+id/registerEndCoordinatesOfObject"
+        android:layout_alignParentRight="true"
+        android:textSize="17sp"
+        android:text="@string/map_grab_user_position_end" />
+
+    <Spinner
+        android:id="@+id/projectionChangingSpinner"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_marginTop="5dp"
+        android:layout_below="@+id/registerEndCoordinatesOfObject" />
+
+    <Spinner
+        android:id="@+id/registerMiscType"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@+id/projectionChangingSpinner" />
+
+    <Button
+        android:id="@+id/dialogAcceptRegistration"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignRight="@+id/registerEndCoordinatesOfObject"
+        android:layout_marginBottom="20dp"
+        android:text="@string/register" />
+
+    <Button
+        android:id="@+id/DialogCancelRegistration"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/dialogAcceptRegistration"
+        android:layout_alignBottom="@+id/dialogAcceptRegistration"
+        android:layout_alignLeft="@+id/dialogFetchUserEndCoordinates"
+        android:layout_alignParentRight="true"
+        android:text="@string/cancel" />
+
+    <TextView
+        android:id="@+id/RegisterToolInvalidInputTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/dialogAcceptRegistration"
+        android:layout_centerHorizontal="true"
+        android:visibility="invisible"
+		android:textColor="#d72323"
+        android:layout_marginBottom="14dp" />
+    
+</RelativeLayout>

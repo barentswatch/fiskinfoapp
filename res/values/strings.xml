@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- Common strings -->
+    <string name="app_name">Barentswatch FiskInfo</string>
+    <string name="action_settings">Settings</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="ok">OK</string>
+    <string name="download">Last ned</string>
+    <string name="cancel">Avbryt</string>
+    <string name="register">Registrer</string>
+    <string name="noInternetAccess">Manglende internettforbindelse</string>
+    
+    <!-- Base activity strings -->
+    <string name="title_activity_base">BaseActivity</string>
+    <string name="actionbarSpinnerMenu">Meny</string>
+
+    <!-- About dialog strings -->
+    <string name="about_page_welcome_text">Velkommen til barentswatch Fiskinfo. Denne appen er forsatt under utvikling, men støttet funksjonalitet på nåværende tidspunk 
+	    er å kunne registrer redskap i sjøen og alltid ha nyeste kart tilgjengelig for navigasjon i norske-havet.</string>
+    <string name="title_activity_about">Barentswatch FiskInfo</string>
+
+    <!-- Help activity strings -->
+    <string name="title_activity_help_activity">Barentswatch FiskInfo</string>
+    <string name="help_activity_introduction">Velkommen til gjennomgang av Barentswatch FiskInfos funksjonalitet. Du kan i menyen ovenfor velge hvilken katagori du ønsker veiledning i\n
+        Dersom dette er første gangen du bruker applikasjonen anbefaler vi at du tar en fullstendig gjennomgang av applikasjonens muligheter</string>
+
+    <!-- Login dialog strings -->
+    <string name="userEmailFieldHintString">E-postadresse</string>
+    <string name="passwordFieldHintString">Passord</string>
+    <string name="forgotPasswordTextViewString">Glemt passord?</string>
+    <string name="loginButtonText">Logg inn</string>
+    <string name="loginDialogTitle">Logg inn</string>
+    <string name="loginInvalidEmail">Ugyldig epostadresse</string>
+    <string name="loginPasswordFieldEmptyString">Passordfeltet kan ikke være tomt</string>
+    <string name="loginIncorrectCredentials">Feil brukernavn eller passord</string>
+
+    <!-- Mypage activity strings -->
+    <string name="title_activity_my_page">Min Side</string>
+    <string name="myPageRegisteredVessels">Mine registrerte fartøy</string>
+    <string name="myPageRegisteredTools">Mine registrerte redskaper</string>
+    <string name="allAvailableSubscriptions">Tilgjengelige abbonementer</string>
+    <string name="myPageMaps">Mine Kart</string>
+    <string name="myPageMyNotices">Mine varsler</string>
+    <string name="myPageAddVessel">Legg til nytt fartøy</string>
+    <string name="myPageAddTool">Legg til nytt redskap</string>
+    <string name="myPageAddMap">Legg til nytt kart</string>
+    <string name="myPageAddNotice">Legg til varsel</string>
+    <string name="myPageNoRegisteredVessels">Du har ingen registrerte fartøy. Klikk her for å legge til</string>
+    <string name="myPageNoRegisteredTools">Du har ingen registrerte redskaper. Klikk her for å legge til</string>
+    <string name="myPageNoRegisteredMaps">Du har ingen registrerte kart. Klikk her for å legge til</string>
+    <string name="myPageNoRegisteredNotices">Du har ingen registrerte varsler. Klikk her for å legge til</string>
+    <string name="myPageGeoDataService">geodataservice</string>
+
+    <!-- Map activity strings -->
+    <string name="title_activity_map">MapActivity</string>
+    <string name="help_activity_button_text">Start veiledning</string>
+    <string name="map_register_misc_button">Registrer redskap</string>
+    <string name="map_zoom_button">Zoom til min posisjon</string>
+    <string name="map_update_button">Oppdater kartet</string>
+    <string name="map_export_metadata">Eksporter data</string>
+    <string name="map_register_popup_text">Venligst oppgi koordinatene, og hvilket redskap som ble benyttet</string>
+    <string name="map_symbol_explanation">Tegnforklaring</string>
+    <string name="map_symbol_explanation_red"> - Long line</string>
+    <string name="map_symbol_explanation_blue"> - Nets</string>
+    <string name="map_symbol_explanation_orange"> - Crab pot</string>
+    <string name="map_symbol_explanation_brown"> - Seismic</string>
+    <string name="map_symbol_explanation_darkpurple"> - Danish - Purse-Seine</string>
+    <string name="map_symbol_explanation_green"> - Sensor / Cable</string>
+    <string name="map_symbol_explanation_pink"> - Mooring System</string>
+    <string name="map_symbol_explanation_black"> - Unknown</string>
+    <string name="map_export_metadata_title">Last ned kartlag</string>
+    <string name="map_export_metadata_help_text">Her kan du laste ned forskjellige kartlag i enten shape- eller OleX format. Velg et kartlag og klikk last ned, deretter lagres kartet på din mobil i mappen FiskInfo/Kartlag</string>
+    <string name="map_ocean_currents_title">Se Havstrømmene ved min posisjon</string>
+	<string name="map_set_proximity_alert_title">Sett varsling</string>
+	<string name="map_proximity_alert_title">Nærhetsvarsel</string>
+		
+    <!-- Register redskap dialog -->
+    <string name="map_coordinates_start_hint">Start-koordinater</string>
+    <string name="map_coordinates_end_hint">Slutt-koordinater</string>
+    <string name="map_grab_user_position_start">Bruk min posisjon</string>
+    <string name="map_grab_user_position_end">Bruk min posisjon</string>
+    <string name="map_registration_popup_title">Registrer redskap og posisjon</string>
+    <string name="registerCoordinatesOfObjectInvalidInput">Koordinat må starte med \'(\'</string>
+    <string name="select_projection">Velg projeksjon</string>
+    <string name="select_tool">Velg redskap</string>
+    <string name="invalidCoordinateFormat">Ugyldig koordinatformat</string>
+    <string name="noProjectionSelected">Ingen projekson valgt</string>
+    <string name="noToolSelected">Ingen redskap valgt</string>
+
+    <!-- Scheduled task executor dialog -->
+    <string name="setAlertWatcher">Sett varsling</string>
+    <string name="setProximityAlert">Sett varsling</string>
+    <string name="measuringUnits">Måleenhet</string>
+    <string name="proximityRadiusEditTextHint">0.0</string>
+    
+    <!-- Proximity alert dialog -->
+    <string name="proximityAlertWarning">Advarsel!</string>
+    <string name="proximityAlertNearbyTool">Du nærmer deg et redskap!</string>
+    <string name="proximityAlertViewPosition">Se posisjon</string>
+	<string name="proximityAlertCancelAlert">Avslutt varsel</string>
+    
+    <string-array name="nonAuthenticatedUserActionbarOptions">
+        <item>logg inn</item>
+        <item>Om</item>
+        <item>Hjelp</item>
+    </string-array>
+    
+    <string-array name="AuthenticatedUserActionbarOptions">
+        <item>Min side</item>
+        <item>Kart</item>
+        <item>Om</item>
+        <item>Hjelp</item>
+        <item>Logg ut</item>
+    </string-array>
+    
+    <string-array name="projections">
+        <item>EPSG:3857</item>
+        <item>EPSG:4326</item>
+        <item>EPSG:23030</item>
+        <item>EPSG:900913</item>
+    </string-array>
+    
+    <string-array name="tool_types">
+        <item>Long line</item>
+        <item>Nets</item>
+        <item>Crab pots</item>
+        <item>Seismic</item>
+        <item>Danish - /Purse-Seine</item>
+        <item>Sensor / Cable</item>
+        <item>Mooring system</item>
+        <item>Unknown</item>
+    </string-array>
+
+    <string-array name="measurement_units">
+        <item>Meter</item>
+        <item>Nautiske mil</item>
+    </string-array>    
+    
+    <string name="title_activity_alarm_activity">Barentswatch FiskInfo</string>
+
+</resources>
