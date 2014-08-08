@@ -32,6 +32,7 @@ import org.json.JSONObject;
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
@@ -95,6 +96,13 @@ public class BaseActivity extends ActionBarActivity {
 	private static SharedPreferences prefs;
 	private int previousSelectionActionBar = -1;
 	private JSONArray sharedCacheOfAvailableSubscriptions;
+
+	/*
+	 * these value refer to the index of the units in the string array 'measurement_units' and are only here so we
+	 * don't need to look them up every time we update the seek bar.
+	 */
+	private String lastSetStartingPosition = null;
+	private String lastSetEndPosition = null;
 	
 	/**
 	 * These variables should really, really, REALLY! Not be here, however
@@ -290,6 +298,52 @@ public class BaseActivity extends ActionBarActivity {
 		TextView messageView = (TextView) dialog.findViewById(android.R.id.message);
 		messageView.setGravity(Gravity.CENTER);
 	}
+	
+	public void createConfirmOverWriteDialog(Context activityContext, 
+			final EditText coordinateField, final String userCoordinates) {
+		AlertDialog.Builder builder = new AlertDialog.Builder(activityContext);
+		builder.setTitle(R.string.register_tool_confirm_overwrite_title);
+		
+		switch(coordinateField.getId()) {
+			case R.id.registerStartingCoordinatesOfTool:
+				builder.setMessage(R.string.register_tool_confirm_overwrite_of_coordinates_start);
+				break;
+			case R.id.registerEndCoordinatesOfTool:
+				builder.setMessage(R.string.register_tool_confirm_overwrite_of_coordinates_end);	
+				break;
+			default:
+				return;
+		}
+		
+		builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+			
+			@Override
+			public void onClick(DialogInterface dialog, int which) {
+				switch(coordinateField.getId()) {
+				case R.id.registerStartingCoordinatesOfTool:
+					lastSetStartingPosition = userCoordinates;
+					break;
+				case R.id.registerEndCoordinatesOfTool:
+					lastSetEndPosition = userCoordinates;
+					break;
+				}
+				coordinateField.setText("");
+				coordinateField.setText(userCoordinates);				
+			}
+		});
+		builder.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+			
+			@Override
+			public void onClick(DialogInterface dialog, int which) {
+				return;
+			}
+		});
+		
+		AlertDialog dialog = builder.show();
+
+		TextView messageView = (TextView) dialog.findViewById(android.R.id.message);
+		messageView.setGravity(Gravity.CENTER);
+	}
 
 	/**
 	 * This function creates a dialog which gives a description of the symbols
@@ -327,10 +381,16 @@ public class BaseActivity extends ActionBarActivity {
 		final AlertDialog builder = new AlertDialog.Builder(activityContext).create();
 		builder.setTitle(R.string.map_registration_popup_title);
 		builder.setView(view);
-		final EditText startingCoordinates = (EditText) view.findViewById(R.id.registerStartingCoordinatesOfObject);
-		final EditText endCoordinates = (EditText) view.findViewById(R.id.registerEndCoordinatesOfObject);
+		final EditText startingCoordinates = (EditText) view.findViewById(R.id.registerStartingCoordinatesOfTool);
+		final EditText endCoordinates = (EditText) view.findViewById(R.id.registerEndCoordinatesOfTool);
 		final TextView invalidInputFeedback = (TextView) view.findViewById(R.id.RegisterToolInvalidInputTextView);
 
+		if(lastSetStartingPosition != null) {
+			startingCoordinates.setText(lastSetStartingPosition);
+		} if(lastSetEndPosition != null) {
+			endCoordinates.setText(lastSetEndPosition);
+		}
+		
 		final Spinner projectionSpinner = (Spinner) view.findViewById(R.id.projectionChangingSpinner);
 		ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this, R.array.projections, android.R.layout.simple_spinner_item);
 		adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -580,14 +640,23 @@ public class BaseActivity extends ActionBarActivity {
 
 			String objectCoordinates = coordinateField.getText().toString();
 			String userCoordinates = String.valueOf(latitude) + "," + String.valueOf(longitude);
-			if (objectCoordinates.length() == 0) {
-				coordinateField.append(userCoordinates);
+			
+				if (objectCoordinates.length() == 0) {
+					coordinateField.append(userCoordinates);
+					switch(coordinateField.getId()) {
+					case R.id.registerStartingCoordinatesOfTool:
+						lastSetStartingPosition = userCoordinates;					
+						break;
+					case R.id.registerEndCoordinatesOfTool:
+						lastSetEndPosition = userCoordinates;
+						break;
+					default:
+						return;
+				}	
 			} else {
-				coordinateField.setText("");
-				coordinateField.setText(userCoordinates);
+				createConfirmOverWriteDialog(mContext, coordinateField, userCoordinates);		
 			}
 			coordinateField.setError(null);
-
 		} else {
 			mGpsLocationTracker.showSettingsAlert();
 		}

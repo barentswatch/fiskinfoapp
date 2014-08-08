@@ -87,7 +87,10 @@
     <string name="invalidCoordinateFormat">Ugyldig koordinatformat</string>
     <string name="noProjectionSelected">Ingen projekson valgt</string>
     <string name="noToolSelected">Ingen redskap valgt</string>
-
+    <string name="register_tool_confirm_overwrite_title">Overskriv koordinater</string>
+    <string name="register_tool_confirm_overwrite_of_coordinates_start">Er du sikker på at du vil overskrive de eksisterende start-koordinatene?</string>
+    <string name="register_tool_confirm_overwrite_of_coordinates_end">Er du sikker på at du vil overskrive de eksisterende slutt-koordinatene?</string>
+    
     <!-- Scheduled task executor dialog -->
     <string name="setAlertWatcher">Sett varsling</string>
     <string name="setProximityAlert">Sett varsling</string>

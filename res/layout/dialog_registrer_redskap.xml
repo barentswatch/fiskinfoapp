@@ -15,7 +15,7 @@
         android:text="@string/map_register_popup_text" />
     
     <EditText
-        android:id="@+id/registerStartingCoordinatesOfObject"
+        android:id="@+id/registerStartingCoordinatesOfTool"
         android:layout_width="50dp"
         android:layout_height="40dp"
         android:layout_alignParentLeft="true"
@@ -30,13 +30,13 @@
     </EditText>
 
     <EditText
-        android:id="@+id/registerEndCoordinatesOfObject"
+        android:id="@+id/registerEndCoordinatesOfTool"
         android:layout_width="50dp"
         android:layout_height="40dp"
         android:layout_alignParentLeft="true"
         android:layout_toLeftOf="@+id/dialogFetchUserEndCoordinates"
         android:ems="10"
-        android:layout_below="@+id/registerStartingCoordinatesOfObject"
+        android:layout_below="@+id/registerStartingCoordinatesOfTool"
         android:hint="@string/map_coordinates_end_hint"
         android:inputType="text" >
     </EditText>
@@ -45,9 +45,9 @@
         android:id="@+id/dialogFetchUserStartingCoordinates"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignTop="@+id/registerStartingCoordinatesOfObject"
-        android:layout_alignBaseline="@+id/registerStartingCoordinatesOfObject"
-        android:layout_alignBottom="@+id/registerStartingCoordinatesOfObject"
+        android:layout_alignTop="@+id/registerStartingCoordinatesOfTool"
+        android:layout_alignBaseline="@+id/registerStartingCoordinatesOfTool"
+        android:layout_alignBottom="@+id/registerStartingCoordinatesOfTool"
         android:layout_alignParentRight="true"
         android:textSize="17sp"
         android:text="@string/map_grab_user_position_start" />
@@ -56,9 +56,9 @@
         android:id="@+id/dialogFetchUserEndCoordinates"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignBaseline="@+id/registerEndCoordinatesOfObject"
+        android:layout_alignBaseline="@+id/registerEndCoordinatesOfTool"
         android:layout_below="@+id/dialogFetchUserStartingCoordinates"
-        android:layout_alignBottom="@+id/registerEndCoordinatesOfObject"
+        android:layout_alignBottom="@+id/registerEndCoordinatesOfTool"
         android:layout_alignParentRight="true"
         android:textSize="17sp"
         android:text="@string/map_grab_user_position_end" />
@@ -69,7 +69,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
         android:layout_marginTop="5dp"
-        android:layout_below="@+id/registerEndCoordinatesOfObject" />
+        android:layout_below="@+id/registerEndCoordinatesOfTool" />
 
     <Spinner
         android:id="@+id/registerMiscType"
@@ -84,7 +84,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_alignParentLeft="true"
-        android:layout_alignRight="@+id/registerEndCoordinatesOfObject"
+        android:layout_alignRight="@+id/registerEndCoordinatesOfTool"
         android:layout_marginBottom="20dp"
         android:text="@string/register" />
 
