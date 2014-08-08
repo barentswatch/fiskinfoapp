@@ -138,9 +138,13 @@ public class MyPageActivity extends BaseActivity {
 			myNotices.add(getString(R.string.myPageAddNotice));
 		}
 
+		JSONArray availableGeoSubscriptions = getSharedCacheOfAvailableSubscriptions();
+		if(availableGeoSubscriptions == null) {
+			availableGeoSubscriptions = authenticatedGetRequestToBarentswatchAPIService(getString(R.string.myPageGeoDataService));
+			setSharedCacheOfAvailableSubscriptions(availableGeoSubscriptions);
+		}
+		
 		List<String> availableSubscriptions = new ArrayList<String>();
-
-		JSONArray availableGeoSubscriptions = authenticatedGetRequestToBarentswatchAPIService(getString(R.string.myPageGeoDataService));
 		List<String> values = new ArrayList<String>();
 		values.add("Name");
 		new FiskInfoUtility().appendSubscriptionItemsToView(availableGeoSubscriptions, availableSubscriptions, values);

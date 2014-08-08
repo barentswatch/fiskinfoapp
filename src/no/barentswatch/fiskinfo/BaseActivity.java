@@ -909,9 +909,6 @@ public class BaseActivity extends ActionBarActivity {
 		final List<String> listDataHeader = new ArrayList<String>();
 		final HashMap<String, List<String>> listDataChild = new HashMap<String, List<String>>();
 
-		/*
-		 * TODO: REMOVE HARDCODED VALUES AND FIXME.JPG
-		 */
 		JSONArray availableSubscriptions = getSharedCacheOfAvailableSubscriptions();
 		if(availableSubscriptions == null) {
 			availableSubscriptions = authenticatedGetRequestToBarentswatchAPIService(getString(R.string.myPageGeoDataService));
