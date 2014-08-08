@@ -918,21 +918,23 @@ public class BaseActivity extends ActionBarActivity {
 			setSharedCacheOfAvailableSubscriptions(availableSubscriptions);
 		}
 		
-		
-		
-		listDataHeader.add("Kart over iskanten");
-		listDataHeader.add("Norges redskapskart");
+		for(int i = 0; i < availableSubscriptions.length(); i++) {
+			try {
+				JSONObject currentSub = availableSubscriptions.getJSONObject(i);
+				listDataHeader.add(currentSub.getString("Name"));
+				List<String> availableDownloadFormatsOfCurrentLayer = new ArrayList<String>();
+				JSONArray availableFormats = currentSub.getJSONArray("Formats");
+				for(int j = 0; j < availableFormats.length(); j++) {
+					availableDownloadFormatsOfCurrentLayer.add(availableFormats.getString(j));
+				}
+				listDataChild.put(listDataHeader.get(i), availableDownloadFormatsOfCurrentLayer);
+			} catch (JSONException e) {
+				e.printStackTrace();
+				Log.d("ExportMapLAyerToUser", "Invalid JSON returned from API CALL");
+				return false;
+			}
+		}
 
-		List<String> iceedgeMapLayer = new ArrayList<String>();
-		iceedgeMapLayer.add("Shape");
-
-		List<String> toolsMapLayer = new ArrayList<String>();
-		toolsMapLayer.add("Shape");
-		toolsMapLayer.add("OleX");
-
-		// Add header and child data
-		listDataChild.put(listDataHeader.get(0), iceedgeMapLayer);
-		listDataChild.put(listDataHeader.get(1), toolsMapLayer);
 		ExpandableListAdapter listAdapter = new ExpandableListAdapter(activityContext, listDataHeader, listDataChild);
 		expListView.setAdapter(listAdapter);
 
@@ -950,21 +952,6 @@ public class BaseActivity extends ActionBarActivity {
 		Button downloadButton = (Button) view.findViewById(R.id.metadataDownloadButton);
 		downloadButton.setOnClickListener(new View.OnClickListener() {
 			public void onClick(View v) {
-				if (selectedFormat.get() == "Shape" || selectedFormat.get() == "shape") {
-					selectedFormat.set("SHAPE-ZIP");
-				} else if (selectedFormat.get() == "OleX" || selectedFormat.get() == "olex") {
-					selectedFormat.set("OLEX");
-				} else {
-					System.out.println("We messed up our format handling and gave the user: " + selectedFormat.get());
-				}
-				if (selectedHeader.get() == "Kart over iskanten") {
-					selectedHeader.set("iceedge");
-				} else if (selectedHeader.get() == "Norges redskapskart") {
-					selectedHeader.set("fishingfacility");
-				} else {
-					System.out.println("fuck... Wrong header, we had: " + selectedHeader.get());
-				}
-
 				new DownloadMapLayerFromBarentswatchApiInBackground().execute(selectedHeader.get(), selectedFormat.get());
 				builder.dismiss();
 			}
