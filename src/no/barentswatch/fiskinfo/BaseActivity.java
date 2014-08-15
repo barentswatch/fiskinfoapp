@@ -9,7 +9,6 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicReference;
@@ -98,12 +97,13 @@ public class BaseActivity extends ActionBarActivity {
 	private JSONArray sharedCacheOfAvailableSubscriptions;
 
 	/*
-	 * these value refer to the index of the units in the string array 'measurement_units' and are only here so we
-	 * don't need to look them up every time we update the seek bar.
+	 * these value refer to the index of the units in the string array
+	 * 'measurement_units' and are only here so we don't need to look them up
+	 * every time we update the seek bar.
 	 */
 	private String lastSetStartingPosition = null;
 	private String lastSetEndPosition = null;
-	
+
 	/**
 	 * These variables should really, really, REALLY! Not be here, however
 	 * Barentswatch.no/pilot uses the most incompetent auth scheme since the
@@ -151,10 +151,10 @@ public class BaseActivity extends ActionBarActivity {
 			String tokenAsString = prefs.getString("token", null);
 			storedToken = new JSONObject(tokenAsString);
 
-			int timestamp = prefs.getInt("timeOfAuth", -1);
-			Calendar c = Calendar.getInstance();
-			int timestampSecondsGranularity = c.get(Calendar.SECOND);
-			if (timestamp == -1 || (timestampSecondsGranularity - timestamp) > storedToken.getInt("expires_in") + 600) {
+			long timestampTimeOfAuthGranularitySeconds = prefs.getLong("timeOfAuth", -1);
+			long timestampNowGranularitySeconds = System.currentTimeMillis() / 1000L;
+			System.out.println("Time of Auth: " + timestampTimeOfAuthGranularitySeconds + "Timestamp now: " + timestampNowGranularitySeconds);
+			if (timestampTimeOfAuthGranularitySeconds == -1 || (timestampNowGranularitySeconds - timestampTimeOfAuthGranularitySeconds) > storedToken.getInt("expires_in") + 600) {
 				authenticateUserCredentials(storedUsername, storedPassword);
 			}
 			System.out.println("stored token: " + storedToken);
@@ -203,78 +203,84 @@ public class BaseActivity extends ActionBarActivity {
 	private void initalizeAndConfigureActionBarSpinners() {
 		spinner = (Spinner) findViewById(R.id.actionBarNavigationList);
 		if (userIsAuthenticated) {
-			adapter = ArrayAdapter.createFromResource(this, R.array.AuthenticatedUserActionbarOptions, R.layout.spinner_item);
-			adapter.setDropDownViewResource(R.layout.spinner_item);
-			spinner.setPrompt("Meny");
-
-			navigationListener = new OnNavigationListener() {
-				String[] strings = getResources().getStringArray(R.array.AuthenticatedUserActionbarOptions);
-
-				@Override
-				public boolean onNavigationItemSelected(int position, long itemId) {
-					if (firstTimeSelect == true) {
-						firstTimeSelect = false;
-						return true;
-					}
-					switch (position) {
-					case 0: // Min side
-						loadView(MyPageActivity.class);
-						break;
-					case 1: // Map View
-						loadView(MapActivity.class);
-						break;
-					case 2: // om
-						mContext = getContext();
-						createNewPositiveDialog(mContext, R.string.app_name, R.string.about_page_welcome_text);
-						break;
-					case 3: // hjelp
-						loadView(HelpActivity.class);
-						break;
-					case 4: // logg ut
-						invalidateAuthenticationData();
-						loadView(MainActivity.class);
-						break;
-					default:
-						return false;
-					}
-					return true;
-				}
-			};
+			initializeAuthenticatedActionBarSpinner();
 		} else {
-			adapter = ArrayAdapter.createFromResource(this, R.array.nonAuthenticatedUserActionbarOptions, R.layout.spinner_item);
-			adapter.setDropDownViewResource(R.layout.spinner_item);
-			spinner.setPrompt("Meny");
-
-			navigationListener = new OnNavigationListener() {
-				String[] strings = getResources().getStringArray(R.array.nonAuthenticatedUserActionbarOptions);
-
-				@Override
-				public boolean onNavigationItemSelected(int position, long itemId) {
-					if (firstTimeSelect == true) {
-						firstTimeSelect = false;
-						return true;
-					}
-
-					switch (position) {
-					case 0: // Logg inn
-						mContext = getContext();
-						ShowLoginDialog(mContext, R.string.app_name, findViewById(R.layout.dialog_login));
-						break;
-					case 1: // om
-						mContext = getContext();
-						createNewPositiveDialog(mContext, R.string.app_name, R.string.about_page_welcome_text);
-						break;
-					case 2: // Hjelp
-						loadView(HelpActivity.class);
-						break;
-					default:
-						return true;
-					}
-					return false;
-				}
-			};
+			initializeAndSetUpNonAuthenticatedActionBarSpinner();
 		}
 		spinner.setAdapter(new NoDefaultSpinner(adapter, R.layout.spinner_layout_actionbar, mContext));
+	}
+
+	private void initializeAndSetUpNonAuthenticatedActionBarSpinner() {
+		adapter = ArrayAdapter.createFromResource(this, R.array.nonAuthenticatedUserActionbarOptions, R.layout.spinner_item);
+		adapter.setDropDownViewResource(R.layout.spinner_item);
+		spinner.setPrompt("Meny");
+
+		navigationListener = new OnNavigationListener() {
+
+			@Override
+			public boolean onNavigationItemSelected(int position, long itemId) {
+				if (firstTimeSelect == true) {
+					firstTimeSelect = false;
+					return true;
+				}
+
+				switch (position) {
+				case 0: // Logg inn
+					mContext = getContext();
+					ShowLoginDialog(mContext, R.string.app_name, findViewById(R.layout.dialog_login));
+					break;
+				case 1: // om
+					mContext = getContext();
+					createNewPositiveDialog(mContext, R.string.app_name, R.string.about_page_welcome_text);
+					break;
+				case 2: // Hjelp
+					loadView(HelpActivity.class);
+					break;
+				default:
+					return true;
+				}
+				return false;
+			}
+		};
+	}
+
+	private void initializeAuthenticatedActionBarSpinner() {
+		adapter = ArrayAdapter.createFromResource(this, R.array.AuthenticatedUserActionbarOptions, R.layout.spinner_item);
+		adapter.setDropDownViewResource(R.layout.spinner_item);
+		spinner.setPrompt("Meny");
+
+		navigationListener = new OnNavigationListener() {
+
+			@Override
+			public boolean onNavigationItemSelected(int position, long itemId) {
+				if (firstTimeSelect == true) {
+					firstTimeSelect = false;
+					return true;
+				}
+				switch (position) {
+				case 0: // Min side
+					loadView(MyPageActivity.class);
+					break;
+				case 1: // Map View
+					loadView(MapActivity.class);
+					break;
+				case 2: // om
+					mContext = getContext();
+					createNewPositiveDialog(mContext, R.string.app_name, R.string.about_page_welcome_text);
+					break;
+				case 3: // hjelp
+					loadView(HelpActivity.class);
+					break;
+				case 4: // logg ut
+					invalidateAuthenticationData();
+					loadView(MainActivity.class);
+					break;
+				default:
+					return false;
+				}
+				return true;
+			}
+		};
 	}
 
 	/**
@@ -298,28 +304,27 @@ public class BaseActivity extends ActionBarActivity {
 		TextView messageView = (TextView) dialog.findViewById(android.R.id.message);
 		messageView.setGravity(Gravity.CENTER);
 	}
-	
-	public void createConfirmOverWriteDialog(Context activityContext, 
-			final EditText coordinateField, final String userCoordinates) {
+
+	public void createConfirmOverWriteDialog(Context activityContext, final EditText coordinateField, final String userCoordinates) {
 		AlertDialog.Builder builder = new AlertDialog.Builder(activityContext);
 		builder.setTitle(R.string.register_tool_confirm_overwrite_title);
-		
-		switch(coordinateField.getId()) {
-			case R.id.registerStartingCoordinatesOfTool:
-				builder.setMessage(R.string.register_tool_confirm_overwrite_of_coordinates_start);
-				break;
-			case R.id.registerEndCoordinatesOfTool:
-				builder.setMessage(R.string.register_tool_confirm_overwrite_of_coordinates_end);	
-				break;
-			default:
-				return;
+
+		switch (coordinateField.getId()) {
+		case R.id.registerStartingCoordinatesOfTool:
+			builder.setMessage(R.string.register_tool_confirm_overwrite_of_coordinates_start);
+			break;
+		case R.id.registerEndCoordinatesOfTool:
+			builder.setMessage(R.string.register_tool_confirm_overwrite_of_coordinates_end);
+			break;
+		default:
+			return;
 		}
-		
+
 		builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
-			
+
 			@Override
 			public void onClick(DialogInterface dialog, int which) {
-				switch(coordinateField.getId()) {
+				switch (coordinateField.getId()) {
 				case R.id.registerStartingCoordinatesOfTool:
 					lastSetStartingPosition = userCoordinates;
 					break;
@@ -328,17 +333,17 @@ public class BaseActivity extends ActionBarActivity {
 					break;
 				}
 				coordinateField.setText("");
-				coordinateField.setText(userCoordinates);				
+				coordinateField.setText(userCoordinates);
 			}
 		});
 		builder.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
-			
+
 			@Override
 			public void onClick(DialogInterface dialog, int which) {
 				return;
 			}
 		});
-		
+
 		AlertDialog dialog = builder.show();
 
 		TextView messageView = (TextView) dialog.findViewById(android.R.id.message);
@@ -385,18 +390,19 @@ public class BaseActivity extends ActionBarActivity {
 		final EditText endCoordinates = (EditText) view.findViewById(R.id.registerEndCoordinatesOfTool);
 		final TextView invalidInputFeedback = (TextView) view.findViewById(R.id.RegisterToolInvalidInputTextView);
 
-		if(lastSetStartingPosition != null) {
+		if (lastSetStartingPosition != null) {
 			startingCoordinates.setText(lastSetStartingPosition);
-		} if(lastSetEndPosition != null) {
+		}
+		if (lastSetEndPosition != null) {
 			endCoordinates.setText(lastSetEndPosition);
 		}
-		
+
 		final Spinner projectionSpinner = (Spinner) view.findViewById(R.id.projectionChangingSpinner);
 		ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this, R.array.projections, android.R.layout.simple_spinner_item);
 		adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 		projectionSpinner.setPrompt("Velg projeksjon");
 		projectionSpinner.setAdapter(new NoDefaultSpinner(adapter, R.layout.spinner_layout_select_projection, activityContext));
-
+		
 		final Spinner itemSpinner = (Spinner) view.findViewById(R.id.registerMiscType);
 		ArrayAdapter<CharSequence> itemAdapter = ArrayAdapter.createFromResource(this, R.array.tool_types, android.R.layout.simple_spinner_item);
 		itemAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -418,6 +424,20 @@ public class BaseActivity extends ActionBarActivity {
 			}
 		});
 
+		acceptButtonRegister(view, builder, startingCoordinates, endCoordinates, invalidInputFeedback, projectionSpinner, itemSpinner);
+
+		Button cancelButton = (Button) view.findViewById(R.id.DialogCancelRegistration);
+		cancelButton.setOnClickListener(new View.OnClickListener() {
+			public void onClick(View v) {
+				builder.dismiss();
+			}
+		});
+
+		builder.show();
+	}
+
+	private void acceptButtonRegister(View view, final AlertDialog builder, final EditText startingCoordinates, final EditText endCoordinates, final TextView invalidInputFeedback,
+			final Spinner projectionSpinner, final Spinner itemSpinner) {
 		Button acceptButton = (Button) view.findViewById(R.id.dialogAcceptRegistration);
 		acceptButton.setOnClickListener(new View.OnClickListener() {
 			public void onClick(View v) {
@@ -464,15 +484,6 @@ public class BaseActivity extends ActionBarActivity {
 				}
 			}
 		});
-
-		Button cancelButton = (Button) view.findViewById(R.id.DialogCancelRegistration);
-		cancelButton.setOnClickListener(new View.OnClickListener() {
-			public void onClick(View v) {
-				builder.dismiss();
-			}
-		});
-
-		builder.show();
 	}
 
 	/**
@@ -640,21 +651,21 @@ public class BaseActivity extends ActionBarActivity {
 
 			String objectCoordinates = coordinateField.getText().toString();
 			String userCoordinates = String.valueOf(latitude) + "," + String.valueOf(longitude);
-			
-				if (objectCoordinates.length() == 0) {
-					coordinateField.append(userCoordinates);
-					switch(coordinateField.getId()) {
-					case R.id.registerStartingCoordinatesOfTool:
-						lastSetStartingPosition = userCoordinates;					
-						break;
-					case R.id.registerEndCoordinatesOfTool:
-						lastSetEndPosition = userCoordinates;
-						break;
-					default:
-						return;
-				}	
+
+			if (objectCoordinates.length() == 0) {
+				coordinateField.append(userCoordinates);
+				switch (coordinateField.getId()) {
+				case R.id.registerStartingCoordinatesOfTool:
+					lastSetStartingPosition = userCoordinates;
+					break;
+				case R.id.registerEndCoordinatesOfTool:
+					lastSetEndPosition = userCoordinates;
+					break;
+				default:
+					return;
+				}
 			} else {
-				createConfirmOverWriteDialog(mContext, coordinateField, userCoordinates);		
+				createConfirmOverWriteDialog(mContext, coordinateField, userCoordinates);
 			}
 			coordinateField.setError(null);
 		} else {
@@ -713,7 +724,7 @@ public class BaseActivity extends ActionBarActivity {
 					passwordEditText.setError(getString(R.string.loginPasswordFieldEmptyString));
 					return;
 				}
-				usernameEditText.setError(null);
+				passwordEditText.setError(null);
 
 				try {
 					authenticateUserCredentials(usernameText, passwordText);
@@ -855,9 +866,8 @@ public class BaseActivity extends ActionBarActivity {
 		editor.putString("password", "8fgP8pDuhFcespv");
 
 		editor.putString("token", barentsWatchResponseToken.toString());
-		Calendar c = Calendar.getInstance();
-		int timestampSecondsGranularity = c.get(Calendar.SECOND);
-		editor.putInt("timeOfAuth", timestampSecondsGranularity);
+		long timestampSecondsGranularity = System.currentTimeMillis() / 1000L;
+		editor.putLong("timeOfAuth", timestampSecondsGranularity);
 		editor.commit();
 	}
 
@@ -979,18 +989,18 @@ public class BaseActivity extends ActionBarActivity {
 		final HashMap<String, List<String>> listDataChild = new HashMap<String, List<String>>();
 
 		JSONArray availableSubscriptions = getSharedCacheOfAvailableSubscriptions();
-		if(availableSubscriptions == null) {
+		if (availableSubscriptions == null) {
 			availableSubscriptions = authenticatedGetRequestToBarentswatchAPIService(getString(R.string.myPageGeoDataService));
 			setSharedCacheOfAvailableSubscriptions(availableSubscriptions);
 		}
-		
-		for(int i = 0; i < availableSubscriptions.length(); i++) {
+
+		for (int i = 0; i < availableSubscriptions.length(); i++) {
 			try {
 				JSONObject currentSub = availableSubscriptions.getJSONObject(i);
 				listDataHeader.add(currentSub.getString("Name"));
 				List<String> availableDownloadFormatsOfCurrentLayer = new ArrayList<String>();
 				JSONArray availableFormats = currentSub.getJSONArray("Formats");
-				for(int j = 0; j < availableFormats.length(); j++) {
+				for (int j = 0; j < availableFormats.length(); j++) {
 					availableDownloadFormatsOfCurrentLayer.add(availableFormats.getString(j));
 				}
 				listDataChild.put(listDataHeader.get(i), availableDownloadFormatsOfCurrentLayer);
@@ -1029,6 +1039,9 @@ public class BaseActivity extends ActionBarActivity {
 	}
 
 	/**
+	 * DOCUMENTATION OUTDATED: THIS FUNCTION SHOULD BE REFACTORED, INTERFACED
+	 * AND BETTER CLASS CODE
+	 * 
 	 * Downloading available map layers from Barentswatch has been placed in its
 	 * own AsyncTask and specifically tailored to do that one task. The
 	 * reasoning behind this process is that multiple inheritance is disallowed
@@ -1036,26 +1049,40 @@ public class BaseActivity extends ActionBarActivity {
 	 * background. Therefore creating a separate logic for this functionality,
 	 * which has a 1-1 relationship and has no possibility of re-use, makes
 	 * sense.
+	 * 
+	 * @param 0 Apiname (name of the map layer)
+	 * @param 1 Output format of the map layer
+	 * @param 2 User defined name of the file to download
+	 * @param 3 User position Longitude
+	 * @param 4 User position Latitude
+	 * @param 5 User position distance
+	 * @param 6 Tells the class that this is a alarm file
 	 */
-	private class DownloadMapLayerFromBarentswatchApiInBackground extends AsyncTask<String, String, byte[]> {
-		String writableFormat;
-		String writableName;
+	public class DownloadMapLayerFromBarentswatchApiInBackground extends AsyncTask<String, String, byte[]> {
+		protected String writableName;
+		protected String format;
+		protected String lon = null;
+		protected String lat = null;
+		protected String distance = null;
+		protected String apiName = null;
+		protected boolean alarmFile;
+
+		protected void parseParameters(String[] params) {
+			apiName = params[0];
+			format = params[1];
+			writableName = apiName;
+			if (params.length > 2 && params.length < 8) {
+				writableName = params[2] != null ? params[2] : apiName;
+				lon = params[3];
+				lat = params[4];
+				distance = params[5];
+				alarmFile = params[6].equalsIgnoreCase("true") ? true : false;
+			}
+		}
 
 		@Override
 		protected byte[] doInBackground(String... params) {
-			String apiName = params[0];
-			writableName = apiName;
-			String format = params[1];
-			writableFormat = format;
-			String lon = null;
-			String lat = null;
-			String distance = null;
-			if (params.length > 2 && params.length < 6) {
-				lon = params[2];
-				lat = params[3];
-				distance = params[4];
-
-			}
+			parseParameters(params);
 
 			InputStream data = null;
 			byte[] rawData = null;
@@ -1063,18 +1090,19 @@ public class BaseActivity extends ActionBarActivity {
 			CloseableHttpClient httpClient = HttpClients.createDefault();
 			try {
 				List<NameValuePair> getParameters = new ArrayList<NameValuePair>(1);
+				if (lon != null && lat != null && distance != null) {
+					getParameters.add(new BasicNameValuePair("lon", lon));
+					getParameters.add(new BasicNameValuePair("lat", lat));
+					getParameters.add(new BasicNameValuePair("distance", distance));
+				}
 				getParameters.add(new BasicNameValuePair("access_token", storedToken.getString("access_token")));
+
 				String paramsString = URLEncodedUtils.format(getParameters, "UTF-8");
 				HttpGet httpGet;
 
-				if (lon != null && lat != null && distance != null) {
-					httpGet = new HttpGet("http://pilot.barentswatch.net/api/geodata/" + apiName + "/download?format=" + format + "&" + "&" + lon + "&" + lat + "&" + distance + paramsString);
-					httpGet.addHeader(HTTP.CONTENT_TYPE, "application/json");
-				} else {
-					httpGet = new HttpGet("http://pilot.barentswatch.net/api/geodata/" + apiName + "/download?format=" + format + "&" + paramsString);
-					httpGet.addHeader(HTTP.CONTENT_TYPE, "application/json");
-				}
-
+				httpGet = new HttpGet("http://pilot.barentswatch.net/api/geodata/" + apiName + "/download?format=" + format + "&" + paramsString);
+				httpGet.addHeader(HTTP.CONTENT_TYPE, "application/json");
+				Log.d("FiskInfo GetRequest", "The current get request is: " + httpGet.getRequestLine());
 				HttpResponse httpResponse = httpClient.execute(httpGet);
 
 				// Check is authentication to the server passed
@@ -1130,20 +1158,11 @@ public class BaseActivity extends ActionBarActivity {
 				if (!(directory.exists())) {
 					directory.mkdirs();
 				}
-				try {
-					outputStream = new FileOutputStream(new File(filePath + writableName + "." + writableFormat));
-					outputStream.write(data);
-					System.out.println("I just wrote at path: " + filePath + writableName);
-				} catch (IOException e) {
-					e.printStackTrace();
-				} finally {
-					if (outputStream != null) {
-						try {
-							outputStream.close();
-						} catch (IOException e) {
-							e.printStackTrace();
-						}
-					}
+				if (!alarmFile) {
+					writeMapLayerToExternalStorage(data, outputStream, filePath);
+				} else {
+					System.out.println("I should write the alarm file");
+					writeAlarmFileToExternalStorage(data, outputStream, filePath);
 				}
 			} else {
 				Toast error = Toast.makeText(getContext(), "Nedlastningen feilet, venligst sjekk at du har plass til filen på mobilen", Toast.LENGTH_LONG);
@@ -1154,183 +1173,99 @@ public class BaseActivity extends ActionBarActivity {
 			Toast toast = Toast.makeText(getContext(), "NedlastningenFullført", Toast.LENGTH_LONG);
 			toast.show();
 		}
-	}
 
-	/**
-	 * There must be a way to achieve this by using polymorphism, but I just
-	 * dont see it TODO: NEEDS REFACTORING AND MORE SPECIALISATION
-	 */
-	class donwloadAndWriteCoordinatesIntoCache extends AsyncTask<String, String, byte[]> {
-		String writableFormat;
-		String writableName;
-		String userDefinedName = null;
-
-		@Override
-		protected byte[] doInBackground(String... params) {
-			String apiName = params[0];
-			writableName = apiName;
-			String format = params[1];
-			writableFormat = format;
-			String lon = null;
-			String lat = null;
-			String distance = null;
-
-			if (params[2] != null) {
-				lon = params[2];
-				lat = params[3];
-				distance = params[4];
-			}
-
-			if (params[5] != null) {
-				userDefinedName = params[5];
-				writableName = userDefinedName;
-			}
-
-			InputStream data = null;
-			byte[] rawData = null;
-
-			CloseableHttpClient httpClient = HttpClients.createDefault();
+		private void writeMapLayerToExternalStorage(byte[] data, OutputStream outputStream, String filePath) {
 			try {
-				List<NameValuePair> getParameters = new ArrayList<NameValuePair>(1);
-				getParameters.add(new BasicNameValuePair("access_token", storedToken.getString("access_token")));
-				String paramsString = URLEncodedUtils.format(getParameters, "UTF-8");
-				HttpGet httpGet;
-
-				httpGet = new HttpGet("http://pilot.barentswatch.net/api/geodata/" + apiName + "/download?format=" + format + "&" + paramsString + "&" + lon + "&" + lat + "&" + distance);
-				httpGet.addHeader(HTTP.CONTENT_TYPE, "application/json");
-
-				HttpResponse httpResponse = httpClient.execute(httpGet);
-
-				// Check is authentication to the server passed
-				if (httpResponse.getStatusLine().getStatusCode() == 401) {
-					// TODO: Get 2.opinion <-> Might clear and reload token, not
-					// sure
-					Log.d("FiskInfo", "User not authenticated for the request: " + httpGet.getRequestLine());
-					finish();
-				}
-
-				HttpEntity responseEntity = httpResponse.getEntity();
-
-				if (responseEntity instanceof HttpEntity && responseEntity != null) {
-					data = responseEntity.getContent();
+				outputStream = new FileOutputStream(new File(filePath + writableName + "." + format));
+				outputStream.write(data);
+			} catch (IOException e) {
+				e.printStackTrace();
+			} finally {
+				if (outputStream != null) {
 					try {
-						rawData = new FiskInfoUtility().toByteArray(data);
+						outputStream.close();
 					} catch (IOException e) {
 						e.printStackTrace();
 					}
 				}
-
-				EntityUtils.consume(responseEntity);
-			} catch (ClientProtocolException CPException) {
-				rawData = null;
-				Log.d("FiskInfo", "Recieved a client protocol exception: " + CPException.getMessage());
-
-			} catch (IOException ioException) {
-				rawData = null;
-				Log.d("FiskInfo", "IOException: " + ioException.getMessage());
-			} catch (JSONException jsonException) {
-				rawData = null;
-				Log.d("FiskInfo", "Recieved malformed JSON data from Barentswatch: " + jsonException.getMessage());
 			}
-			if (data == null) {
-				Log.d("FiskInfo", "ApiError. Did not recieve data from Barentswatch");
-			}
-			return rawData;
 		}
 
-		@Override
-		protected void onPostExecute(byte[] data) {
-			OutputStream outputStream = null;
-			if (data == null) {
-				return;
-			}
-			if (isExternalStorageWritable()) {
-				String directoryPath = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).toString();
-				String directoryName = "FiskInfo";
-				String filePath = directoryPath + "/" + directoryName + "/";
+		private void writeAlarmFileToExternalStorage(byte[] data, OutputStream outputStream, String filePath) {
+			try {
+				InputStream inputStream = new ByteArrayInputStream(data);
+				BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
+				FiskInfoPolygon2D serializablePolygon2D = new FiskInfoPolygon2D();
 
-				File directory = new File(directoryPath, directoryName);
-
-				if (!(directory.exists())) {
-					directory.mkdirs();
-				}
-				try {
-					InputStream inputStream = new ByteArrayInputStream(data);
-					BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
-					FiskInfoPolygon2D newDataFormat = new FiskInfoPolygon2D();
-
-					String line = null;
-					boolean startSet = false;
-					String[] convertedLine = null;
-					List<Point> shape = new ArrayList<Point>();
-					while ((line = reader.readLine()) != null) {
-						// We are supporting API 8, so this is:
-						// IsNullOrEmpty();
-						Point currPoint = new Point();
-						if (line == "" || line.length() == 0 || line == null) {
-							continue;
-						}
-						if (Character.isLetter(line.charAt(0))) {
-							continue;
-						}
-
-						convertedLine = line.split("\\s+");
-						if (convertedLine[3].equalsIgnoreCase("Garnstart") && startSet == true) {
-							if (shape.size() == 1) {
-								// Point
-								newDataFormat.addPoint(shape.get(0));
-								shape = new ArrayList<Point>();
-							} else if (shape.size() == 2) {
-								// line
-								newDataFormat.addLine(new Line(shape.get(0), shape.get(1)));
-								shape = new ArrayList<Point>();
-							} else {
-								newDataFormat.addPolygon(new Polygon(shape));
-								shape = new ArrayList<Point>();
-							}
-							startSet = false;
-						}
-
-						if (convertedLine[3].equalsIgnoreCase("Garnstart") && startSet == false) {
-							double lat = Double.parseDouble(convertedLine[0]) / 60;
-							double lon = Double.parseDouble(convertedLine[1]) / 60;
-							currPoint.setNewPointValues(lat, lon);
-							shape.add(currPoint);
-							startSet = true;
-						} else if (convertedLine[3].equalsIgnoreCase("Brunsirkel")) {
-							double lat = Double.parseDouble(convertedLine[0]) / 60;
-							double lon = Double.parseDouble(convertedLine[1]) / 60;
-							currPoint.setNewPointValues(lat, lon);
-							shape.add(currPoint);
-						}
+				String line = null;
+				boolean startSet = false;
+				String[] convertedLine = null;
+				List<Point> shape = new ArrayList<Point>();
+				while ((line = reader.readLine()) != null) {
+					// We are supporting API 8, so this is:
+					// IsNullOrEmpty();
+					Point currPoint = new Point();
+					if (line == "" || line.length() == 0 || line == null) {
+						continue;
+					}
+					if (Character.isLetter(line.charAt(0))) {
+						continue;
 					}
 
-					reader.close();
-					new FiskInfoUtility().serializeFiskInfoPolygon2D(filePath + writableName, newDataFormat);
-					outputStream = new FileOutputStream(new File(filePath + writableName + "." + writableFormat));
-					outputStream.write(data);
-
-				} catch (IOException e) {
-					e.printStackTrace();
-				} finally {
-					if (outputStream != null) {
-						try {
-							outputStream.close();
-						} catch (IOException e) {
-							e.printStackTrace();
+					convertedLine = line.split("\\s+");
+					if (convertedLine[3].equalsIgnoreCase("Garnstart") && startSet == true) {
+						if (shape.size() == 1) {
+							// Point
+							serializablePolygon2D.addPoint(shape.get(0));
+							shape = new ArrayList<Point>();
+						} else if (shape.size() == 2) {
+							// line
+							serializablePolygon2D.addLine(new Line(shape.get(0), shape.get(1)));
+							shape = new ArrayList<Point>();
+						} else {
+							serializablePolygon2D.addPolygon(new Polygon(shape));
+							shape = new ArrayList<Point>();
 						}
+						startSet = false;
+					}
+
+					if (convertedLine[3].equalsIgnoreCase("Garnstart") && startSet == false) {
+						double lat = Double.parseDouble(convertedLine[0]) / 60;
+						double lon = Double.parseDouble(convertedLine[1]) / 60;
+						currPoint.setNewPointValues(lat, lon);
+						shape.add(currPoint);
+						startSet = true;
+					} else if (convertedLine[3].equalsIgnoreCase("Brunsirkel")) {
+						double lat = Double.parseDouble(convertedLine[0]) / 60;
+						double lon = Double.parseDouble(convertedLine[1]) / 60;
+						currPoint.setNewPointValues(lat, lon);
+						shape.add(currPoint);
 					}
 				}
-			} else {
-				Toast error = Toast.makeText(getContext(), "Nedlastningen feilet, venligst sjekk at du har plass til filen på mobilen", Toast.LENGTH_LONG);
+
+				reader.close();
+				new FiskInfoUtility().serializeFiskInfoPolygon2D(filePath + writableName, serializablePolygon2D);
+				outputStream = new FileOutputStream(new File(filePath + writableName + "." + format));
+				outputStream.write(data);
+
+			} catch (IOException e) {
+				e.printStackTrace();
+			} catch (ArrayIndexOutOfBoundsException e) {
+				Log.e("FiskInfo", "We should've received a file without any tools");
+				Toast error = Toast.makeText(getContext(), "Ingen redskaper i området du definerte", Toast.LENGTH_LONG);
 				error.show();
 				return;
+			} finally {
+				if (outputStream != null) {
+					try {
+						outputStream.close();
+					} catch (IOException e) {
+						e.printStackTrace();
+					}
+				}
 			}
-
-			Toast toast = Toast.makeText(getContext(), "AlarmStartet", Toast.LENGTH_LONG);
-			toast.show();
-
 		}
+
 	}
 
 	/**
@@ -1355,7 +1290,8 @@ public class BaseActivity extends ActionBarActivity {
 	}
 
 	/**
-	 * @param sharedCacheOfAvailableSubscriptions the sharedCacheOfAvailableSubscriptions to set
+	 * @param sharedCacheOfAvailableSubscriptions
+	 *            the sharedCacheOfAvailableSubscriptions to set
 	 */
 	public void setSharedCacheOfAvailableSubscriptions(JSONArray sharedCacheOfAvailableSubscriptions) {
 		this.sharedCacheOfAvailableSubscriptions = sharedCacheOfAvailableSubscriptions;

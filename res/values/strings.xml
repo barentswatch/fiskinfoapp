@@ -39,7 +39,7 @@
     <string name="title_activity_my_page">Min Side</string>
     <string name="myPageRegisteredVessels">Mine registrerte fartøy</string>
     <string name="myPageRegisteredTools">Mine registrerte redskaper</string>
-    <string name="allAvailableSubscriptions">Tilgjengelige abbonementer</string>
+    <string name="allAvailableSubscriptions">Tilgjengelige abonnementer</string>
     <string name="myPageMaps">Mine Kart</string>
     <string name="myPageMyNotices">Mine varsler</string>
     <string name="myPageAddVessel">Legg til nytt fartøy</string>

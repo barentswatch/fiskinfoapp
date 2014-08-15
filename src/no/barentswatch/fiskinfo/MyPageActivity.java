@@ -8,8 +8,6 @@ import no.barentswatch.implementation.ExpandableListAdapter;
 import no.barentswatch.implementation.FiskInfoUtility;
 
 import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import android.content.Intent;
 import android.os.Bundle;

@@ -45,7 +45,7 @@ public class MapActivity extends BaseActivity {
 	private boolean alarmSet = false;
 	private static int currentlySelected = 0;
 	private final double minLenghtMeters = 100;
-	private final double maxLenghtMeters = 1852;
+	private final double maxLenghtMeters = 18520;
 	private final double minLenghtNauticalMiles = minLenghtMeters / 1852;
 	private final double maxLenghtNauticalMiles = maxLenghtMeters / 1852;
 	private final double stepSizeMeters = (maxLenghtMeters - minLenghtMeters) / 100;
@@ -259,7 +259,7 @@ public class MapActivity extends BaseActivity {
 					String distance = distanceEditText.getText().toString();
 					cachedDistance = distance;
 
-					cacheWriter = new donwloadAndWriteCoordinatesIntoCache().execute("fishingfacility", "OLEX", String.valueOf(latitude), String.valueOf(longitude), distance, "cachedResults.olex");
+					cacheWriter = new DownloadMapLayerFromBarentswatchApiInBackground().execute("fishingfacility", "OLEX", "cachedResults", String.valueOf(longitude), String.valueOf(latitude), distance, "true");
 					alarmSet = true;
 					runScheduledAlarm();
 				}
@@ -472,7 +472,7 @@ public class MapActivity extends BaseActivity {
 					if (checkCacheWriterStatus()) {
 						String directoryPath = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).toString();
 						String directoryName = "FiskInfo";
-						String filename = "cachedResults.olex";
+						String filename = "cachedResults";
 						String filePath = directoryPath + "/" + directoryName + "/" + filename;
 						tools = new FiskInfoUtility().deserializeFiskInfoPolygon2D(filePath);
 						cacheDeserialized = true;
