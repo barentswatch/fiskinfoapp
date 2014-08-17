@@ -211,7 +211,7 @@ public class BaseActivity extends ActionBarActivity {
 	}
 
 	private void initializeAndSetUpNonAuthenticatedActionBarSpinner() {
-		adapter = ArrayAdapter.createFromResource(this, R.array.nonAuthenticatedUserActionbarOptions, R.layout.spinner_item);
+		adapter = ArrayAdapter.createFromResource(this, R.array.non_authenticated_user_actionbar_options, R.layout.spinner_item);
 		adapter.setDropDownViewResource(R.layout.spinner_item);
 		spinner.setPrompt("Meny");
 
@@ -245,7 +245,7 @@ public class BaseActivity extends ActionBarActivity {
 	}
 
 	private void initializeAuthenticatedActionBarSpinner() {
-		adapter = ArrayAdapter.createFromResource(this, R.array.AuthenticatedUserActionbarOptions, R.layout.spinner_item);
+		adapter = ArrayAdapter.createFromResource(this, R.array.authenticated_user_actionbar_options, R.layout.spinner_item);
 		adapter.setDropDownViewResource(R.layout.spinner_item);
 		spinner.setPrompt("Meny");
 
@@ -384,7 +384,7 @@ public class BaseActivity extends ActionBarActivity {
 		LayoutInflater layoutInflater = getLayoutInflater();
 		View view = layoutInflater.inflate(R.layout.dialog_registrer_redskap, (null));
 		final AlertDialog builder = new AlertDialog.Builder(activityContext).create();
-		builder.setTitle(R.string.map_registration_popup_title);
+		builder.setTitle(R.string.register_tool_dialog_title);
 		builder.setView(view);
 		final EditText startingCoordinates = (EditText) view.findViewById(R.id.registerStartingCoordinatesOfTool);
 		final EditText endCoordinates = (EditText) view.findViewById(R.id.registerEndCoordinatesOfTool);
@@ -449,28 +449,28 @@ public class BaseActivity extends ActionBarActivity {
 				invalidInputFeedback.setVisibility(android.view.View.INVISIBLE);
 
 				if (projectionSpinner.getSelectedItem() == null) {
-					invalidInputFeedback.setText(getString(R.string.noProjectionSelected));
+					invalidInputFeedback.setText(getString(R.string.register_tool_no_projection_selected));
 					invalidInputFeedback.setVisibility(android.view.View.VISIBLE);
 					return;
 				} else if (itemSpinner.getSelectedItem() == null) {
-					invalidInputFeedback.setText(getString(R.string.noToolSelected));
+					invalidInputFeedback.setText(getString(R.string.register_tool_no_tool_selected));
 					invalidInputFeedback.setVisibility(android.view.View.VISIBLE);
 					return;
 				}
 
 				if (checkCoordinates(ToolstartingCoordinates, projectionSpinner.getSelectedItem().toString()) == false) {
-					invalidInputFeedback.setText(getString(R.string.invalidCoordinateFormat));
+					invalidInputFeedback.setText(getString(R.string.register_tool_invalid_coordinate_format));
 					invalidInputFeedback.setVisibility(android.view.View.VISIBLE);
 
 					startingCoordinates.requestFocus();
-					startingCoordinates.setError(getString(R.string.invalidCoordinateFormat));
+					startingCoordinates.setError(getString(R.string.register_tool_invalid_coordinate_format));
 
 				} else if (checkCoordinates(ToolendCoordinates, projectionSpinner.getSelectedItem().toString()) == false) {
-					invalidInputFeedback.setText(getString(R.string.invalidCoordinateFormat));
+					invalidInputFeedback.setText(getString(R.string.register_tool_invalid_coordinate_format));
 					invalidInputFeedback.setVisibility(android.view.View.VISIBLE);
 
 					endCoordinates.requestFocus();
-					endCoordinates.setError(getString(R.string.invalidCoordinateFormat));
+					endCoordinates.setError(getString(R.string.register_tool_invalid_coordinate_format));
 				} else {
 					startingCoordinates.setError(null);
 					endCoordinates.setError(null);
@@ -704,7 +704,7 @@ public class BaseActivity extends ActionBarActivity {
 				}
 
 				if (!isNetworkAvailable()) {
-					incorrectCredentialsTextView.setText(getString(R.string.noInternetAccess));
+					incorrectCredentialsTextView.setText(getString(R.string.no_internet_access));
 					incorrectCredentialsTextView.setVisibility(android.view.View.VISIBLE);
 					return;
 				}
@@ -714,14 +714,14 @@ public class BaseActivity extends ActionBarActivity {
 
 				if (!validateEmail(usernameText)) {
 					usernameEditText.requestFocus();
-					usernameEditText.setError(getString(R.string.loginInvalidEmail));
+					usernameEditText.setError(getString(R.string.login_invalid_email));
 					return;
 				}
 				usernameEditText.setError(null);
 
 				if (passwordText.length() == 0) {
 					passwordEditText.requestFocus();
-					passwordEditText.setError(getString(R.string.loginPasswordFieldEmptyString));
+					passwordEditText.setError(getString(R.string.login_password_field_empty_string));
 					return;
 				}
 				passwordEditText.setError(null);
@@ -735,7 +735,7 @@ public class BaseActivity extends ActionBarActivity {
 				if (userIsAuthenticated) {
 					loadView(MyPageActivity.class);
 				} else {
-					incorrectCredentialsTextView.setText(getString(R.string.loginIncorrectCredentials));
+					incorrectCredentialsTextView.setText(getString(R.string.login_incorrect_credentials));
 					incorrectCredentialsTextView.setVisibility(android.view.View.VISIBLE);
 					return;
 				}
@@ -990,7 +990,7 @@ public class BaseActivity extends ActionBarActivity {
 
 		JSONArray availableSubscriptions = getSharedCacheOfAvailableSubscriptions();
 		if (availableSubscriptions == null) {
-			availableSubscriptions = authenticatedGetRequestToBarentswatchAPIService(getString(R.string.myPageGeoDataService));
+			availableSubscriptions = authenticatedGetRequestToBarentswatchAPIService(getString(R.string.my_page_geo_data_service));
 			setSharedCacheOfAvailableSubscriptions(availableSubscriptions);
 		}
 

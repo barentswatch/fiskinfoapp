@@ -8,4 +8,4 @@
     android:ellipsize="marquee"
     android:textSize="18sp"
     android:textColor="#808080"
-    android:text="@string/select_projection" /> 
+    android:text="@string/register_tool_select_projection" /> 

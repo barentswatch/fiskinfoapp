@@ -11,7 +11,7 @@
         android:layout_centerHorizontal="true"
         android:layout_marginTop="19dp"
         android:ems="10"
-        android:hint="@string/userEmailFieldHintString"
+        android:hint="@string/login_user_email_field_hint_string"
         android:inputType="textEmailAddress" >
 
         <requestFocus />
@@ -25,7 +25,7 @@
         android:layout_below="@+id/LoginDialogEmailField"
         android:layout_marginTop="15dp"
         android:ems="10"
-        android:hint="@string/passwordFieldHintString"
+        android:hint="@string/login_password_field_hint_string"
         android:inputType="textPassword" />
     
     <TextView
@@ -35,7 +35,7 @@
         android:layout_alignLeft="@+id/loginDialogPasswordField"
         android:layout_below="@+id/loginDialogPasswordField"
         android:layout_marginLeft="17dp"
-        android:text="@string/forgotPasswordTextViewString" />
+        android:text="@string/login_forgot_password_textview_string" />
 
     <TextView
         android:id="@+id/loginIncorrectCredentialsTextView"
@@ -44,7 +44,7 @@
         android:layout_centerHorizontal="true"
         android:layout_below="@+id/loginDialogForgottenPasswordTextView"
         android:layout_marginTop="5dp"
-        android:text="@string/loginIncorrectCredentials"
+        android:text="@string/login_incorrect_credentials"
 		android:visibility="invisible"
         android:textColor="#d72323" />
     
@@ -54,7 +54,7 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/loginIncorrectCredentialsTextView"
         android:layout_centerHorizontal="true"
-        android:text="@string/loginButtonText"
+        android:text="@string/login_button_text"
         android:layout_marginBottom="10dp"
         android:layout_marginTop="5dp" />
 

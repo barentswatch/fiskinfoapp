@@ -2,6 +2,8 @@ package no.barentswatch.fiskinfo;
 
 import android.os.Bundle;
 import android.view.Menu;
+import android.view.View;
+import android.widget.Button;
 
 public class MainActivity extends BaseActivity {
 
@@ -12,6 +14,16 @@ public class MainActivity extends BaseActivity {
 		setContentView(R.layout.activity_main);
 		if(getAuthenticationLevel()) {
 			loadView(MyPageActivity.class);
+		} else {
+			Button loginButton = (Button) findViewById(R.id.mainActivityLoginButton);
+			
+			loginButton.setOnClickListener(new View.OnClickListener() {
+				
+				@Override
+				public void onClick(View v) {
+					ShowLoginDialog(getContext(), R.string.app_name, findViewById(R.layout.dialog_login));
+				}
+			});
 		}
 	}
 

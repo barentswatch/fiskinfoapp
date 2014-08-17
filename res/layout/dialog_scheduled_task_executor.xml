@@ -11,7 +11,7 @@
         android:layout_alignParentTop="true"
         android:layout_marginTop="93dp"
         android:ems="10"
-        android:hint="@string/proximityRadiusEditTextHint"
+        android:hint="@string/proximity_radius_edit_text_hint"
         android:inputType="numberDecimal" >
         <requestFocus />
     </EditText>
@@ -31,7 +31,7 @@
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
         android:layout_marginBottom="50dp"
-        android:text="@string/setProximityAlert" />
+        android:text="@string/set_proximity_alert" />
 
     <Spinner
         android:id="@+id/scheduledMeasuringUnitsSpinner"

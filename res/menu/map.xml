@@ -6,7 +6,7 @@
         <item android:id="@+id/export_metadata_to_user" android:title="@string/map_export_metadata"></item>
         <item android:id="@+id/symbol_explanation" android:title="@string/map_symbol_explanation"></item>
         <item android:id="@+id/ocean_currents" android:title="@string/map_ocean_currents_title"></item>
-        <item android:id="@+id/setProximityAlert" android:title="@string/setAlertWatcher"></item>
+        <item android:id="@+id/setProximityAlert" android:title="@string/set_alert_watcher"></item>
         </group>
 
 </menu>

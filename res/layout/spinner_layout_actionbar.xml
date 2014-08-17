@@ -7,4 +7,4 @@
     android:layout_height="wrap_content"
     android:ellipsize="marquee"
     android:textSize="18sp"
-    android:text="@string/actionbarSpinnerMenu" />
+    android:text="@string/actionbar_spinner_menu" />

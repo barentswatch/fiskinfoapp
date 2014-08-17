@@ -93,26 +93,26 @@ public class MyPageActivity extends BaseActivity {
 		listDataHeader = new ArrayList<String>();
 		listDataChild = new HashMap<String, List<String>>();
 
-		listDataHeader.add(getString(R.string.myPageRegisteredVessels));
-		listDataHeader.add(getString(R.string.myPageRegisteredTools));
-		listDataHeader.add(getString(R.string.myPageMaps));
-		listDataHeader.add(getString(R.string.myPageMyNotices));
-		listDataHeader.add(getString(R.string.allAvailableSubscriptions));
+		listDataHeader.add(getString(R.string.my_page_registered_vessels));
+		listDataHeader.add(getString(R.string.my_page_registered_tools));
+		listDataHeader.add(getString(R.string.my_page_my_maps));
+		listDataHeader.add(getString(R.string.my_page_my_notices));
+		listDataHeader.add(getString(R.string.my_page_all_available_subscriptions));
 
 		List<String> myVessels = new ArrayList<String>();
 		// TODO: get registered vessels from BarentsWatch when its implemented
 		if (myVessels.size() == 0) {
-			myVessels.add(getString(R.string.myPageNoRegisteredVessels));
+			myVessels.add(getString(R.string.my_page_no_registered_vessels));
 		} else {
-			myVessels.add(getString(R.string.myPageAddVessel));
+			myVessels.add(getString(R.string.my_page_add_vessel));
 		}
 
 		List<String> myTools = new ArrayList<String>();
 		// TODO: get registered tools from BarentsWatch once implemented
 		if (myTools.size() == 0) {
-			myTools.add(getString(R.string.myPageNoRegisteredTools));
+			myTools.add(getString(R.string.my_page_no_registered_tools));
 		} else {
-			myTools.add(getString(R.string.myPageAddTool));
+			myTools.add(getString(R.string.my_page_add_tool));
 		}
 
 		List<String> myMaps = new ArrayList<String>();
@@ -123,22 +123,22 @@ public class MyPageActivity extends BaseActivity {
 		
 		if (myMaps.size() == 0) {
 			
-			myMaps.add(getString(R.string.myPageNoRegisteredMaps));
+			myMaps.add(getString(R.string.my_page__no_registered_maps));
 		} else {
-			myMaps.add(getString(R.string.myPageAddMap));
+			myMaps.add(getString(R.string.my_page_add_map));
 		}
 
 		List<String> myNotices = new ArrayList<String>();
 		// TODO: get registered notices from BarentsWatch once its implemented
 		if (myNotices.size() == 0) {
-			myNotices.add(getString(R.string.myPageNoRegisteredNotices));
+			myNotices.add(getString(R.string.my_page_no_registered_notices));
 		} else {
-			myNotices.add(getString(R.string.myPageAddNotice));
+			myNotices.add(getString(R.string.my_page_add_notice));
 		}
 
 		JSONArray availableGeoSubscriptions = getSharedCacheOfAvailableSubscriptions();
 		if(availableGeoSubscriptions == null) {
-			availableGeoSubscriptions = authenticatedGetRequestToBarentswatchAPIService(getString(R.string.myPageGeoDataService));
+			availableGeoSubscriptions = authenticatedGetRequestToBarentswatchAPIService(getString(R.string.my_page_geo_data_service));
 			setSharedCacheOfAvailableSubscriptions(availableGeoSubscriptions);
 		}
 		
