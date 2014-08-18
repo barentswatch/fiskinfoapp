@@ -382,7 +382,7 @@ public class BaseActivity extends ActionBarActivity {
 	 */
 	public void registerItemAndToolUsed(Context activityContext) {
 		LayoutInflater layoutInflater = getLayoutInflater();
-		View view = layoutInflater.inflate(R.layout.dialog_registrer_redskap, (null));
+		View view = layoutInflater.inflate(R.layout.dialog_register_tool, (null));
 		final AlertDialog builder = new AlertDialog.Builder(activityContext).create();
 		builder.setTitle(R.string.register_tool_dialog_title);
 		builder.setView(view);
