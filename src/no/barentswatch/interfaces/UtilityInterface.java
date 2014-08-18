@@ -17,4 +17,5 @@ public interface UtilityInterface {
 	public FiskInfoPolygon2D deserializeFiskInfoPolygon2D(String path);
 	public Double truncateDecimal(double x, int numberofDecimals);
 	public void appendSubscriptionItemsToView(JSONArray subscriptions, List<String> field, List<String> fieldsToExtract);
+	public boolean checkCoordinates(String coordinates, String projection);
 }

@@ -189,7 +189,14 @@ public class FiskInfoUtility implements UtilityInterface {
 	}
 	
 	/**
+	 * Appends a item from a JsonArray to a <code>ExpandableListAdapater</code>
 	 * 
+	 * @param subscriptions
+	 * 			A JSON array containing all the available subscriptions
+	 * @param field
+	 * 			The field name in the <code>ExpandableListAdapater</code>
+	 * @param fieldsToExtract
+	 * 			The fields from the subscriptions to retrieve and store in the <code>ExpandableListAdapater</code>
 	 */
 	public void appendSubscriptionItemsToView(JSONArray subscriptions, List<String> field, List<String> fieldsToExtract) {
 		if ((subscriptions.isNull(0)) || (subscriptions == null)) {
@@ -207,4 +214,148 @@ public class FiskInfoUtility implements UtilityInterface {
 		}
 	}
 	
+	/**
+	 * 
+	 */
+	public boolean checkCoordinates(String coordinates, String projection) {
+		System.out.println("coords: " + coordinates);
+		System.out.println("projection: " + projection);
+
+		if (coordinates.length() == 0) {
+
+			return false;
+		} else {
+			switch (projection) {
+			case "EPSG:3857":
+				if (checkProjectionEPSG3857(coordinates) == true) {
+					break;
+				}
+			case "EPSG:4326":
+				if (checkProjectionEPSG4326(coordinates) == true) {
+					break;
+				}
+			case "EPSG:23030":
+				if (checkProjectionEPSG23030(coordinates) == true) {
+					break;
+				}
+			case "EPSG:900913":
+				if (checkProjectionEPSG900913(coordinates) == true) {
+					break;
+				}
+			default:
+				return false;
+			}
+			return true;
+		}
+	}
+	/**
+	 * Checks that the given string contains coordinates in a valid format in
+	 * regards to the given projection.
+	 * 
+	 * @param coordinates
+	 *            the coordinates to be checked.
+	 * @return true if coordinates are in a valid format.
+	 */
+	
+	private boolean checkProjectionEPSG3857(String coordinates) {
+		try {
+			int commaSeperatorIndex = coordinates.indexOf(",");
+			double latitude = Double.parseDouble(coordinates.substring(0, commaSeperatorIndex - 1));
+			double longitude = Double.parseDouble(coordinates.substring(commaSeperatorIndex + 1, coordinates.length() - 1));
+
+			double EPSG3857MinX = -20026376.39;
+			double EPSG3857MaxX = 20026376.39;
+			double EPSG3857MinY = -20048966.10;
+			double EPSG3857MaxY = 20048966.10;
+
+			if (latitude < EPSG3857MinX || latitude > EPSG3857MaxX || longitude < EPSG3857MinY || longitude > EPSG3857MaxY) {
+				return false;
+			}
+
+			return true;
+		} catch (NumberFormatException e) {
+			e.printStackTrace();
+			return false;
+		} catch (StringIndexOutOfBoundsException e) {
+			e.printStackTrace();
+			return false;
+		}
+	}
+
+	private boolean checkProjectionEPSG4326(String coordinates) {
+		try {
+			int commaSeperatorIndex = coordinates.indexOf(",");
+			double latitude = Double.parseDouble(coordinates.substring(0, commaSeperatorIndex - 1));
+			double longitude = Double.parseDouble(coordinates.substring(commaSeperatorIndex + 1, coordinates.length() - 1));
+			double EPSG4326MinX = -180.0;
+			double EPSG4326MaxX = 180.0;
+			double EPSG4326MinY = -90.0;
+			double EPSG4326MaxY = 90.0;
+
+			if (latitude < EPSG4326MinX || latitude > EPSG4326MaxX || longitude < EPSG4326MinY || longitude > EPSG4326MaxY) {
+				return false;
+			}
+
+			return true;
+		} catch (NumberFormatException e) {
+			e.printStackTrace();
+			return false;
+		} catch (StringIndexOutOfBoundsException e) {
+			e.printStackTrace();
+			return false;
+		}
+	}
+
+	private boolean checkProjectionEPSG23030(String coordinates) {
+		try {
+			int commaSeperatorIndex = coordinates.indexOf(",");
+			double latitude = Double.parseDouble(coordinates.substring(0, commaSeperatorIndex - 1));
+			double longitude = Double.parseDouble(coordinates.substring(commaSeperatorIndex + 1, coordinates.length() - 1));
+			double EPSG23030MinX = 229395.8528;
+			double EPSG23030MaxX = 770604.1472;
+			double EPSG23030MinY = 3982627.8377;
+			double EPSG23030MaxY = 7095075.2268;
+
+			if (latitude < EPSG23030MinX || latitude > EPSG23030MaxX || longitude < EPSG23030MinY || longitude > EPSG23030MaxY) {
+				return false;
+			}
+
+			return true;
+		} catch (NumberFormatException e) {
+			e.printStackTrace();
+			return false;
+		} catch (StringIndexOutOfBoundsException e) {
+			e.printStackTrace();
+			return false;
+		}
+	}
+
+	private boolean checkProjectionEPSG900913(String coordinates) {
+		try {
+			int commaSeperatorIndex = coordinates.indexOf(",");
+			double latitude = Double.parseDouble(coordinates.substring(0, commaSeperatorIndex - 1));
+			double longitude = Double.parseDouble(coordinates.substring(commaSeperatorIndex + 1, coordinates.length() - 1));
+
+			/*
+			 * These are based on the spherical metricator bounds of OpenLayers
+			 * and as we are currently using OpenLayer these are bounds to use.
+			 */
+			double EPSG900913MinX = -20037508.34;
+			double EPSG900913MaxX = 20037508.34;
+			double EPSG900913MinY = -20037508.34;
+			double EPSG900913MaxY = 20037508.34;
+
+			if (latitude < EPSG900913MinX || latitude > EPSG900913MaxX || longitude < EPSG900913MinY || longitude > EPSG900913MaxY) {
+				return false;
+			}
+
+			return true;
+		} catch (NumberFormatException e) {
+			e.printStackTrace();
+			return false;
+		} catch (StringIndexOutOfBoundsException e) {
+			e.printStackTrace();
+			return false;
+		}
+	}
 }
