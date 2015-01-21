@@ -9,6 +9,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicReference;
@@ -30,6 +31,7 @@ import org.json.JSONObject;
 
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -50,6 +52,8 @@ import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
@@ -87,7 +91,7 @@ public class BaseActivity extends ActionBarActivity {
 	public ActionBar actionBar;
 	private static boolean userIsAuthenticated;
 	public Spinner spinner;
-	public ArrayAdapter<CharSequence> adapter;
+	public ArrayAdapter<String> adapter;
 	public ActionBar.OnNavigationListener navigationListener;
 	private Context mContext;
 	public boolean firstTimeSelect = true;
@@ -197,7 +201,7 @@ public class BaseActivity extends ActionBarActivity {
 		actionBar.setDisplayHomeAsUpEnabled(false);
 		actionBar.setDisplayShowTitleEnabled(true);
 		actionBar.setListNavigationCallbacks(adapter, navigationListener);
-		actionBar.setSelectedNavigationItem(getPreviousSelectionActionBar());
+		actionBar.setSelectedNavigationItem(adapter.getCount());
 	}
 
 	private void initalizeAndConfigureActionBarSpinners() {
@@ -207,14 +211,13 @@ public class BaseActivity extends ActionBarActivity {
 		} else {
 			initializeAndSetUpNonAuthenticatedActionBarSpinner();
 		}
-		spinner.setAdapter(new NoDefaultSpinner(adapter, R.layout.spinner_layout_actionbar, mContext));
 	}
 
 	private void initializeAndSetUpNonAuthenticatedActionBarSpinner() {
-		adapter = ArrayAdapter.createFromResource(this, R.array.non_authenticated_user_actionbar_options, R.layout.spinner_item);
-		adapter.setDropDownViewResource(R.layout.spinner_item);
-		spinner.setPrompt("Meny");
-
+		adapter = createAndInitializeHintAdapter(R.array.non_authenticated_user_actionbar_options, "Meny", mContext);
+		spinner.setAdapter(adapter);
+		spinner.setSelection(adapter.getCount());		
+		
 		navigationListener = new OnNavigationListener() {
 
 			@Override
@@ -242,12 +245,14 @@ public class BaseActivity extends ActionBarActivity {
 				return false;
 			}
 		};
+		
+					
 	}
-
+	
 	private void initializeAuthenticatedActionBarSpinner() {
-		adapter = ArrayAdapter.createFromResource(this, R.array.authenticated_user_actionbar_options, R.layout.spinner_item);
-		adapter.setDropDownViewResource(R.layout.spinner_item);
-		spinner.setPrompt("Meny");
+		adapter = createAndInitializeHintAdapter(R.array.authenticated_user_actionbar_options, "Meny", mContext);
+		spinner.setAdapter(adapter);
+		spinner.setSelection(adapter.getCount());
 
 		navigationListener = new OnNavigationListener() {
 
@@ -300,6 +305,14 @@ public class BaseActivity extends ActionBarActivity {
 		builder.setMessage(rPathToTextInTheBodyOfThePopup);
 		builder.setPositiveButton("OK", null);
 		AlertDialog dialog = builder.show();
+		dialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
+			
+			@Override
+			public void onDismiss(DialogInterface dialog) {
+				// TODO Auto-generated method stub
+				actionBar.setSelectedNavigationItem(adapter.getCount());
+			}
+		});
 
 		TextView messageView = (TextView) dialog.findViewById(android.R.id.message);
 		messageView.setGravity(Gravity.CENTER);
@@ -556,8 +569,10 @@ public class BaseActivity extends ActionBarActivity {
 		final TextView incorrectCredentialsTextView = (TextView) view.findViewById(R.id.loginIncorrectCredentialsTextView);
 
 		Button loginButton = (Button) view.findViewById(R.id.loginDialogButton);
+		Button cancelButton = (Button) view.findViewById(R.id.cancel_login_button);
 		builder.setView(view);
-
+		final AlertDialog dialog = builder.create();
+		
 		loginButton.setOnClickListener(new View.OnClickListener() {
 			public void onClick(View v) {
 				if (incorrectCredentialsTextView.getVisibility() == 0) {
@@ -603,7 +618,25 @@ public class BaseActivity extends ActionBarActivity {
 			}
 		});
 
-		builder.show();
+		cancelButton.setOnClickListener(new View.OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				dialog.dismiss();
+	
+			}
+		});
+		
+		dialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
+			
+			@Override
+			public void onDismiss(DialogInterface dialog) {
+				// TODO Auto-generated method stub
+				actionBar.setSelectedNavigationItem(adapter.getCount());
+			}
+		});
+		
+		dialog.show();
 	}
 
 	protected boolean isNetworkAvailable() {
@@ -763,6 +796,40 @@ public class BaseActivity extends ActionBarActivity {
 	public void setAuthentication(boolean authLevel) {
 		BaseActivity.userIsAuthenticated = authLevel;
 	}
+	
+	private static ArrayAdapter<String> createAndInitializeHintAdapter(int rPathToArray, String hint, Context context) {
+		ArrayAdapter<String> adapter = new ArrayAdapter<String>(context, R.layout.spinner_item) {
+
+			@Override
+			public View getView(int position, View convertView, ViewGroup parent) {
+
+				View v = super.getView(position, convertView, parent);
+				if (position == getCount()) {
+					((TextView) v.findViewById(android.R.id.text1)).setText("");
+					((TextView) v.findViewById(android.R.id.text1)).setHint(getItem(getCount())); // "Hint to be displayed"
+				}
+
+				return v;
+			}
+
+			@Override
+			public int getCount() {
+				return super.getCount() - 1; // you dont display
+												// last item. It is
+												// used as hint.
+			}
+
+		};
+		for (String field : context.getResources().getStringArray(rPathToArray)) {
+			adapter.add(field);
+		}
+		// HACK WARNING: Adding last entry so we can display spinner
+		// hint
+		adapter.add(hint);
+		adapter.setDropDownViewResource(R.layout.spinner_item);
+		return adapter;
+	}
+
 
 	/**
 	 * Sends a request to BarentsWatch for the given service, which returns a
