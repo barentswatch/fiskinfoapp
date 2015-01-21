@@ -671,7 +671,7 @@ public class BaseActivity extends ActionBarActivity {
 				try {
 					CloseableHttpClient httpclient = HttpClients.createDefault();
 					try {
-						HttpPost httpPost = new HttpPost("http://pilot.barentswatch.net/api/token");
+						HttpPost httpPost = new HttpPost("https://pilot.barentswatch.net/api/token");
 						httpPost.addHeader(HTTP.CONTENT_TYPE, "application/x-www-form-urlencoded");
 						List<NameValuePair> postParameters = new ArrayList<NameValuePair>();
 						postParameters.add(new BasicNameValuePair("grant_type", "password"));
@@ -919,31 +919,25 @@ public class BaseActivity extends ActionBarActivity {
 	 * @param 5 User position distance
 	 * @param 6 Tells the class that this is a alarm file
 	 */
-	public class DownloadMapLayerFromBarentswatchApiInBackground extends AsyncTask<String, String, byte[]> {
-		protected String writableName;
-		protected String format;
-		protected String lon = null;
-		protected String lat = null;
-		protected String distance = null;
-		protected String apiName = null;
-		protected boolean alarmFile;
-
-		protected void parseParameters(String[] params) {
-			apiName = params[0];
-			format = params[1];
-			writableName = apiName;
-			if (params.length > 2 && params.length < 8) {
-				writableName = params[2] != null ? params[2] : apiName;
-				lon = params[3];
-				lat = params[4];
-				distance = params[5];
-				alarmFile = params[6].equalsIgnoreCase("true") ? true : false;
-			}
-		}
+	private class DownloadMapLayerFromBarentswatchApiInBackground extends AsyncTask<String, String, byte[]> {
+		String writableFormat;
+		String writableName;
 
 		@Override
 		protected byte[] doInBackground(String... params) {
-			parseParameters(params);
+			String apiName = params[0];
+			writableName = apiName;
+			String format = params[1];
+			writableFormat = format;
+			String lon = null;
+			String lat = null;
+			String distance = null;
+			if (params.length > 2 && params.length < 6) {
+				lon = params[2];
+				lat = params[3];
+				distance = params[4];
+
+			}
 
 			InputStream data = null;
 			byte[] rawData = null;
@@ -951,19 +945,18 @@ public class BaseActivity extends ActionBarActivity {
 			CloseableHttpClient httpClient = HttpClients.createDefault();
 			try {
 				List<NameValuePair> getParameters = new ArrayList<NameValuePair>(1);
-				if (lon != null && lat != null && distance != null) {
-					getParameters.add(new BasicNameValuePair("lon", lon));
-					getParameters.add(new BasicNameValuePair("lat", lat));
-					getParameters.add(new BasicNameValuePair("distance", distance));
-				}
 				getParameters.add(new BasicNameValuePair("access_token", storedToken.getString("access_token")));
-
 				String paramsString = URLEncodedUtils.format(getParameters, "UTF-8");
 				HttpGet httpGet;
 
-				httpGet = new HttpGet("http://pilot.barentswatch.net/api/geodata/" + apiName + "/download?format=" + format + "&" + paramsString);
-				httpGet.addHeader(HTTP.CONTENT_TYPE, "application/json");
-				Log.d("FiskInfo GetRequest", "The current get request is: " + httpGet.getRequestLine());
+				if (lon != null && lat != null && distance != null) {
+					httpGet = new HttpGet("http://pilot.barentswatch.net/api/v1/geodata/" + apiName + "/download?format=" + format + "&" + "&" + lon + "&" + lat + "&" + distance + paramsString);
+					httpGet.addHeader(HTTP.CONTENT_TYPE, "application/json");
+				} else {
+					httpGet = new HttpGet("http://pilot.barentswatch.net/api/v1/geodata/" + apiName + "/download?format=" + format + "&" + paramsString);
+					httpGet.addHeader(HTTP.CONTENT_TYPE, "application/json");
+				}
+
 				HttpResponse httpResponse = httpClient.execute(httpGet);
 
 				// Check is authentication to the server passed
@@ -1019,11 +1012,20 @@ public class BaseActivity extends ActionBarActivity {
 				if (!(directory.exists())) {
 					directory.mkdirs();
 				}
-				if (!alarmFile) {
-					writeMapLayerToExternalStorage(data, outputStream, filePath);
-				} else {
-					System.out.println("I should write the alarm file");
-					writeAlarmFileToExternalStorage(data, outputStream, filePath);
+				try {
+					outputStream = new FileOutputStream(new File(filePath + writableName + "." + writableFormat));
+					outputStream.write(data);
+					System.out.println("I just wrote at path: " + filePath + writableName);
+				} catch (IOException e) {
+					e.printStackTrace();
+				} finally {
+					if (outputStream != null) {
+						try {
+							outputStream.close();
+						} catch (IOException e) {
+							e.printStackTrace();
+						}
+					}
 				}
 			} else {
 				Toast error = Toast.makeText(getContext(), "Nedlastningen feilet, venligst sjekk at du har plass til filen på mobilen", Toast.LENGTH_LONG);
@@ -1034,99 +1036,6 @@ public class BaseActivity extends ActionBarActivity {
 			Toast toast = Toast.makeText(getContext(), "NedlastningenFullført", Toast.LENGTH_LONG);
 			toast.show();
 		}
-
-		private void writeMapLayerToExternalStorage(byte[] data, OutputStream outputStream, String filePath) {
-			try {
-				outputStream = new FileOutputStream(new File(filePath + writableName + "." + format));
-				outputStream.write(data);
-			} catch (IOException e) {
-				e.printStackTrace();
-			} finally {
-				if (outputStream != null) {
-					try {
-						outputStream.close();
-					} catch (IOException e) {
-						e.printStackTrace();
-					}
-				}
-			}
-		}
-
-		private void writeAlarmFileToExternalStorage(byte[] data, OutputStream outputStream, String filePath) {
-			try {
-				InputStream inputStream = new ByteArrayInputStream(data);
-				BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
-				FiskInfoPolygon2D serializablePolygon2D = new FiskInfoPolygon2D();
-
-				String line = null;
-				boolean startSet = false;
-				String[] convertedLine = null;
-				List<Point> shape = new ArrayList<Point>();
-				while ((line = reader.readLine()) != null) {
-					// We are supporting API 8, so this is:
-					// IsNullOrEmpty();
-					Point currPoint = new Point();
-					if (line == "" || line.length() == 0 || line == null) {
-						continue;
-					}
-					if (Character.isLetter(line.charAt(0))) {
-						continue;
-					}
-
-					convertedLine = line.split("\\s+");
-					if (convertedLine[3].equalsIgnoreCase("Garnstart") && startSet == true) {
-						if (shape.size() == 1) {
-							// Point
-							serializablePolygon2D.addPoint(shape.get(0));
-							shape = new ArrayList<Point>();
-						} else if (shape.size() == 2) {
-							// line
-							serializablePolygon2D.addLine(new Line(shape.get(0), shape.get(1)));
-							shape = new ArrayList<Point>();
-						} else {
-							serializablePolygon2D.addPolygon(new Polygon(shape));
-							shape = new ArrayList<Point>();
-						}
-						startSet = false;
-					}
-
-					if (convertedLine[3].equalsIgnoreCase("Garnstart") && startSet == false) {
-						double lat = Double.parseDouble(convertedLine[0]) / 60;
-						double lon = Double.parseDouble(convertedLine[1]) / 60;
-						currPoint.setNewPointValues(lat, lon);
-						shape.add(currPoint);
-						startSet = true;
-					} else if (convertedLine[3].equalsIgnoreCase("Brunsirkel")) {
-						double lat = Double.parseDouble(convertedLine[0]) / 60;
-						double lon = Double.parseDouble(convertedLine[1]) / 60;
-						currPoint.setNewPointValues(lat, lon);
-						shape.add(currPoint);
-					}
-				}
-
-				reader.close();
-				new FiskInfoUtility().serializeFiskInfoPolygon2D(filePath + writableName, serializablePolygon2D);
-				outputStream = new FileOutputStream(new File(filePath + writableName + "." + format));
-				outputStream.write(data);
-
-			} catch (IOException e) {
-				e.printStackTrace();
-			} catch (ArrayIndexOutOfBoundsException e) {
-				Log.e("FiskInfo", "We should've received a file without any tools");
-				Toast error = Toast.makeText(getContext(), "Ingen redskaper i området du definerte", Toast.LENGTH_LONG);
-				error.show();
-				return;
-			} finally {
-				if (outputStream != null) {
-					try {
-						outputStream.close();
-					} catch (IOException e) {
-						e.printStackTrace();
-					}
-				}
-			}
-		}
-
 	}
 
 	/**

@@ -50,7 +50,7 @@
     <string name="my_page_no_registered_tools">Du har ingen registrerte redskaper. Klikk her for å legge til</string>
     <string name="my_page__no_registered_maps">Du har ingen registrerte kart. Klikk her for å legge til</string>
     <string name="my_page_no_registered_notices">Du har ingen registrerte varsler. Klikk her for å legge til</string>
-    <string name="my_page_geo_data_service">geodataservice</string>
+    <string name="my_page_geo_data_service">v1/geodata/subscription</string>
 
     <!-- Map activity strings -->
     <string name="title_activity_map">MapActivity</string>
