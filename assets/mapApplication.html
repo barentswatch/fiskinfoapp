@@ -29,10 +29,12 @@
                 ],
                 layers: [
                     new OpenLayers.Layer.WMS(
-	      		"base_map", "http://opencache.statkart.no/gatekeeper/gk/gk.open?",
-		      	{ layers: 'sjo_hovedkart2', format: 'image/png' }, {
+	      		"Grunnkart", "http://opencache.statkart.no/gatekeeper/gk/gk.open?",
+		      	{ layers: 'sjo_hovedkart2', format: 'image/png' },
+                        { 'displayInLayerSwitcher': false },{
 		      	    isBaseLayer: true
 		      	}
+                        
 	      	), new OpenLayers.Layer.WMS(
             "Redskapskartet", "http://153.44.6.85:8080/geoserver/bw/wms",
             {
