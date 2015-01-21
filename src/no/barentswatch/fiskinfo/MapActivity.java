@@ -127,9 +127,9 @@ public class MapActivity extends BaseActivity {
 		Context currentContext = getContext();
 		// Handle item selection
 		switch (item.getItemId()) {
-		case R.id.register_misc:
-			registerItemAndToolUsed(currentContext);
-			return true;
+//		case R.id.register_misc:
+//			registerItemAndToolUsed(currentContext);
+//			return true;
 		case R.id.update_map:
 			loadView(MapActivity.class);
 			return true;
@@ -142,12 +142,12 @@ public class MapActivity extends BaseActivity {
 		case R.id.symbol_explanation:
 			displaySymbolExplanation(currentContext);
 			return true;
-		case R.id.ocean_currents:
-			String OMFG = displayCurrentOceanCurrents(currentContext);
-			browser.loadData(OMFG, "image/svg+xml", "UTF-8");
-			browser.getSettings().setSupportZoom(true);
-			browser.getSettings().setBuiltInZoomControls(true);
-			return true;
+//		case R.id.ocean_currents:
+//			String OMFG = displayCurrentOceanCurrents(currentContext);
+//			browser.loadData(OMFG, "image/svg+xml", "UTF-8");
+//			browser.getSettings().setSupportZoom(true);
+//			browser.getSettings().setBuiltInZoomControls(true);
+//			return true;
 		case R.id.setProximityAlert:
 			displayScheduledTaskExecutor(currentContext);
 			return true;
