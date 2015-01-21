@@ -19,7 +19,7 @@
                 projection: 'EPSG:3857',
                 controls: [
                     new OpenLayers.Control.Attribution(),
-					new OpenLayers.Control.LayerSwitcher({'div':OpenLayers.Util.getElement('layerswitcher')}),
+					new OpenLayers.Control.LayerSwitcher({ 'div': OpenLayers.Util.getElement('layerswitcher') }),
                     new OpenLayers.Control.TouchNavigation({
                         dragPanOptions: {
                             enableKinetic: true
@@ -34,9 +34,65 @@
 		      	    isBaseLayer: true
 		      	}
 	      	), new OpenLayers.Layer.WMS(
-            "bw:fishingfacility_latest - Untiled", "http://153.44.6.85:8080/geoserver/bw/wms",
+            "Redskapskartet", "http://153.44.6.85:8080/geoserver/bw/wms",
             {
-                LAYERS: 'bw:fishingfacility_latest',
+                LAYERS: 'bwdev:fishingfacility_latest',
+                transparent: true,
+                STYLES: '',
+                format: format
+            },
+            {
+                singleTile: true,
+                ratio: 1,
+                isBaseLayer: false,
+                yx: { 'EPSG:4326': true }
+            }
+        ), new OpenLayers.Layer.WMS(
+            "Bølgevarsel", "http://153.44.6.85:8080/geoserver/bw/wms",
+            {
+                LAYERS: 'bwdev:waveforecast_area_iso_latest',
+                transparent: true,
+                STYLES: '',
+                format: format
+            },
+            {
+                singleTile: true,
+                ratio: 1,
+                isBaseLayer: false,
+                yx: { 'EPSG:4326': true }
+            }
+        ), new OpenLayers.Layer.WMS(
+            "Seismikk, pågående", "http://153.44.6.85:8080/geoserver/bw/wms",
+            {
+                LAYERS: 'bwdev:npdsurveyongoing_latest',
+                transparent: true,
+                STYLES: '',
+                format: format
+            },
+            {
+                singleTile: true,
+                ratio: 1,
+                isBaseLayer: false,
+                yx: { 'EPSG:4326': true }
+            }
+        ), new OpenLayers.Layer.WMS(
+            "Seismikk, pågående", "http://153.44.6.85:8080/geoserver/bw/wms",
+            {
+                LAYERS: 'bwdev:npdsurveyongoing_latest',
+                transparent: true,
+                STYLES: '',
+                format: format
+            },
+            {
+                singleTile: true,
+                ratio: 1,
+                isBaseLayer: false,
+                yx: { 'EPSG:4326': true }
+            }
+        ), new OpenLayers.Layer.WMS(
+            "Seismikk, planlagt", "http://153.44.6.85:8080/geoserver/bw/wms",
+            {
+                LAYERS: 'bwdev:npdsurveyplanned_latest',
                 transparent: true,
                 STYLES: '',
                 format: format
@@ -70,11 +126,11 @@
                 map.setCenter(userPosition, 14);
             });
         }
-        
+
         function fail() {
-        	alert("Venligst sjekk om du har internett forbindelse");
+            alert("Venligst sjekk om du har internett forbindelse");
         }
-        
+
     </script>
     <style>
         html, body {
@@ -129,46 +185,48 @@
             background-color: transparent;
         }
 
-        .olControlLayerSwitcher .layersDiv {
-            padding-top: 5px;
-            padding-left: 10px;
-            padding-bottom: 5px;
-            padding-right: 10px;
-            background-color: darkblue;
-        }
+            .olControlLayerSwitcher .layersDiv {
+                padding-top: 5px;
+                padding-left: 10px;
+                padding-bottom: 5px;
+                padding-right: 10px;
+                background-color: darkblue;
+            }
 
-        .olControlLayerSwitcher .layersDiv .baseLbl,
-        .olControlLayerSwitcher .layersDiv .dataLbl {
-            margin-top: 3px;
-            margin-left: 3px;
-            margin-bottom: 3px;
-        }
+                .olControlLayerSwitcher .layersDiv .baseLbl,
+                .olControlLayerSwitcher .layersDiv .dataLbl {
+                    margin-top: 3px;
+                    margin-left: 3px;
+                    margin-bottom: 3px;
+                }
 
-        .olControlLayerSwitcher .layersDiv .baseLayersDiv,
-        .olControlLayerSwitcher .layersDiv .dataLayersDiv {
-            padding-left: 10px;
-        }
+                .olControlLayerSwitcher .layersDiv .baseLayersDiv,
+                .olControlLayerSwitcher .layersDiv .dataLayersDiv {
+                    padding-left: 10px;
+                }
 
-        .olControlLayerSwitcher .maximizeDiv,
-        .olControlLayerSwitcher .minimizeDiv {
-            width: 18px;
-            height: 18px;
-            top: 5px;
-            right: 0;
-            cursor: pointer;
-        }
+            .olControlLayerSwitcher .maximizeDiv,
+            .olControlLayerSwitcher .minimizeDiv {
+                width: 18px;
+                height: 18px;
+                top: 5px;
+                right: 0;
+                cursor: pointer;
+            }
 
         div.olControlZoom {
-    position: absolute;
-    top: 8px;
-    left: 8px;
-    background: rgba(255,255,255,0.4);
-    border-radius: 4px;
-    padding: 2px;
-    }
+            position: absolute;
+            top: 8px;
+            left: 8px;
+            background: rgba(255,255,255,0.4);
+            border-radius: 4px;
+            padding: 2px;
+        }
+
         * {
             -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
         }
+
         div.olControlZoom a {
             display: block;
             margin: 1px;
@@ -187,25 +245,31 @@
             background: rgba(0, 60, 136, 0.5);
             filter: alpha(opacity=80);
         }
+
         a.olControlZoomIn {
             border-radius: 4px 4px 0 0;
         }
+
         a.olControlZoomOut {
             border-radius: 0 0 4px 4px;
         }
+
         div.olControlZoom a:hover {
             background: #130085; /* fallback for IE */
             background: rgba(0, 60, 136, 0.7);
             filter: alpha(opacity=100);
         }
+
         @media only screen and (max-width: 600px) {
             div.olControlZoom a:hover {
                 background: rgba(0, 60, 136, 0.5);
             }
         }
+
         div.olMapViewport {
             -ms-touch-action: none;
         }
+
         .olLayerGrid .olTileImage {
             -webkit-transition: opacity 0.2s linear;
             -moz-transition: opacity 0.2s linear;
@@ -239,7 +303,7 @@
     <p id="shortdesc">
         FiskInfo Karttjeneste
     </p>
-	<div id="layerswitcher" class="olControlLayerSwitcher"></div>
+    <div id="layerswitcher" class="olControlLayerSwitcher"></div>
     <div id="map"></div>
 </body>
 </html>
