@@ -36,9 +36,9 @@
 		      	}
                         
 	      	), new OpenLayers.Layer.WMS(
-            "Redskapskartet", "http://153.44.6.85:8080/geoserver/bw/wms",
+            "Redskapskartet", "http://153.44.6.85:8080/geoserver/bwdev/wms",
             {
-                LAYERS: 'bwdev:fishingfacility_latest',
+                LAYERS: 'bwdev:fishingfacility',
                 transparent: true,
                 STYLES: '',
                 format: format
@@ -114,6 +114,67 @@
             ls.ascending = false;
             ls.useLegendGraphics = true;
             map.addControl(ls);
+
+            var geoJson = Android.getGeoJson()
+            var geoJsonFormat = new OpenLayers.Format.GeoJSON();
+            var toolsVectorLayer = new OpenLayers.Layer.Vector();
+            map.addLayer(toolsVectorLayer);
+            toolsVectorLayer.addFeatures(geojson_format.read(geoJson));
+
+            ////feature info (wish me luck!)
+            //map.events.register('click', map, function (e) {
+            //    var params = {
+            //        REQUEST: "GetFeatureInfo",
+            //        EXCEPTIONS: "application/vnd.ogc.se_xml",
+            //        BBOX: map.getExtent().toBBOX(),
+            //        SERVICE: "WMS",
+            //        INFO_FORMAT: 'text/html',
+            //        QUERY_LAYERS: map.layers[1].params.LAYERS,
+            //        FEATURE_COUNT: 50,
+            //        Layers: 'bwdev:fishingfacility',
+            //        WIDTH: map.size.w,
+            //        HEIGHT: map.size.h,
+            //        format: format,
+            //        styles: map.layers[1].params.STYLES,
+            //        srs: map.layers[1].params.SRS
+            //    };
+            //    // handle the wms 1.3 vs wms 1.1 madness
+            //    if (map.layers[1].params.VERSION == "1.3.0") {
+            //        params.version = "1.3.0";
+            //        params.j = parseInt(e.xy.x);
+            //        params.i = parseInt(e.xy.y);
+            //    } else {
+            //        params.version = "1.1.1";
+            //        params.x = parseInt(e.xy.x);
+            //        params.y = parseInt(e.xy.y);
+            //    }
+            //    // merge filters
+            //    if (map.layers[1].params.CQL_FILTER != null) {
+            //        params.cql_filter = map.layers[1].params.CQL_FILTER;
+            //    }
+            //    if (map.layers[1].params.FILTER != null) {
+            //        params.filter = map.layers[1].params.FILTER;
+            //    }
+            //    if (map.layers[1].params.FEATUREID) {
+            //        params.featureid = map.layers[1].params.FEATUREID;
+            //    }
+
+            //    document.origin = "http://153.44.6.85:8080/geoserver/bwdev/wms";
+            //    OpenLayers.Request.GET({
+            //        url: "http://153.44.6.85:8080/geoserver/bwdev/wms",
+            //        params: params,
+            //        callback: setHTML
+            //    });
+            //    document.origin = "localhost";
+            //    //OpenLayers.Request.GET("http://153.44.6.85:8080/geoserver/bwdev/wms", params, this, setHTML, setHTML);
+            //    //OpenLayers.loadURL("http://153.44.6.85:8080/geoserver/bwdev/wms", params, this, setHTML, setHTML);
+            //    //OpenLayers.Event.stop(e)
+            //});
+
+        };
+        
+        function setHTML(response) {
+            document.getElementById('nodelist').innerHTML = response.responseText;
         };
 
         function populateUserPosition(callback) {
@@ -311,5 +372,6 @@
     </p>
     <div id="layerswitcher" class="olControlLayerSwitcher"></div>
     <div id="map"></div>
+    <div id="nodelist"></div>
 </body>
 </html>
