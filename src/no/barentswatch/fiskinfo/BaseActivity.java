@@ -774,6 +774,7 @@ public class BaseActivity extends ActionBarActivity {
 	public void loadView(Class<?> activityClass) {
 		mContext = getContext();
 		try {
+			actionBar.setSelectedNavigationItem(adapter.getCount());
 			Intent intent = new Intent(mContext, activityClass);
 			startActivity(intent);
 		} catch (Exception e) {
@@ -925,7 +926,7 @@ public class BaseActivity extends ActionBarActivity {
 		for (int i = 0; i < availableSubscriptions.length(); i++) {
 			try {
 				JSONObject currentSub = availableSubscriptions.getJSONObject(i);
-				listDataHeader.add(currentSub.getString("Name"));
+				listDataHeader.add(currentSub.getString("ApiName"));
 				List<String> availableDownloadFormatsOfCurrentLayer = new ArrayList<String>();
 				JSONArray availableFormats = currentSub.getJSONArray("Formats");
 				for (int j = 0; j < availableFormats.length(); j++) {
