@@ -916,7 +916,8 @@ public class BaseActivity extends ActionBarActivity {
 		ExpandableListView expListView = (ExpandableListView) view.findViewById(R.id.exportMetadataMapServices);
 		final List<String> listDataHeader = new ArrayList<String>();
 		final HashMap<String, List<String>> listDataChild = new HashMap<String, List<String>>();
-
+		final Map<String, String> nameToApiNameResolver = new HashMap<String, String>();
+		
 		JSONArray availableSubscriptions = getSharedCacheOfAvailableSubscriptions();
 		if (availableSubscriptions == null) {
 			availableSubscriptions = authenticatedGetRequestToBarentswatchAPIService(getString(R.string.my_page_geo_data_service));
@@ -926,7 +927,8 @@ public class BaseActivity extends ActionBarActivity {
 		for (int i = 0; i < availableSubscriptions.length(); i++) {
 			try {
 				JSONObject currentSub = availableSubscriptions.getJSONObject(i);
-				listDataHeader.add(currentSub.getString("ApiName"));
+				nameToApiNameResolver.put(currentSub.getString("Name"), currentSub.getString("ApiName"));
+				listDataHeader.add(currentSub.getString("Name"));
 				List<String> availableDownloadFormatsOfCurrentLayer = new ArrayList<String>();
 				JSONArray availableFormats = currentSub.getJSONArray("Formats");
 				for (int j = 0; j < availableFormats.length(); j++) {
@@ -939,7 +941,6 @@ public class BaseActivity extends ActionBarActivity {
 				return false;
 			}
 		}
-
 		ExpandableListAdapter listAdapter = new ExpandableListAdapter(activityContext, listDataHeader, listDataChild);
 		expListView.setAdapter(listAdapter);
 
@@ -948,6 +949,7 @@ public class BaseActivity extends ActionBarActivity {
 
 			@Override
 			public boolean onChildClick(ExpandableListView parent, View v, int groupPosition, int childPosition, long id) {
+				selectedHeader.set(nameToApiNameResolver.get(listDataHeader.get(groupPosition)));
 				selectedHeader.set(listDataHeader.get(groupPosition));
 				selectedFormat.set(listDataChild.get(listDataHeader.get(groupPosition)).get(childPosition));
 				return true;
