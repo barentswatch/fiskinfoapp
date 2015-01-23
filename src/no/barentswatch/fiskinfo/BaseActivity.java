@@ -9,9 +9,9 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -31,7 +31,6 @@ import org.json.JSONObject;
 
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
-import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -53,12 +52,12 @@ import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ExpandableListView;
 import android.widget.ExpandableListView.OnChildClickListener;
+import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -157,8 +156,10 @@ public class BaseActivity extends ActionBarActivity {
 
 			long timestampTimeOfAuthGranularitySeconds = prefs.getLong("timeOfAuth", -1);
 			long timestampNowGranularitySeconds = System.currentTimeMillis() / 1000L;
-			System.out.println("Time of Auth: " + timestampTimeOfAuthGranularitySeconds + "Timestamp now: " + timestampNowGranularitySeconds);
-			if (timestampTimeOfAuthGranularitySeconds == -1 || (timestampNowGranularitySeconds - timestampTimeOfAuthGranularitySeconds) > storedToken.getInt("expires_in") + 600) {
+			System.out.println("Time of Auth: " + timestampTimeOfAuthGranularitySeconds + "Timestamp now: "
+					+ timestampNowGranularitySeconds);
+			if (timestampTimeOfAuthGranularitySeconds == -1
+					|| (timestampNowGranularitySeconds - timestampTimeOfAuthGranularitySeconds) > storedToken.getInt("expires_in") + 600) {
 				authenticateUserCredentials(storedUsername, storedPassword);
 			}
 			System.out.println("stored token: " + storedToken);
@@ -216,8 +217,8 @@ public class BaseActivity extends ActionBarActivity {
 	private void initializeAndSetUpNonAuthenticatedActionBarSpinner() {
 		adapter = createAndInitializeHintAdapter(R.array.non_authenticated_user_actionbar_options, "Meny", mContext);
 		spinner.setAdapter(adapter);
-		spinner.setSelection(adapter.getCount());		
-		
+		spinner.setSelection(adapter.getCount());
+
 		navigationListener = new OnNavigationListener() {
 
 			@Override
@@ -245,10 +246,9 @@ public class BaseActivity extends ActionBarActivity {
 				return false;
 			}
 		};
-		
-					
+
 	}
-	
+
 	private void initializeAuthenticatedActionBarSpinner() {
 		adapter = createAndInitializeHintAdapter(R.array.authenticated_user_actionbar_options, "Meny", mContext);
 		spinner.setAdapter(adapter);
@@ -305,8 +305,10 @@ public class BaseActivity extends ActionBarActivity {
 		builder.setMessage(rPathToTextInTheBodyOfThePopup);
 		builder.setPositiveButton("OK", null);
 		AlertDialog dialog = builder.show();
+		dialog.setCanceledOnTouchOutside(false);
+
 		dialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
-			
+
 			@Override
 			public void onDismiss(DialogInterface dialog) {
 				// TODO Auto-generated method stub
@@ -375,6 +377,7 @@ public class BaseActivity extends ActionBarActivity {
 		View view = layoutInflater.inflate(R.layout.symbol_explanation, (null));
 		final AlertDialog builder = new AlertDialog.Builder(ActivityContext).create();
 		builder.setTitle(R.string.map_symbol_explanation);
+		builder.setCanceledOnTouchOutside(false);
 		builder.setView(view);
 
 		Button okButton = (Button) view.findViewById(R.id.symbolOkButton);
@@ -383,6 +386,7 @@ public class BaseActivity extends ActionBarActivity {
 				builder.dismiss();
 			}
 		});
+
 		builder.show();
 	}
 
@@ -411,13 +415,15 @@ public class BaseActivity extends ActionBarActivity {
 		}
 
 		final Spinner projectionSpinner = (Spinner) view.findViewById(R.id.projectionChangingSpinner);
-		ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this, R.array.projections, android.R.layout.simple_spinner_item);
+		ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this, R.array.projections,
+				android.R.layout.simple_spinner_item);
 		adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 		projectionSpinner.setPrompt("Velg projeksjon");
 		projectionSpinner.setAdapter(new NoDefaultSpinner(adapter, R.layout.spinner_layout_select_projection, activityContext));
-		
+
 		final Spinner itemSpinner = (Spinner) view.findViewById(R.id.registerMiscType);
-		ArrayAdapter<CharSequence> itemAdapter = ArrayAdapter.createFromResource(this, R.array.tool_types, android.R.layout.simple_spinner_item);
+		ArrayAdapter<CharSequence> itemAdapter = ArrayAdapter.createFromResource(this, R.array.tool_types,
+				android.R.layout.simple_spinner_item);
 		itemAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 		itemSpinner.setPrompt("Velg redskapstype");
 		itemSpinner.setAdapter(new NoDefaultSpinner(itemAdapter, R.layout.spinner_layout_choose_tool, activityContext));
@@ -449,8 +455,8 @@ public class BaseActivity extends ActionBarActivity {
 		builder.show();
 	}
 
-	private void acceptButtonRegister(View view, final AlertDialog builder, final EditText startingCoordinates, final EditText endCoordinates, final TextView invalidInputFeedback,
-			final Spinner projectionSpinner, final Spinner itemSpinner) {
+	private void acceptButtonRegister(View view, final AlertDialog builder, final EditText startingCoordinates,
+			final EditText endCoordinates, final TextView invalidInputFeedback, final Spinner projectionSpinner, final Spinner itemSpinner) {
 		Button acceptButton = (Button) view.findViewById(R.id.dialogAcceptRegistration);
 		acceptButton.setOnClickListener(new View.OnClickListener() {
 			public void onClick(View v) {
@@ -469,10 +475,10 @@ public class BaseActivity extends ActionBarActivity {
 					invalidInputFeedback.setText(getString(R.string.register_tool_no_tool_selected));
 					invalidInputFeedback.setVisibility(android.view.View.VISIBLE);
 					return;
-					
+
 				}
 
-				if ( new FiskInfoUtility().checkCoordinates(ToolstartingCoordinates, projectionSpinner.getSelectedItem().toString()) == false) {
+				if (new FiskInfoUtility().checkCoordinates(ToolstartingCoordinates, projectionSpinner.getSelectedItem().toString()) == false) {
 					invalidInputFeedback.setText(getString(R.string.register_tool_invalid_coordinate_format));
 					invalidInputFeedback.setVisibility(android.view.View.VISIBLE);
 
@@ -499,8 +505,6 @@ public class BaseActivity extends ActionBarActivity {
 			}
 		});
 	}
-
-
 
 	/**
 	 * Sets the contents of the given EditText to be equal to the GPS position
@@ -572,7 +576,8 @@ public class BaseActivity extends ActionBarActivity {
 		Button cancelButton = (Button) view.findViewById(R.id.cancel_login_button);
 		builder.setView(view);
 		final AlertDialog dialog = builder.create();
-		
+		dialog.setCanceledOnTouchOutside(false);
+
 		loginButton.setOnClickListener(new View.OnClickListener() {
 			public void onClick(View v) {
 				if (incorrectCredentialsTextView.getVisibility() == 0) {
@@ -619,23 +624,23 @@ public class BaseActivity extends ActionBarActivity {
 		});
 
 		cancelButton.setOnClickListener(new View.OnClickListener() {
-			
+
 			@Override
 			public void onClick(View v) {
 				dialog.dismiss();
-	
+
 			}
 		});
-		
+
 		dialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
-			
+
 			@Override
 			public void onDismiss(DialogInterface dialog) {
 				// TODO Auto-generated method stub
 				actionBar.setSelectedNavigationItem(adapter.getCount());
 			}
 		});
-		
+
 		dialog.show();
 	}
 
@@ -797,7 +802,7 @@ public class BaseActivity extends ActionBarActivity {
 	public void setAuthentication(boolean authLevel) {
 		BaseActivity.userIsAuthenticated = authLevel;
 	}
-	
+
 	private static ArrayAdapter<String> createAndInitializeHintAdapter(int rPathToArray, String hint, Context context) {
 		ArrayAdapter<String> adapter = new ArrayAdapter<String>(context, R.layout.spinner_item) {
 
@@ -830,7 +835,6 @@ public class BaseActivity extends ActionBarActivity {
 		adapter.setDropDownViewResource(R.layout.spinner_item);
 		return adapter;
 	}
-
 
 	/**
 	 * Sends a request to BarentsWatch for the given service, which returns a
@@ -908,16 +912,20 @@ public class BaseActivity extends ActionBarActivity {
 	public boolean exportMapLayerToUser(Context activityContext) {
 		LayoutInflater layoutInflater = getLayoutInflater();
 		View view = layoutInflater.inflate(R.layout.dialog_export_metadata, (null));
+
+		Button downloadButton = (Button) view.findViewById(R.id.metadataDownloadButton);
+		Button cancelButton = (Button) view.findViewById(R.id.cancel_button);
+
 		final AlertDialog builder = new AlertDialog.Builder(activityContext).create();
 		builder.setTitle(R.string.map_export_metadata_title);
 		builder.setView(view);
 		final AtomicReference<String> selectedHeader = new AtomicReference<String>();
 		final AtomicReference<String> selectedFormat = new AtomicReference<String>();
-		ExpandableListView expListView = (ExpandableListView) view.findViewById(R.id.exportMetadataMapServices);
+		final ExpandableListView expListView = (ExpandableListView) view.findViewById(R.id.exportMetadataMapServices);
 		final List<String> listDataHeader = new ArrayList<String>();
 		final HashMap<String, List<String>> listDataChild = new HashMap<String, List<String>>();
 		final Map<String, String> nameToApiNameResolver = new HashMap<String, String>();
-		
+
 		JSONArray availableSubscriptions = getSharedCacheOfAvailableSubscriptions();
 		if (availableSubscriptions == null) {
 			availableSubscriptions = authenticatedGetRequestToBarentswatchAPIService(getString(R.string.my_page_geo_data_service));
@@ -949,14 +957,25 @@ public class BaseActivity extends ActionBarActivity {
 
 			@Override
 			public boolean onChildClick(ExpandableListView parent, View v, int groupPosition, int childPosition, long id) {
+				String tag = "prevSelected";
 				selectedHeader.set(nameToApiNameResolver.get(listDataHeader.get(groupPosition)));
 				selectedHeader.set(listDataHeader.get(groupPosition));
 				selectedFormat.set(listDataChild.get(listDataHeader.get(groupPosition)).get(childPosition));
+//				for(int i = 0; i < parent.getChildCount(); i++) {
+//					if(tag.equals(parent.getChildAt(i).getTag())) {
+//						parent.getChildAt(i).setTag(null);
+//						((LinearLayout)parent.getChildAt(i)).getChildAt(0).setBackgroundColor(getResources().getColor(android.R.color.background_light));
+//					}
+//				}
+//				
+//				((LinearLayout)v).getChildAt(0).setBackgroundColor(Color.rgb(214, 214, 214));
+//				v.setTag(tag);
+				
+				
 				return true;
 			}
 		});
 
-		Button downloadButton = (Button) view.findViewById(R.id.metadataDownloadButton);
 		downloadButton.setOnClickListener(new View.OnClickListener() {
 			public void onClick(View v) {
 				new DownloadMapLayerFromBarentswatchApiInBackground().execute(selectedHeader.get(), selectedFormat.get());
@@ -964,6 +983,13 @@ public class BaseActivity extends ActionBarActivity {
 			}
 		});
 
+		cancelButton.setOnClickListener(new View.OnClickListener() {
+			public void onClick(View v) {
+				builder.dismiss();
+			}
+		});
+
+		builder.setCanceledOnTouchOutside(false);
 		builder.show();
 
 		return true;
@@ -989,7 +1015,7 @@ public class BaseActivity extends ActionBarActivity {
 	 * @param 5 User position distance
 	 * @param 6 Tells the class that this is a alarm file
 	 */
-/**
+	/**
 	 * DOCUMENTATION OUTDATED: THIS FUNCTION SHOULD BE REFACTORED, INTERFACED
 	 * AND BETTER CLASS CODE
 	 * 
@@ -1051,7 +1077,8 @@ public class BaseActivity extends ActionBarActivity {
 				String paramsString = URLEncodedUtils.format(getParameters, "UTF-8");
 				HttpGet httpGet;
 
-				httpGet = new HttpGet("http://pilot.barentswatch.net/api/v1/geodata/" + apiName + "/download?format=" + format + "&" + paramsString);
+				httpGet = new HttpGet("http://pilot.barentswatch.net/api/v1/geodata/" + apiName + "/download?format=" + format + "&"
+						+ paramsString);
 				httpGet.addHeader(HTTP.CONTENT_TYPE, "application/json");
 				Log.d("FiskInfo GetRequest", "The current get request is: " + httpGet.getRequestLine());
 				HttpResponse httpResponse = httpClient.execute(httpGet);
@@ -1116,7 +1143,8 @@ public class BaseActivity extends ActionBarActivity {
 					writeAlarmFileToExternalStorage(data, outputStream, filePath);
 				}
 			} else {
-				Toast error = Toast.makeText(getContext(), "Nedlastningen feilet, venligst sjekk at du har plass til filen p? mobilen", Toast.LENGTH_LONG);
+				Toast error = Toast.makeText(getContext(), "Nedlastningen feilet, venligst sjekk at du har plass til filen p? mobilen",
+						Toast.LENGTH_LONG);
 				error.show();
 				return;
 			}
@@ -1218,7 +1246,6 @@ public class BaseActivity extends ActionBarActivity {
 		}
 
 	}
-
 
 	/**
 	 * Checks if external storage is available for read and write.

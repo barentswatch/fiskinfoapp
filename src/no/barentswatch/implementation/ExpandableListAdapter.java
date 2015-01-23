@@ -5,6 +5,7 @@ import java.util.List;
 
 import no.barentswatch.fiskinfo.R;
 import android.content.Context;
+import android.graphics.Color;
 import android.graphics.Typeface;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -18,7 +19,8 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter {
     private List<String> _listDataHeader; // header titles
     // child data in format of header title, child title
     private HashMap<String, List<String>> _listDataChild;
- 
+    private TextView _mTextView = null;
+    
     public ExpandableListAdapter(Context context, List<String> listDataHeader,
             HashMap<String, List<String>> listChildData) {
         this._context = context;
@@ -49,10 +51,24 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter {
             convertView = infalInflater.inflate(R.layout.list_item, null);
         }
  
-        TextView txtListChild = (TextView) convertView
+        final TextView txtListChild = (TextView) convertView
                 .findViewById(R.id.lblListItem);
  
         txtListChild.setText(childText);
+        
+        txtListChild.setOnClickListener(new View.OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				if(_mTextView != null) {
+					_mTextView.setBackgroundColor(Color.WHITE);
+				}
+				
+				_mTextView = txtListChild;
+				_mTextView.setBackgroundColor(Color.rgb(214, 214, 214));
+			}
+		});
+        
         return convertView;
     }
  

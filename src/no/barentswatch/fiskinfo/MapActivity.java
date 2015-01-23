@@ -239,7 +239,10 @@ public class MapActivity extends BaseActivity {
 		});
 
 		Button setProximityAlertButton = (Button) view.findViewById(R.id.scheduledSetProximityCheckerDialogButton);
+		Button cancelButton = (Button) view.findViewById(R.id.cancel_button);
+		
 		builder.setView(view);
+		builder.setCanceledOnTouchOutside(false);
 
 		setProximityAlertButton.setOnClickListener(new View.OnClickListener() {
 			public void onClick(View v) {
@@ -268,6 +271,16 @@ public class MapActivity extends BaseActivity {
 			}
 		});
 
+		cancelButton.setOnClickListener(new View.OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				builder.cancel();
+	
+			}
+		});
+		
+		
 		builder.show();
 	}
 

@@ -1,20 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent" >
-
-    <EditText
-        android:id="@+id/scheduledProximityRangeEditText"
-        android:layout_width="90dp"
-        android:layout_height="wrap_content"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentTop="true"
-        android:layout_marginTop="93dp"
-        android:ems="10"
-        android:hint="@string/proximity_radius_edit_text_hint"
-        android:inputType="numberDecimal" >
-        <requestFocus />
-    </EditText>
+    android:layout_height="match_parent"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin" >
 
     <SeekBar
         android:id="@+id/scheduledSetProximityRangeSeekBar"
@@ -24,14 +15,44 @@
         android:layout_alignTop="@+id/scheduledProximityRangeEditText"
         android:layout_toLeftOf="@+id/scheduledProximityRangeEditText" />
 
-    <Button
-        android:id="@+id/scheduledSetProximityCheckerDialogButton"
-        android:layout_width="wrap_content"
+    <EditText
+        android:id="@+id/scheduledProximityRangeEditText"
+        android:layout_width="90dp"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginBottom="50dp"
-        android:text="@string/set_proximity_alert" />
+        android:layout_alignParentRight="true"
+        android:layout_alignParentTop="true"
+        android:ems="10"
+        android:hint="@string/proximity_radius_edit_text_hint"
+        android:inputType="numberDecimal" >
+
+        <requestFocus />
+    </EditText>
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/scheduledMeasuringUnitsSpinner"
+        android:layout_marginTop="50dp"
+        android:orientation="horizontal"
+        android:paddingBottom="1.0dip"
+        android:paddingLeft="4.0dip"
+        android:paddingRight="4.0dip"
+        android:paddingTop="5.0dip" >
+
+        <Button
+            android:id="@+id/scheduledSetProximityCheckerDialogButton"
+            android:layout_width="0.0dip"
+            android:layout_height="wrap_content"
+            android:layout_weight="1.0"
+            android:text="@string/set_proximity_alert" />
+
+        <Button
+            android:id="@+id/cancel_button"
+            android:layout_width="0.0dip"
+            android:layout_height="wrap_content"
+            android:layout_weight="1.0"
+            android:text="@string/cancel" />
+    </LinearLayout>
 
     <Spinner
         android:id="@+id/scheduledMeasuringUnitsSpinner"
