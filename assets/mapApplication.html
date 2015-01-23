@@ -6,6 +6,7 @@
     <script type="text/javascript" defer="defer" src="http://openlayers.org/api/OpenLayers.js"></script>
     <script>
         var map;
+        var ls;
         var sensor = false;
         var format = "image/jpeg";
         window.onload = function () {
@@ -19,7 +20,6 @@
                 projection: 'EPSG:3857',
                 controls: [
                     new OpenLayers.Control.Attribution(),
-					new OpenLayers.Control.LayerSwitcher({ 'div': OpenLayers.Util.getElement('layerswitcher') }),
                     new OpenLayers.Control.TouchNavigation({
                         dragPanOptions: {
                             enableKinetic: true
@@ -64,9 +64,9 @@
                 yx: { 'EPSG:4326': true }
             }
         ), new OpenLayers.Layer.WMS(
-            "Seismikk, pågående", "http://153.44.6.85:8080/geoserver/bw/wms",
+            "Iskanten", "http://153.44.6.85:8080/geoserver/bw/wms",
             {
-                LAYERS: 'bwdev:npdsurveyongoing_latest',
+                LAYERS: 'bwdev:iceedge_latest',
                 transparent: true,
                 STYLES: '',
                 format: format
@@ -110,6 +110,10 @@
                 center: new OpenLayers.LonLat(15, 66.5).transform(new OpenLayers.Projection('EPSG:4326'), new OpenLayers.Projection('EPSG:3857')),
                 zoom: 5
             });
+            ls = new OpenLayers.Control.LayerSwitcher();
+            ls.ascending = false;
+            ls.useLegendGraphics = true;
+            map.addControl(ls);
         };
 
         function populateUserPosition(callback) {
