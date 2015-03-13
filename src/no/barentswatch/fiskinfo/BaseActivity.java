@@ -1,3 +1,16 @@
+/**
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+ */
 package no.barentswatch.fiskinfo;
 
 import java.io.BufferedReader;
@@ -98,7 +111,7 @@ public class BaseActivity extends ActionBarActivity {
 	private int previousSelectionActionBar = -1;
 	private JSONArray sharedCacheOfAvailableSubscriptions;
 	private static final String STATE_SELECTED_NAVIGATION_ITEM = "selectedNavItem";
-	
+
 	/*
 	 * these value refer to the index of the units in the string array
 	 * 'measurement_units' and are only here so we don't need to look them up
@@ -131,7 +144,7 @@ public class BaseActivity extends ActionBarActivity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		
+
 		setContentView(R.layout.activity_base);
 		if (applicationStartup) {
 			try {
@@ -144,24 +157,21 @@ public class BaseActivity extends ActionBarActivity {
 
 		initalizeAndConfigureActionBar();
 	}
-	
+
 	@Override
 	public void onRestoreInstanceState(Bundle savedInstanceState) {
-	    // Restore the previously serialized current dropdown position.
-	    if (savedInstanceState.containsKey(STATE_SELECTED_NAVIGATION_ITEM)) {
-	        getSupportActionBar().setSelectedNavigationItem(
-	                savedInstanceState.getInt(STATE_SELECTED_NAVIGATION_ITEM));
-	    }
-	}
-	
-	@Override
-	public void onSaveInstanceState(Bundle outState) {
-	    // Serialize the current dropdown position.
-	    outState.putInt(STATE_SELECTED_NAVIGATION_ITEM, getSupportActionBar()
-	            .getSelectedNavigationIndex());
+		// Restore the previously serialized current dropdown position.
+		if (savedInstanceState.containsKey(STATE_SELECTED_NAVIGATION_ITEM)) {
+			getSupportActionBar().setSelectedNavigationItem(savedInstanceState.getInt(STATE_SELECTED_NAVIGATION_ITEM));
+		}
 	}
 
-	
+	@Override
+	public void onSaveInstanceState(Bundle outState) {
+		// Serialize the current dropdown position.
+		outState.putInt(STATE_SELECTED_NAVIGATION_ITEM, getSupportActionBar().getSelectedNavigationIndex());
+	}
+
 	private void getAuthenticationCredientialsFromSharedPrefrences() throws Exception {
 		prefs = this.getSharedPreferences("no.barentswatch.fiskinfo", Context.MODE_PRIVATE);
 		String authWritten = prefs.getString("authWritten", null);
@@ -186,7 +196,7 @@ public class BaseActivity extends ActionBarActivity {
 				invalidateAuthenticationData();
 			}
 		}
-		
+
 	}
 
 	/**
@@ -225,41 +235,41 @@ public class BaseActivity extends ActionBarActivity {
 
 	@Override
 	public void onConfigurationChanged(Configuration newConfig) {
-	    super.onConfigurationChanged(newConfig);
-	    int orientation = newConfig.orientation;
-	    
-	    switch (orientation) {
-	    case Configuration.ORIENTATION_LANDSCAPE:
-			actionBar.setSelectedNavigationItem(adapter.getCount());
-	        // do what you want when user is in LANDSCAPE
-	        break;
+		super.onConfigurationChanged(newConfig);
+		int orientation = newConfig.orientation;
 
-	    case Configuration.ORIENTATION_PORTRAIT:
+		switch (orientation) {
+		case Configuration.ORIENTATION_LANDSCAPE:
 			actionBar.setSelectedNavigationItem(adapter.getCount());
-	        // do what you want when user is in PORTRAIT
-	        break;
-	    }
+			// do what you want when user is in LANDSCAPE
+			break;
+
+		case Configuration.ORIENTATION_PORTRAIT:
+			actionBar.setSelectedNavigationItem(adapter.getCount());
+			// do what you want when user is in PORTRAIT
+			break;
+		}
 	}
-	
+
 	@Override
-	public void onResume(){
-	    super.onResume();
+	public void onResume() {
+		super.onResume();
 
 		return;
-	}	
-	
+	}
+
 	@Override
 	public void onPause() {
-	    super.onPause();
+		super.onPause();
 		return;
 	}
-	
+
 	@Override
 	public void onRestart() {
-	    super.onRestart();
+		super.onRestart();
 		return;
 	}
-	
+
 	private void initalizeAndConfigureActionBarSpinners() {
 		spinner = (Spinner) findViewById(R.id.actionBarNavigationList);
 		if (userIsAuthenticated) {
@@ -283,7 +293,7 @@ public class BaseActivity extends ActionBarActivity {
 					System.out.println("First time!");
 					return true;
 				}
-								
+
 				switch (position) {
 				case 0: // Logg inn
 					mContext = getContext();
@@ -308,7 +318,7 @@ public class BaseActivity extends ActionBarActivity {
 	private void initializeAuthenticatedActionBarSpinner() {
 		adapter = createAndInitializeHintAdapter(R.array.authenticated_user_actionbar_options, "Meny", mContext);
 		spinner.setAdapter(adapter);
-//		spinner.setSelection(adapter.getCount());
+		// spinner.setSelection(adapter.getCount());
 
 		navigationListener = new OnNavigationListener() {
 
@@ -318,7 +328,7 @@ public class BaseActivity extends ActionBarActivity {
 					firstTimeSelect = false;
 					return true;
 				}
-				
+
 				switch (position) {
 				case 0: // Min side
 					loadView(MyPageActivity.class);
@@ -334,7 +344,7 @@ public class BaseActivity extends ActionBarActivity {
 					loadView(HelpActivity.class);
 					break;
 				case 4: // logg ut
-					
+
 					createConfirmLogoutDialog(mContext, R.string.log_out, R.string.confirm_log_out);
 					break;
 				default:
@@ -384,7 +394,7 @@ public class BaseActivity extends ActionBarActivity {
 		builder.setTitle(rPathToTitleOfPopup);
 		builder.setMessage(rPathToTextInTheBodyOfThePopup);
 		builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
-			
+
 			@Override
 			public void onClick(DialogInterface dialog, int which) {
 				invalidateAuthenticationData();
@@ -399,13 +409,13 @@ public class BaseActivity extends ActionBarActivity {
 				dialog.dismiss();
 			}
 		});
-		
+
 		dialog = builder.create();
 		dialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
-			
+
 			@Override
 			public void onDismiss(DialogInterface dialog) {
-				actionBar.setSelectedNavigationItem(adapter.getCount());				
+				actionBar.setSelectedNavigationItem(adapter.getCount());
 			}
 		});
 
@@ -415,7 +425,7 @@ public class BaseActivity extends ActionBarActivity {
 		TextView messageView = (TextView) dialog.findViewById(android.R.id.message);
 		messageView.setGravity(Gravity.CENTER);
 	}
-	
+
 	public void createConfirmOverWriteDialog(Context activityContext, final EditText coordinateField, final String userCoordinates) {
 		AlertDialog.Builder builder = new AlertDialog.Builder(activityContext);
 		builder.setTitle(R.string.register_tool_confirm_overwrite_title);
@@ -1054,11 +1064,11 @@ public class BaseActivity extends ActionBarActivity {
 
 			@Override
 			public boolean onChildClick(ExpandableListView parent, View v, int groupPosition, int childPosition, long id) {
-				String tag = "prevSelected";   
+				String tag = "prevSelected";
 				selectedHeader.set(nameToApiNameResolver.get(listDataHeader.get(groupPosition)));
 				selectedHeader.set(listDataHeader.get(groupPosition));
 				selectedFormat.set(listDataChild.get(listDataHeader.get(groupPosition)).get(childPosition));
-				
+
 				return true;
 			}
 		});
