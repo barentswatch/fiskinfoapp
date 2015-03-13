@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.List;
 
 import no.barentswatch.fiskinfo.R;
+import android.R.raw;
 import android.content.Context;
 import android.graphics.Color;
 import android.graphics.Typeface;
@@ -39,16 +40,24 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter {
         return childPosition;
     }
  
+    /* (non-Javadoc)
+     * @see android.widget.ExpandableListAdapter#getChildView(int, int, boolean, android.view.View, android.view.ViewGroup)
+     */
     @Override
-    public View getChildView(int groupPosition, final int childPosition,
+    public View getChildView(final int groupPosition, final int childPosition,
             boolean isLastChild, View convertView, ViewGroup parent) {
  
         final String childText = (String) getChild(groupPosition, childPosition);
  
         if (convertView == null) {
+        	
             LayoutInflater infalInflater = (LayoutInflater) this._context
                     .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             convertView = infalInflater.inflate(R.layout.list_item, null);
+//            if(getGroup(groupPosition).equals("Tilgjengelige abonnementer")) {
+//            	TextView titleView = (TextView) convertView.findViewById(R.id.lblListItem);
+//            	titleView.setCompoundDrawables(R.drawable.ikon_kystfiske, null, null, null);
+//            }
         }
  
         final TextView txtListChild = (TextView) convertView
@@ -56,18 +65,17 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter {
  
         txtListChild.setText(childText);
         
-        txtListChild.setOnClickListener(new View.OnClickListener() {
-			
-			@Override
-			public void onClick(View v) {
-				if(_mTextView != null) {
-					_mTextView.setBackgroundColor(Color.WHITE);
-				}
-				
-				_mTextView = txtListChild;
-				_mTextView.setBackgroundColor(Color.rgb(214, 214, 214));
-			}
-		});
+//        convertView.setOnClickListener(new View.OnClickListener() {
+//			
+//			@Override
+//			public void onClick(View v) {
+//				if(_mTextView != null) {
+//					_mTextView.setBackgroundColor(Color.WHITE);
+//				}
+//				_mTextView = txtListChild;
+//				_mTextView.setBackgroundColor(Color.rgb(214, 214, 214));
+//			}
+//		});
         
         return convertView;
     }

@@ -1,0 +1,79 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent" >
+
+    <TextView
+        android:id="@+id/subscription_last_updated_title_text_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginLeft="@dimen/subscription_dialog_margin_left"
+        android:layout_marginTop="@dimen/subscription_dialog_margin_top"
+        android:text="@string/subscription_last_updated_colon" />
+
+    <TextView
+        android:id="@+id/subscription_last_updated_text_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/subscription_last_updated_title_text_view"
+        android:layout_marginLeft="@dimen/subscription_dialog_margin_to_right_off"
+        android:layout_toRightOf="@+id/subscription_last_updated_title_text_view"
+        android:text="@string/subscription_last_updated_hint" />
+
+    <TextView
+        android:id="@+id/subscription_owner_title_text_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@+id/subscription_last_updated_title_text_view"
+        android:layout_marginLeft="@dimen/subscription_dialog_margin_left"
+        android:layout_marginTop="@dimen/subscription_dialog_margin_top"
+        android:text="@string/subscription_owner" />
+
+    <TextView
+        android:id="@+id/subscription_owner_text_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/subscription_owner_title_text_view"
+        android:layout_marginLeft="@dimen/subscription_dialog_margin_to_right_off"
+        android:layout_toRightOf="@+id/subscription_last_updated_title_text_view"
+        android:text="@string/subscription_last_updated_hint" />
+
+    <TextView
+        android:id="@+id/subscription_description_text_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@+id/subscription_owner_title_text_view"
+        android:layout_marginLeft="@dimen/subscription_dialog_margin_left"
+        android:layout_marginTop="@dimen/subscription_dialog_margin_top"
+        android:hint="@string/subscription_info" />
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/subscription_description_text_view"
+        android:layout_marginTop="@dimen/subscription_dialog_margin_bottom_button"
+        android:orientation="horizontal"
+        android:paddingBottom="1.0dip"
+        android:paddingLeft="4.0dip"
+        android:paddingRight="4.0dip"
+        android:paddingTop="5.0dip" >
+
+        <Button
+            android:id="@+id/dismiss_dialog_button"
+            android:layout_width="0.0dip"
+            android:layout_height="wrap_content"
+            android:layout_weight="1.0"
+            android:text="@string/ok" />
+
+        <Button
+            android:id="@+id/go_to_map_button"
+            android:layout_width="0.0dip"
+            android:layout_height="wrap_content"
+            android:layout_weight="1.0"
+            android:text="@string/subscription_go_to_map" />
+    </LinearLayout>
+
+</RelativeLayout>

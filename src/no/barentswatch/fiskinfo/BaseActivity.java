@@ -35,7 +35,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.pm.ActivityInfo;
+import android.content.res.Configuration;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.net.ConnectivityManager;
@@ -57,7 +57,6 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ExpandableListView;
 import android.widget.ExpandableListView.OnChildClickListener;
-import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -98,7 +97,8 @@ public class BaseActivity extends ActionBarActivity {
 	private static SharedPreferences prefs;
 	private int previousSelectionActionBar = -1;
 	private JSONArray sharedCacheOfAvailableSubscriptions;
-
+	private static final String STATE_SELECTED_NAVIGATION_ITEM = "selectedNavItem";
+	
 	/*
 	 * these value refer to the index of the units in the string array
 	 * 'measurement_units' and are only here so we don't need to look them up
@@ -131,7 +131,7 @@ public class BaseActivity extends ActionBarActivity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+		
 		setContentView(R.layout.activity_base);
 		if (applicationStartup) {
 			try {
@@ -144,7 +144,24 @@ public class BaseActivity extends ActionBarActivity {
 
 		initalizeAndConfigureActionBar();
 	}
+	
+	@Override
+	public void onRestoreInstanceState(Bundle savedInstanceState) {
+	    // Restore the previously serialized current dropdown position.
+	    if (savedInstanceState.containsKey(STATE_SELECTED_NAVIGATION_ITEM)) {
+	        getSupportActionBar().setSelectedNavigationItem(
+	                savedInstanceState.getInt(STATE_SELECTED_NAVIGATION_ITEM));
+	    }
+	}
+	
+	@Override
+	public void onSaveInstanceState(Bundle outState) {
+	    // Serialize the current dropdown position.
+	    outState.putInt(STATE_SELECTED_NAVIGATION_ITEM, getSupportActionBar()
+	            .getSelectedNavigationIndex());
+	}
 
+	
 	private void getAuthenticationCredientialsFromSharedPrefrences() throws Exception {
 		prefs = this.getSharedPreferences("no.barentswatch.fiskinfo", Context.MODE_PRIVATE);
 		String authWritten = prefs.getString("authWritten", null);
@@ -165,9 +182,11 @@ public class BaseActivity extends ActionBarActivity {
 			System.out.println("stored token: " + storedToken);
 			setAuthentication(true);
 			if (storedUsername == null || storedPassword == null || storedToken == null) {
+				System.out.println("Could not read proper from disk at startup, invalidating the data");
 				invalidateAuthenticationData();
 			}
 		}
+		
 	}
 
 	/**
@@ -175,7 +194,7 @@ public class BaseActivity extends ActionBarActivity {
 	 */
 	private void invalidateAuthenticationData() {
 		String authWritten;
-		System.out.println("Could not read proper from disk at startup, invalidating the data");
+		System.out.println("Invalidating stored data");
 		storedUsername = storedPassword = null;
 		storedToken = null;
 		authWritten = null;
@@ -192,7 +211,6 @@ public class BaseActivity extends ActionBarActivity {
 	 * 11.
 	 */
 	private void initalizeAndConfigureActionBar() {
-
 		actionBar = getSupportActionBar();
 		actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_LIST);
 		actionBar.setBackgroundDrawable(new ColorDrawable(Color.parseColor("#085382")));
@@ -205,6 +223,43 @@ public class BaseActivity extends ActionBarActivity {
 		actionBar.setSelectedNavigationItem(adapter.getCount());
 	}
 
+	@Override
+	public void onConfigurationChanged(Configuration newConfig) {
+	    super.onConfigurationChanged(newConfig);
+	    int orientation = newConfig.orientation;
+	    
+	    switch (orientation) {
+	    case Configuration.ORIENTATION_LANDSCAPE:
+			actionBar.setSelectedNavigationItem(adapter.getCount());
+	        // do what you want when user is in LANDSCAPE
+	        break;
+
+	    case Configuration.ORIENTATION_PORTRAIT:
+			actionBar.setSelectedNavigationItem(adapter.getCount());
+	        // do what you want when user is in PORTRAIT
+	        break;
+	    }
+	}
+	
+	@Override
+	public void onResume(){
+	    super.onResume();
+
+		return;
+	}	
+	
+	@Override
+	public void onPause() {
+	    super.onPause();
+		return;
+	}
+	
+	@Override
+	public void onRestart() {
+	    super.onRestart();
+		return;
+	}
+	
 	private void initalizeAndConfigureActionBarSpinners() {
 		spinner = (Spinner) findViewById(R.id.actionBarNavigationList);
 		if (userIsAuthenticated) {
@@ -225,9 +280,10 @@ public class BaseActivity extends ActionBarActivity {
 			public boolean onNavigationItemSelected(int position, long itemId) {
 				if (firstTimeSelect == true) {
 					firstTimeSelect = false;
+					System.out.println("First time!");
 					return true;
 				}
-
+								
 				switch (position) {
 				case 0: // Logg inn
 					mContext = getContext();
@@ -252,7 +308,7 @@ public class BaseActivity extends ActionBarActivity {
 	private void initializeAuthenticatedActionBarSpinner() {
 		adapter = createAndInitializeHintAdapter(R.array.authenticated_user_actionbar_options, "Meny", mContext);
 		spinner.setAdapter(adapter);
-		spinner.setSelection(adapter.getCount());
+//		spinner.setSelection(adapter.getCount());
 
 		navigationListener = new OnNavigationListener() {
 
@@ -262,6 +318,7 @@ public class BaseActivity extends ActionBarActivity {
 					firstTimeSelect = false;
 					return true;
 				}
+				
 				switch (position) {
 				case 0: // Min side
 					loadView(MyPageActivity.class);
@@ -277,12 +334,13 @@ public class BaseActivity extends ActionBarActivity {
 					loadView(HelpActivity.class);
 					break;
 				case 4: // logg ut
-					invalidateAuthenticationData();
-					loadView(MainActivity.class);
+					
+					createConfirmLogoutDialog(mContext, R.string.log_out, R.string.confirm_log_out);
 					break;
 				default:
 					return false;
 				}
+
 				return true;
 			}
 		};
@@ -320,6 +378,44 @@ public class BaseActivity extends ActionBarActivity {
 		messageView.setGravity(Gravity.CENTER);
 	}
 
+	public void createConfirmLogoutDialog(Context activityContext, int rPathToTitleOfPopup, int rPathToTextInTheBodyOfThePopup) {
+		AlertDialog.Builder builder = new AlertDialog.Builder(activityContext);
+		AlertDialog dialog;
+		builder.setTitle(rPathToTitleOfPopup);
+		builder.setMessage(rPathToTextInTheBodyOfThePopup);
+		builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+			
+			@Override
+			public void onClick(DialogInterface dialog, int which) {
+				invalidateAuthenticationData();
+				dialog.dismiss();
+				loadView(MainActivity.class);
+			}
+		});
+		builder.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+
+			@Override
+			public void onClick(DialogInterface dialog, int which) {
+				dialog.dismiss();
+			}
+		});
+		
+		dialog = builder.create();
+		dialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
+			
+			@Override
+			public void onDismiss(DialogInterface dialog) {
+				actionBar.setSelectedNavigationItem(adapter.getCount());				
+			}
+		});
+
+		dialog.show();
+		dialog.setCanceledOnTouchOutside(false);
+
+		TextView messageView = (TextView) dialog.findViewById(android.R.id.message);
+		messageView.setGravity(Gravity.CENTER);
+	}
+	
 	public void createConfirmOverWriteDialog(Context activityContext, final EditText coordinateField, final String userCoordinates) {
 		AlertDialog.Builder builder = new AlertDialog.Builder(activityContext);
 		builder.setTitle(R.string.register_tool_confirm_overwrite_title);
@@ -777,6 +873,7 @@ public class BaseActivity extends ActionBarActivity {
 	 *            A generic class, namely the class instance of the view to load
 	 */
 	public void loadView(Class<?> activityClass) {
+		System.out.println("loading view: " + activityClass.getName().toString());
 		mContext = getContext();
 		try {
 			actionBar.setSelectedNavigationItem(adapter.getCount());
@@ -957,20 +1054,10 @@ public class BaseActivity extends ActionBarActivity {
 
 			@Override
 			public boolean onChildClick(ExpandableListView parent, View v, int groupPosition, int childPosition, long id) {
-				String tag = "prevSelected";
+				String tag = "prevSelected";   
 				selectedHeader.set(nameToApiNameResolver.get(listDataHeader.get(groupPosition)));
 				selectedHeader.set(listDataHeader.get(groupPosition));
 				selectedFormat.set(listDataChild.get(listDataHeader.get(groupPosition)).get(childPosition));
-//				for(int i = 0; i < parent.getChildCount(); i++) {
-//					if(tag.equals(parent.getChildAt(i).getTag())) {
-//						parent.getChildAt(i).setTag(null);
-//						((LinearLayout)parent.getChildAt(i)).getChildAt(0).setBackgroundColor(getResources().getColor(android.R.color.background_light));
-//					}
-//				}
-//				
-//				((LinearLayout)v).getChildAt(0).setBackgroundColor(Color.rgb(214, 214, 214));
-//				v.setTag(tag);
-				
 				
 				return true;
 			}

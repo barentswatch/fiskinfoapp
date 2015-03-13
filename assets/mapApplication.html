@@ -7,6 +7,9 @@
     <script>
         var map;
         var ls;
+        var mFeature;
+        var selectFeature;
+        var geoJson = null;
         var sensor = false;
         var format = "image/jpeg";
         window.onload = function () {
@@ -31,10 +34,10 @@
                     new OpenLayers.Layer.WMS(
 	      		"Grunnkart", "http://opencache.statkart.no/gatekeeper/gk/gk.open?",
 		      	{ layers: 'sjo_hovedkart2', format: 'image/png' },
-                        { 'displayInLayerSwitcher': false },{
-		      	    isBaseLayer: true
-		      	}
-                        
+                        { 'displayInLayerSwitcher': false }, {
+                            isBaseLayer: true
+                        }
+
 	      	), new OpenLayers.Layer.WMS(
             "Redskapskartet", "http://153.44.6.85:8080/geoserver/bwdev/wms",
             {
@@ -114,65 +117,14 @@
             ls.ascending = false;
             ls.useLegendGraphics = true;
             map.addControl(ls);
-
-            var geoJson = Android.getGeoJson()
-            var geoJsonFormat = new OpenLayers.Format.GeoJSON();
-            var toolsVectorLayer = new OpenLayers.Layer.Vector();
-            map.addLayer(toolsVectorLayer);
-            toolsVectorLayer.addFeatures(geojson_format.read(geoJson));
-
-            ////feature info (wish me luck!)
-            //map.events.register('click', map, function (e) {
-            //    var params = {
-            //        REQUEST: "GetFeatureInfo",
-            //        EXCEPTIONS: "application/vnd.ogc.se_xml",
-            //        BBOX: map.getExtent().toBBOX(),
-            //        SERVICE: "WMS",
-            //        INFO_FORMAT: 'text/html',
-            //        QUERY_LAYERS: map.layers[1].params.LAYERS,
-            //        FEATURE_COUNT: 50,
-            //        Layers: 'bwdev:fishingfacility',
-            //        WIDTH: map.size.w,
-            //        HEIGHT: map.size.h,
-            //        format: format,
-            //        styles: map.layers[1].params.STYLES,
-            //        srs: map.layers[1].params.SRS
-            //    };
-            //    // handle the wms 1.3 vs wms 1.1 madness
-            //    if (map.layers[1].params.VERSION == "1.3.0") {
-            //        params.version = "1.3.0";
-            //        params.j = parseInt(e.xy.x);
-            //        params.i = parseInt(e.xy.y);
-            //    } else {
-            //        params.version = "1.1.1";
-            //        params.x = parseInt(e.xy.x);
-            //        params.y = parseInt(e.xy.y);
-            //    }
-            //    // merge filters
-            //    if (map.layers[1].params.CQL_FILTER != null) {
-            //        params.cql_filter = map.layers[1].params.CQL_FILTER;
-            //    }
-            //    if (map.layers[1].params.FILTER != null) {
-            //        params.filter = map.layers[1].params.FILTER;
-            //    }
-            //    if (map.layers[1].params.FEATUREID) {
-            //        params.featureid = map.layers[1].params.FEATUREID;
-            //    }
-
-            //    document.origin = "http://153.44.6.85:8080/geoserver/bwdev/wms";
-            //    OpenLayers.Request.GET({
-            //        url: "http://153.44.6.85:8080/geoserver/bwdev/wms",
-            //        params: params,
-            //        callback: setHTML
-            //    });
-            //    document.origin = "localhost";
-            //    //OpenLayers.Request.GET("http://153.44.6.85:8080/geoserver/bwdev/wms", params, this, setHTML, setHTML);
-            //    //OpenLayers.loadURL("http://153.44.6.85:8080/geoserver/bwdev/wms", params, this, setHTML, setHTML);
-            //    //OpenLayers.Event.stop(e)
-            //});
-
+            var tempscript = null, attempts;
+            tempscript = document.createElement("script");
+            tempscript.type = "text/javascript";
+            tempscript.id = "tempscript";
+            tempscript.src = "http://153.44.6.85:8080/geoserver/bwdev/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=bwdev:fishingfacility&maxFeatures=500000&outputFormat=text/javascript";
+            document.body.appendChild(tempscript);
         };
-        
+
         function setHTML(response) {
             document.getElementById('nodelist').innerHTML = response.responseText;
         };
@@ -187,12 +139,79 @@
             }
         }
 
+        function parseResponse(data) {
+            document.body.removeChild(tempscript);
+            tempscript = null;
+            geoJson = data;
+            var geoJsonFormat = new OpenLayers.Format.GeoJSON({
+                'internalProjection': new OpenLayers.Projection("EPSG:3857"),
+                'externalProjection': new OpenLayers.Projection("EPSG:4326")
+            });
+            var toolsVectorLayer = new OpenLayers.Layer.Vector();
+            toolsVectorLayer.addFeatures(geoJsonFormat.read(geoJson));
+            map.addLayer(toolsVectorLayer);
+            selectFeature = new OpenLayers.Control.SelectFeature(
+            toolsVectorLayer,{
+                onSelect: clickNotice,
+                onUnselect: onPopupFeatureUnselect,
+                autoActivate: true
+            });
+            map.addControl(selectFeature);
+        }
+
+        function clickNotice(feature) {
+            mFeature = feature;
+            var vesselName;
+            var phoneNumber;
+            var toolDate;
+            var toolTime;
+            if (feature.data.vesselname != null) {
+                vesselName = "Fartøynavn: " + feature.data.vesselname;
+            } else {
+                vesselName = "Fartøynavn: " + "Ikke tilgjengelig";
+            }
+            if (feature.data.vesselphone != null) {
+                phoneNumber = "Telefon nummer: " + feature.data.vesselphone;
+            } else {
+                phoneNumber = "Telefon nummer: " + "Ikke tilgjengelig";
+            }
+            if (feature.data.setupdatetime != null) {
+                toolDate = "Redskapet ble satt: " + feature.data.setupdatetime;
+            } else {
+                toolDate = "Redksapet ble satt: " + "Ikke tilgjengelig";
+            }
+            if (feature.data.tooltypename != null) {
+                toolTime = "Redskapstype: " + feature.data.tooltypename;
+            } else {
+                toolTime = "Redskapstype: " + "Ikke tilgjengelig";
+            }
+            popup = new OpenLayers.Popup.FramedCloud("Redskapsinformasjon",
+            feature.geometry.getBounds().getCenterLonLat(),
+                null, "<p>Redskapsinformasjon</p> <p> " + vesselName + "</p>" + "<p>" + phoneNumber + "</p>" + "<p>" + toolDate + "</p>" + "<p>" + toolTime + "</p>" + "<p></p>" , null, true, onPopupClose);
+            popup.panMapIfOutOfView = true;
+            popup.autoSize = true;
+            feature.popup = popup;
+            map.addPopup(popup);
+
+        }
+
         function zoomToUserPosition() {
             sensor = populateUserPosition(function (position) {
                 var userPosition = new OpenLayers.LonLat(position.coords.longitude, position.coords.latitude).transform(new OpenLayers.Projection('EPSG:4326'), new OpenLayers.Projection('EPSG:3857'));
                 map.setCenter(userPosition, 14);
             });
         }
+
+        function onPopupFeatureUnselect(feature) {
+            map.removePopup(feature.popup);
+            feature.popup.destroy();
+            feature.popup = null;
+        }
+
+        function onPopupClose(evt) {
+            selectFeature.unselect(mFeature);
+        }
+
 
         function fail() {
             alert("Venligst sjekk om du har internett forbindelse");
@@ -213,6 +232,8 @@
             }
         }
 
+        p {margin:0}
+
         #map {
             width: 100%;
             position: relative;
@@ -228,6 +249,15 @@
             font-family: Arial;
             padding: 2px 4px;
             border-radius: 5px 0 0 0;
+        }
+        #Redskapsinformasjon_close {
+            background-color: cornflowerblue;
+
+        }
+
+        #Redskapsinformasjon_close:before {
+            content: "X";
+            text-align: center;
         }
 
         #title, #tags, #shortdesc {

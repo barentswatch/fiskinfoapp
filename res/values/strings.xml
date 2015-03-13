@@ -10,10 +10,12 @@
     <string name="cancel">Avbryt</string>
     <string name="register">Registrer</string>
     <string name="no_internet_access">Manglende internettforbindelse</string>
-    
+
     <!-- Base activity strings -->
     <string name="title_activity_base">BaseActivity</string>
     <string name="actionbar_spinner_menu">Meny</string>
+    <string name="log_out">Logg ut</string>
+    <string name="confirm_log_out">Er du sikker på at du vil logge ut?</string>
 
     <!-- About dialog strings -->
     <string name="about_page_welcome_text">Velkommen til barentswatch Fiskinfo. Denne appen er forsatt under utvikling, men støttet funksjonalitet på nåværende tidspunk 
@@ -48,10 +50,19 @@
     <string name="my_page_add_notice">Legg til varsel</string>
     <string name="my_page_no_registered_vessels">Du har ingen registrerte fartøy. Klikk her for å legge til</string>
     <string name="my_page_no_registered_tools">Du har ingen registrerte redskaper. Klikk her for å legge til</string>
+    <string name="my_page_service_not_available">Denne tjenesten er ikke tilgjengelig enda.</string>
     <string name="my_page__no_registered_maps">Du har ingen registrerte kart. Klikk her for å legge til</string>
     <string name="my_page_no_registered_notices">Du har ingen registrerte varsler. Klikk her for å legge til</string>
     <string name="my_page_geo_data_service">v1/geodata/service/subscribable</string>
-
+    <string name="subscription_icon">Abonnementikon</string>
+    <string name="subscription_name">Abonnementnavn</string>
+    <string name="subscription_last_updated_colon">Sist oppdatert:</string>
+    <string name="subscription_last_updated_hint">Dato</string>
+    <string name="subscription_go_to_map">Se på kart</string>
+    <string name="subscription_info">Informasjon om kartlaget</string>
+    <string name="subscription_owner">Tjenesteeier</string>
+    <string name="subscription_owner_hint">Tjenesteeier</string>
+    
     <!-- Map activity strings -->
     <string name="title_activity_map">MapActivity</string>
     <string name="help_activity_button_text">Start veiledning</string>
@@ -72,9 +83,9 @@
     <string name="map_export_metadata_title">Last ned kartlag</string>
     <string name="map_export_metadata_help_text">Her kan du laste ned forskjellige kartlag i enten shape- eller OleX format. Velg et kartlag og klikk last ned, deretter lagres kartet på din mobil i mappen FiskInfo/Kartlag</string>
     <string name="map_ocean_currents_title">Se Havstrømmene ved min posisjon</string>
-	<string name="map_set_proximity_alert_title">Sett varsling</string>
-	<string name="map_proximity_alert_title">Nærhetsvarsel</string>
-		
+    <string name="map_set_proximity_alert_title">Sett varsling</string>
+    <string name="map_proximity_alert_title">Nærhetsvarsel</string>
+
     <!-- Register redskap dialog -->
     <string name="register_tool_coordinates_start_hint">Start-koordinater</string>
     <string name="register_tool_coordinates_end_hint">Slutt-koordinater</string>
@@ -89,25 +100,24 @@
     <string name="register_tool_confirm_overwrite_title">Overskriv koordinater</string>
     <string name="register_tool_confirm_overwrite_of_coordinates_start">Er du sikker på at du vil overskrive de eksisterende start-koordinatene?</string>
     <string name="register_tool_confirm_overwrite_of_coordinates_end">Er du sikker på at du vil overskrive de eksisterende slutt-koordinatene?</string>
-    
+
     <!-- Scheduled task executor dialog -->
     <string name="set_alert_watcher">Sett varsling</string>
     <string name="set_proximity_alert">Sett varsling</string>
     <string name="measuring_units">Måleenhet</string>
     <string name="proximity_radius_edit_text_hint">0.0</string>
-    
+
     <!-- Proximity alert dialog -->
     <string name="proximity_alert_warning">Advarsel!</string>
     <string name="proximity_Alert_nearby_tool">Du nærmer deg et redskap!</string>
     <string name="proximity_alert_view_position">Se posisjon</string>
-	<string name="proximity_alert_cancel_alert">Avslutt varsel</string>
-    
+    <string name="proximity_alert_cancel_alert">Avslutt varsel</string>
+
     <string-array name="non_authenticated_user_actionbar_options">
         <item>logg inn</item>
         <item>Om</item>
         <item>Hjelp</item>
     </string-array>
-    
     <string-array name="authenticated_user_actionbar_options">
         <item>Min side</item>
         <item>Kart</item>
@@ -115,14 +125,12 @@
         <item>Hjelp</item>
         <item>Logg ut</item>
     </string-array>
-    
     <string-array name="projections">
         <item>EPSG:3857</item>
         <item>EPSG:4326</item>
         <item>EPSG:23030</item>
         <item>EPSG:900913</item>
     </string-array>
-    
     <string-array name="tool_types">
         <item>Long line</item>
         <item>Nets</item>
@@ -133,12 +141,11 @@
         <item>Mooring system</item>
         <item>Unknown</item>
     </string-array>
-
     <string-array name="measurement_units">
         <item>Meter</item>
         <item>Nautiske mil</item>
-    </string-array>    
-    
+    </string-array>
+
     <string name="title_activity_alarm_activity">Barentswatch FiskInfo</string>
 
 </resources>

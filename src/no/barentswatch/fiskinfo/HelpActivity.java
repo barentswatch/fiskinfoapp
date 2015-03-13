@@ -32,11 +32,6 @@ public class HelpActivity extends BaseActivity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.setContext(this);
-		if (!getAuthenticationLevel()) {
-			super.setPreviousSelectionActionBar(2);
-		} else {
-			super.setPreviousSelectionActionBar(3);			
-		}
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_help_activity);
 
@@ -88,7 +83,6 @@ public class HelpActivity extends BaseActivity {
 				return false;
 			}
 		});
-
 	}
 
 	// TODO: the data for this function does not exist. It should be written/created and then implemented.

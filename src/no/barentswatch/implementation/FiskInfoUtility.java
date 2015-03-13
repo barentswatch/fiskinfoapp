@@ -199,18 +199,22 @@ public class FiskInfoUtility implements UtilityInterface {
 	 * 			The fields from the subscriptions to retrieve and store in the <code>ExpandableListAdapater</code>
 	 */
 	public void appendSubscriptionItemsToView(JSONArray subscriptions, List<String> field, List<String> fieldsToExtract) {
-		if ((subscriptions.isNull(0)) || (subscriptions == null)) {
+		if ((subscriptions == null) || (subscriptions.isNull(0))) {
 			return;
 		}
+		String title = "";
 		for (int i = 0; i < subscriptions.length(); i++) {
 			try {
 				JSONObject currentSubscription = subscriptions.getJSONObject(i);
 				for (String fieldValue : fieldsToExtract) {
-					field.add(currentSubscription.getString(fieldValue));
+					title += currentSubscription.getString(fieldValue) + "\n";
 				}
+				title = title.substring(0, title.length() - 1);
+				field.add(title);
 			} catch (JSONException e) {
 				e.printStackTrace();
 			}
+			title = "";
 		}
 	}
 	

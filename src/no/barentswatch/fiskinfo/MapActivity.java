@@ -1,13 +1,22 @@
 package no.barentswatch.fiskinfo;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicReference;
+
+import org.json.JSONObject;
 
 import no.barentswatch.baseclasses.Point;
 import no.barentswatch.implementation.FiskInfoPolygon2D;
 import no.barentswatch.implementation.FiskInfoUtility;
 import no.barentswatch.implementation.FiskinfoScheduledTaskExecutor;
 import no.barentswatch.implementation.GpsLocationTracker;
+import no.barentswatch.implementation.ToolsInfo;
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.content.Context;
@@ -54,16 +63,15 @@ public class MapActivity extends BaseActivity {
 	private boolean alarmFiring = false;
 	private FiskInfoPolygon2D tools = null;
 	private boolean cacheDeserialized = false;
-	
+
 	/*
-	 * these value refer to the index of the units in the string array 'measurement_units' and are only here so we
-	 * don't need to look them up every time we update the seek bar.
+	 * these value refer to the index of the units in the string array
+	 * 'measurement_units' and are only here so we don't need to look them up
+	 * every time we update the seek bar.
 	 */
 	private final int meterIndex = 0;
 	private final int nauticalMileIndex = 1;
-	
-	
-	
+
 	protected AsyncTask<String, String, byte[]> cacheWriter;
 	protected double cachedLat;
 	protected double cachedLon;
@@ -74,13 +82,12 @@ public class MapActivity extends BaseActivity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.setContext(this);
-		super.setPreviousSelectionActionBar(1);
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_map);
 		configureWebParametersAndLoadDefaultMapApplication();
 	}
 
-	@SuppressLint("SetJavaScriptEnabled")
+	@SuppressLint({ "SetJavaScriptEnabled" })
 	private void configureWebParametersAndLoadDefaultMapApplication() {
 		browser = new WebView(getContext());
 		browser = (WebView) findViewById(R.id.browserWebView);
@@ -88,6 +95,8 @@ public class MapActivity extends BaseActivity {
 		browser.getSettings().setDomStorageEnabled(true);
 		browser.getSettings().setGeolocationEnabled(true);
 		browser.getSettings().setJavaScriptCanOpenWindowsAutomatically(true);
+
+		browser.addJavascriptInterface(new JavaScriptInterface(getContext()), "Android");
 		browser.setWebViewClient(new barentswatchFiskInfoWebClient());
 		browser.setWebChromeClient(new WebChromeClient() {
 
@@ -127,9 +136,9 @@ public class MapActivity extends BaseActivity {
 		Context currentContext = getContext();
 		// Handle item selection
 		switch (item.getItemId()) {
-//		case R.id.register_misc:
-//			registerItemAndToolUsed(currentContext);
-//			return true;
+		// case R.id.register_misc:
+		// registerItemAndToolUsed(currentContext);
+		// return true;
 		case R.id.update_map:
 			loadView(MapActivity.class);
 			return true;
@@ -142,12 +151,12 @@ public class MapActivity extends BaseActivity {
 		case R.id.symbol_explanation:
 			displaySymbolExplanation(currentContext);
 			return true;
-//		case R.id.ocean_currents:
-//			String OMFG = displayCurrentOceanCurrents(currentContext);
-//			browser.loadData(OMFG, "image/svg+xml", "UTF-8");
-//			browser.getSettings().setSupportZoom(true);
-//			browser.getSettings().setBuiltInZoomControls(true);
-//			return true;
+			// case R.id.ocean_currents:
+			// String OMFG = displayCurrentOceanCurrents(currentContext);
+			// browser.loadData(OMFG, "image/svg+xml", "UTF-8");
+			// browser.getSettings().setSupportZoom(true);
+			// browser.getSettings().setBuiltInZoomControls(true);
+			// return true;
 		case R.id.setProximityAlert:
 			displayScheduledTaskExecutor(currentContext);
 			return true;
@@ -174,7 +183,8 @@ public class MapActivity extends BaseActivity {
 		distanceEditText.setText(String.valueOf(minLenghtMeters));
 
 		final Spinner measuringUnitSpinner = (Spinner) view.findViewById(R.id.scheduledMeasuringUnitsSpinner);
-		ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this, R.array.measurement_units, android.R.layout.simple_spinner_item);
+		ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this, R.array.measurement_units,
+				android.R.layout.simple_spinner_item);
 		adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 		measuringUnitSpinner.setAdapter(adapter);
 
@@ -209,7 +219,7 @@ public class MapActivity extends BaseActivity {
 
 				System.out.println("posistion: " + position);
 				System.out.println("currentlySelected: " + position);
-				
+
 				if (position == meterIndex) {
 					if (position != currentlySelected) {
 						distance = convertDistance(distance, position);
@@ -240,7 +250,7 @@ public class MapActivity extends BaseActivity {
 
 		Button setProximityAlertButton = (Button) view.findViewById(R.id.scheduledSetProximityCheckerDialogButton);
 		Button cancelButton = (Button) view.findViewById(R.id.cancel_button);
-		
+
 		builder.setView(view);
 		builder.setCanceledOnTouchOutside(false);
 
@@ -262,7 +272,8 @@ public class MapActivity extends BaseActivity {
 					String distance = distanceEditText.getText().toString();
 					cachedDistance = distance;
 
-					cacheWriter = new DownloadMapLayerFromBarentswatchApiInBackground().execute("fishingfacility", "OLEX", "cachedResults", String.valueOf(longitude), String.valueOf(latitude), distance, "true");
+					cacheWriter = new DownloadMapLayerFromBarentswatchApiInBackground().execute("fishingfacility", "OLEX", "cachedResults",
+							String.valueOf(longitude), String.valueOf(latitude), distance, "true");
 					alarmSet = true;
 					runScheduledAlarm();
 				}
@@ -272,15 +283,14 @@ public class MapActivity extends BaseActivity {
 		});
 
 		cancelButton.setOnClickListener(new View.OnClickListener() {
-			
+
 			@Override
 			public void onClick(View v) {
 				builder.cancel();
-	
+
 			}
 		});
-		
-		
+
 		builder.show();
 	}
 
@@ -350,7 +360,9 @@ public class MapActivity extends BaseActivity {
 				try {
 					CloseableHttpClient httpclient = HttpClients.createDefault();
 					try {
-						HttpGet httpGet = new HttpGet("http://192.168.255.213:8080" + "/GET" + "?" + "x=" + new FiskInfoUtility().truncateDecimal(latitude, 2) + "&y=" + new FiskInfoUtility().truncateDecimal(longitude, 2));
+						HttpGet httpGet = new HttpGet("http://192.168.255.213:8080" + "/GET" + "?" + "x="
+								+ new FiskInfoUtility().truncateDecimal(latitude, 2) + "&y="
+								+ new FiskInfoUtility().truncateDecimal(longitude, 2));
 
 						CloseableHttpResponse response = httpclient.execute(httpGet);
 						try {
@@ -377,7 +389,7 @@ public class MapActivity extends BaseActivity {
 		String sinmodServiceProvierResponse = responseAsString.get();
 		return sinmodServiceProvierResponse;
 	}
-	
+
 	/**
 	 * Notifies the user through vibration and sound that he is on collision
 	 * course with a object.
@@ -403,19 +415,17 @@ public class MapActivity extends BaseActivity {
 	 * distance and measurement unit.
 	 * 
 	 * @param distance
-	 *            the distance used to determine the progress. If outside the min-max bounds, it returns the
-	 *            minimum or maximum value.
+	 *            the distance used to determine the progress. If outside the
+	 *            min-max bounds, it returns the minimum or maximum value.
 	 * @param unit
-	 *            the measurement unit used to determine the progress
-	 *            <= -1:	unsupported unit
-	 *            0:		meters
-	 *            1:		nautical miles
-	 *            >= 2:		unsupported unit
+	 *            the measurement unit used to determine the progress <= -1:
+	 *            unsupported unit 0: meters 1: nautical miles >= 2: unsupported
+	 *            unit
 	 * @return the new position of the progress indicator for the seek bar.
 	 */
 	protected int findProgress(double distance, int unit) {
 		int progress = 0;
-		
+
 		if (unit == meterIndex) {
 			if (distance <= minLenghtMeters) {
 				return 0;
@@ -443,11 +453,10 @@ public class MapActivity extends BaseActivity {
 	 * @param distance
 	 *            The distance to convert
 	 * @param conversion
-	 *            what to convert
-	 *            <= -1:	Unsupported conversion, returns null.
-	 *            0:		Converts the given distance from nautical miles to meters.
-	 *            1:		Converts the given distance from meters to nautical miles.
-	 *            >= 2:		Unsupported conversion, returns null.
+	 *            what to convert <= -1: Unsupported conversion, returns null.
+	 *            0: Converts the given distance from nautical miles to meters.
+	 *            1: Converts the given distance from meters to nautical miles.
+	 *            >= 2: Unsupported conversion, returns null.
 	 * @return the distance converted to the new unit of measurement
 	 */
 	protected double convertDistance(double distance, int conversion) {
@@ -534,5 +543,52 @@ public class MapActivity extends BaseActivity {
 			return true;
 		}
 		return false;
+	}
+
+	public class JavaScriptInterface {
+		Context mContext;
+
+		JavaScriptInterface(Context context) {
+			mContext = context;
+		}
+
+		@android.webkit.JavascriptInterface
+		public JSONObject getGeoJson() {
+			JSONObject mordi = null;
+			try {
+				System.out.println("DO I FAIL?");
+				JSONObject fnName = getStringFromFile(getAssets().open("redskapsInfoJSON.json"));
+				mordi = fnName;
+			} catch (IOException e) {
+				System.out.println("I FAILED");
+				e.printStackTrace();
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				System.out.println("I FAILED");
+				e.printStackTrace();
+			}
+			return mordi;
+
+		}
+	}
+
+	public static String convertStreamToString(InputStream is) throws Exception {
+		BufferedReader reader = new BufferedReader(new InputStreamReader(is));
+		StringBuilder sb = new StringBuilder();
+		String line = null;
+		while ((line = reader.readLine()) != null) {
+			sb.append(line);
+		}
+		reader.close();
+		return sb.toString();
+	}
+
+	public static JSONObject getStringFromFile(InputStream in) throws Exception {
+		InputStream fin = in;
+		String ret = convertStreamToString(fin);
+		JSONObject dearGod = new JSONObject(ret);
+		fin.close();
+		System.out.println(dearGod.toString());
+		return dearGod;
 	}
 }
