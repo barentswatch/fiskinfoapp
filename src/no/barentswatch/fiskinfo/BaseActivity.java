@@ -809,8 +809,8 @@ public class BaseActivity extends ActionBarActivity {
 						httpPost.addHeader(HTTP.CONTENT_TYPE, "application/x-www-form-urlencoded");
 						List<NameValuePair> postParameters = new ArrayList<NameValuePair>();
 						postParameters.add(new BasicNameValuePair("grant_type", "password"));
-						postParameters.add(new BasicNameValuePair("username", "crono142@gmail.com"));
-						postParameters.add(new BasicNameValuePair("password", "8fgP8pDuhFcespv"));
+						postParameters.add(new BasicNameValuePair("username", username));
+						postParameters.add(new BasicNameValuePair("password", password));
 						httpPost.setEntity(new UrlEncodedFormEntity(postParameters));
 
 						CloseableHttpResponse response = httpclient.execute(httpPost);

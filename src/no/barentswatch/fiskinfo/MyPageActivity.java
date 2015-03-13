@@ -62,7 +62,7 @@ public class MyPageActivity extends BaseActivity {
 
 			@Override
 			public boolean onGroupClick(ExpandableListView parent, View v, int groupPosition, long id) {
-				Toast.makeText(getApplicationContext(), "Group Clicked " + listDataHeader.get(groupPosition), Toast.LENGTH_SHORT).show();
+//				Toast.makeText(getApplicationContext(), "Group Clicked " + listDataHeader.get(groupPosition), Toast.LENGTH_SHORT).show();
 				return false;
 			}
 		});
@@ -72,7 +72,7 @@ public class MyPageActivity extends BaseActivity {
 
 			@Override
 			public void onGroupExpand(int groupPosition) {
-				Toast.makeText(getApplicationContext(), listDataHeader.get(groupPosition) + " Expanded", Toast.LENGTH_SHORT).show();
+//				Toast.makeText(getApplicationContext(), listDataHeader.get(groupPosition) + " Expanded", Toast.LENGTH_SHORT).show();
 			}
 		});
 
@@ -81,7 +81,7 @@ public class MyPageActivity extends BaseActivity {
 
 			@Override
 			public void onGroupCollapse(int groupPosition) {
-				Toast.makeText(getApplicationContext(), listDataHeader.get(groupPosition) + " Collapsed", Toast.LENGTH_SHORT).show();
+//				Toast.makeText(getApplicationContext(), listDataHeader.get(groupPosition) + " Collapsed", Toast.LENGTH_SHORT).show();
 
 			}
 		});
@@ -139,7 +139,7 @@ public class MyPageActivity extends BaseActivity {
 
 		if (myMaps.size() == 0) {
 
-			myMaps.add(getString(R.string.my_page__no_registered_maps));
+			myMaps.add(getString(R.string.my_page_service_not_available));
 		} else {
 			myMaps.add(getString(R.string.my_page_add_map));
 		}
@@ -147,7 +147,7 @@ public class MyPageActivity extends BaseActivity {
 		List<String> myNotices = new ArrayList<String>();
 		// TODO: get registered notices from BarentsWatch once its implemented
 		if (myNotices.size() == 0) {
-			myNotices.add(getString(R.string.my_page_no_registered_notices));
+			myNotices.add(getString(R.string.my_page_service_not_available));
 		} else {
 			myNotices.add(getString(R.string.my_page_add_notice));
 		}
