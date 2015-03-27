@@ -1038,6 +1038,8 @@ public class BaseActivity extends ActionBarActivity {
 					availableDownloadFormatsOfCurrentLayer.add(availableFormats.getString(j));
 				}
 				listDataChild.put(listDataHeader.get(i), availableDownloadFormatsOfCurrentLayer);
+				
+				System.out.println("item: " + currentSub.getString("Name") + ", " + currentSub.getString("ApiName"));
 			} catch (JSONException e) {
 				e.printStackTrace();
 				Log.d("ExportMapLAyerToUser", "Invalid JSON returned from API CALL");
@@ -1063,7 +1065,7 @@ public class BaseActivity extends ActionBarActivity {
 
 		downloadButton.setOnClickListener(new View.OnClickListener() {
 			public void onClick(View v) {
-				new DownloadMapLayerFromBarentswatchApiInBackground().execute(selectedHeader.get(), selectedFormat.get());
+				new DownloadMapLayerFromBarentswatchApiInBackground().execute(nameToApiNameResolver.get(selectedHeader.get()), selectedFormat.get());
 				builder.dismiss();
 			}
 		});
@@ -1131,6 +1133,13 @@ public class BaseActivity extends ActionBarActivity {
 
 		protected void parseParameters(String[] params) {
 			apiName = params[0];
+			
+			for(String item : params) {
+				System.out.println("items: " + item);
+
+			}
+			
+			System.out.println("apiname: " + apiName);
 			format = params[1];
 			writableName = apiName;
 			if (params.length > 2 && params.length < 8) {

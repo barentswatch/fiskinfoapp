@@ -67,7 +67,7 @@ public class MapActivity extends BaseActivity {
 	private boolean alarmSet = false;
 	private static int currentlySelected = 0;
 	private final double minLenghtMeters = 100;
-	private final double maxLenghtMeters = 18520;
+	private final double maxLenghtMeters = 1852;
 	private final double minLenghtNauticalMiles = minLenghtMeters / 1852;
 	private final double maxLenghtNauticalMiles = maxLenghtMeters / 1852;
 	private final double stepSizeMeters = (maxLenghtMeters - minLenghtMeters) / 100;

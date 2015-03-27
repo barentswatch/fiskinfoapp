@@ -24,4 +24,7 @@ limitations under the License.
     <dimen name="subscription_dialog_margin_top">20dp</dimen>
     <dimen name="subscription_dialog_margin_bottom_button">40dp</dimen>
     
+    <!-- Symbol explanation values -->
+    <dimen name="symbol_explanation_margin_bottom">20dp</dimen>
+    
 </resources>

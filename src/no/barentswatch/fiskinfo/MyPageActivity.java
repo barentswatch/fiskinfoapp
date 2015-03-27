@@ -170,7 +170,7 @@ public class MyPageActivity extends BaseActivity {
 			availableGeoSubscriptions = authenticatedGetRequestToBarentswatchAPIService(getString(R.string.my_page_geo_data_service));
 			setSharedCacheOfAvailableSubscriptions(availableGeoSubscriptions);
 		}
-
+		
 		List<String> availableSubscriptions = new ArrayList<String>();
 		List<String> values = new ArrayList<String>();
 		values.add("Name");
@@ -190,11 +190,8 @@ public class MyPageActivity extends BaseActivity {
 
 			@Override
 			public boolean onChildClick(ExpandableListView parent, View v, int groupPosition, int childPosition, long id) {
-				System.out.println("magic!");
-
 				if (((String) listAdapter.getGroup(groupPosition)).equals(getString(R.string.my_page_all_available_subscriptions)
 						.toString())) {
-					System.out.println("stuff!");
 					listAdapter.getChild(groupPosition, childPosition);
 					createSubscriptionInformationDialog(childPosition);
 				}
@@ -209,10 +206,12 @@ public class MyPageActivity extends BaseActivity {
 		dialog.setContentView(R.layout.subscription_info_dialog);
 
 		TextView subscriptionNameView = (TextView) dialog.findViewById(R.id.subscription_description_text_view);
+		TextView subscriptionOwnerView = (TextView) dialog.findViewById(R.id.subscription_owner_text_view);
 		TextView subscriptionUpdatedView = (TextView) dialog.findViewById(R.id.subscription_last_updated_text_view);
 		Button okButton = (Button) dialog.findViewById(R.id.dismiss_dialog_button);
 		Button viewOnMapButton = (Button) dialog.findViewById(R.id.go_to_map_button);
 		String subscriptionName = null;
+		String subscriptionOwner = null;
 		String subscriptionDescription = null;
 
 		JSONArray subscriptions = getSharedCacheOfAvailableSubscriptions();
@@ -233,6 +232,7 @@ public class MyPageActivity extends BaseActivity {
 						+ currentSubscription.getString("LastUpdated") + "\n" + currentSubscription.getString("UpdateFrequencyText") + "\n"
 						+ currentSubscription.getString("Description"));
 				subscriptionName = currentSubscription.getString("Name");
+				subscriptionOwner = currentSubscription.getString("DataOwner");
 				subscriptionDescription = currentSubscription.getString("Description");
 				lastUpdated = currentSubscription.get("LastUpdated").toString();
 			} catch (JSONException e) {
@@ -244,6 +244,7 @@ public class MyPageActivity extends BaseActivity {
 		lastUpdated = updateDateAndTime[1] + "  " + updateDateAndTime[0];
 
 		subscriptionNameView.setText(subscriptionDescription);
+		subscriptionOwnerView.setText(subscriptionOwner);
 		subscriptionUpdatedView.setText(lastUpdated);
 
 		okButton.setOnClickListener(new View.OnClickListener() {

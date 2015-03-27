@@ -70,7 +70,7 @@ limitations under the License.
     <string name="subscription_icon">Abonnementikon</string>
     <string name="subscription_name">Abonnementnavn</string>
     <string name="subscription_last_updated_colon">Sist oppdatert:</string>
-    <string name="subscription_last_updated_hint">Dato</string>
+    <string name="subscription_last_updated_hint">Eier</string>
     <string name="subscription_go_to_map">Se på kart</string>
     <string name="subscription_info">Informasjon om kartlaget</string>
     <string name="subscription_owner">Tjenesteeier</string>

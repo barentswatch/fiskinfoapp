@@ -1,5 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!--
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" >
+
+    <!--
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
 You may obtain a copy of the License at
@@ -11,179 +15,189 @@ distributed under the License is distributed on an "AS IS" BASIS,
 WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
--->
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical" >
-
-    <Button
-        android:id="@+id/symbolOkButton"
-        android:layout_width="wrap_content"
+    -->
+    <RelativeLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
-        android:text="@string/ok" />
+        android:orientation="vertical" >
 
-    <SurfaceView
-        android:id="@+id/redSurfaceView"
-        android:layout_width="35dp"
-        android:layout_height="20dp"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentTop="true"
-        android:layout_marginLeft="15dp"
-        android:layout_marginTop="30dp"
-        android:background="@color/red"
-        android:clickable="false" />
+        <SurfaceView
+            android:id="@+id/redSurfaceView"
+            android:layout_width="35dp"
+            android:layout_height="20dp"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentTop="true"
+            android:layout_marginLeft="15dp"
+            android:layout_marginTop="30dp"
+            android:background="@color/red"
+            android:clickable="false" />
 
-    <SurfaceView
-        android:id="@+id/blueSurfaceView"
-        android:layout_width="35dp"
-        android:layout_height="20dp"
-        android:layout_alignLeft="@+id/redSurfaceView"
-        android:layout_below="@+id/redSurfaceView"
-        android:layout_marginTop="30dp"
-        android:background="@color/blue"
-        android:clickable="false" />
+        <SurfaceView
+            android:id="@+id/blueSurfaceView"
+            android:layout_width="35dp"
+            android:layout_height="20dp"
+            android:layout_alignLeft="@+id/redSurfaceView"
+            android:layout_below="@+id/redSurfaceView"
+            android:layout_marginTop="30dp"
+            android:background="@color/blue"
+            android:clickable="false" />
 
-    <SurfaceView
-        android:id="@+id/orangeSurfaceView"
-        android:layout_width="35dp"
-        android:layout_height="20dp"
-        android:layout_alignLeft="@+id/blueSurfaceView"
-        android:layout_below="@+id/blueSurfaceView"
-        android:layout_marginTop="30dp"
-        android:background="@color/orange"
-        android:clickable="false" />
+        <SurfaceView
+            android:id="@+id/orangeSurfaceView"
+            android:layout_width="35dp"
+            android:layout_height="20dp"
+            android:layout_alignLeft="@+id/blueSurfaceView"
+            android:layout_below="@+id/blueSurfaceView"
+            android:layout_marginTop="30dp"
+            android:background="@color/orange"
+            android:clickable="false" />
 
-    <SurfaceView
-        android:id="@+id/brownSurfaceView"
-        android:layout_width="35dp"
-        android:layout_height="20dp"
-        android:layout_alignLeft="@+id/orangeSurfaceView"
-        android:layout_below="@+id/orangeSurfaceView"
-        android:layout_marginTop="30dp"
-        android:background="@color/brown"
-        android:clickable="false" />
+        <SurfaceView
+            android:id="@+id/brownSurfaceView"
+            android:layout_width="35dp"
+            android:layout_height="20dp"
+            android:layout_alignLeft="@+id/orangeSurfaceView"
+            android:layout_below="@+id/orangeSurfaceView"
+            android:layout_marginTop="30dp"
+            android:background="@color/brown"
+            android:clickable="false" />
 
-    <SurfaceView
-        android:id="@+id/darkPurpleSurfaceView"
-        android:layout_width="35dp"
-        android:layout_height="20dp"
-        android:layout_alignLeft="@+id/brownSurfaceView"
-        android:layout_below="@+id/brownSurfaceView"
-        android:layout_marginTop="30dp"
-        android:background="@color/darkpurple"
-        android:clickable="false" />
+        <SurfaceView
+            android:id="@+id/darkPurpleSurfaceView"
+            android:layout_width="35dp"
+            android:layout_height="20dp"
+            android:layout_alignLeft="@+id/brownSurfaceView"
+            android:layout_below="@+id/brownSurfaceView"
+            android:layout_marginTop="30dp"
+            android:background="@color/darkpurple"
+            android:clickable="false" />
 
-    <SurfaceView
-        android:id="@+id/greenSurfaceView"
-        android:layout_width="35dp"
-        android:layout_height="20dp"
-        android:layout_alignLeft="@+id/darkPurpleSurfaceView"
-        android:layout_below="@+id/darkPurpleSurfaceView"
-        android:layout_marginTop="30dp"
-        android:background="@color/green"
-        android:clickable="false" />
+        <SurfaceView
+            android:id="@+id/greenSurfaceView"
+            android:layout_width="35dp"
+            android:layout_height="20dp"
+            android:layout_alignLeft="@+id/darkPurpleSurfaceView"
+            android:layout_below="@+id/darkPurpleSurfaceView"
+            android:layout_marginTop="30dp"
+            android:background="@color/green"
+            android:clickable="false" />
 
-    <SurfaceView
-        android:id="@+id/pinkSurfaceView"
-        android:layout_width="35dp"
-        android:layout_height="20dp"
-        android:layout_alignLeft="@+id/greenSurfaceView"
-        android:layout_below="@+id/greenSurfaceView"
-        android:layout_marginTop="30dp"
-        android:background="@color/pink"
-        android:clickable="false" />
+        <SurfaceView
+            android:id="@+id/pinkSurfaceView"
+            android:layout_width="35dp"
+            android:layout_height="20dp"
+            android:layout_alignLeft="@+id/greenSurfaceView"
+            android:layout_below="@+id/greenSurfaceView"
+            android:layout_marginTop="30dp"
+            android:background="@color/pink"
+            android:clickable="false" />
 
-    <SurfaceView
-        android:id="@+id/blackSurfaceView"
-        android:layout_width="35dp"
-        android:layout_height="20dp"
-        android:layout_alignLeft="@+id/pinkSurfaceView"
-        android:layout_below="@+id/pinkSurfaceView"
-        android:layout_marginTop="30dp"
-        android:background="@android:color/black"
-        android:clickable="false" />
+        <SurfaceView
+            android:id="@+id/blackSurfaceView"
+            android:layout_width="35dp"
+            android:layout_height="20dp"
+            android:layout_alignLeft="@+id/pinkSurfaceView"
+            android:layout_below="@+id/pinkSurfaceView"
+            android:layout_marginTop="30dp"
+            android:background="@android:color/black"
+            android:clickable="false" />
 
-    <TextView
-        android:id="@+id/redTextView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignBaseline="@+id/redSurfaceView"
-        android:layout_alignBottom="@+id/redSurfaceView"
-        android:layout_alignLeft="@+id/blueTextView"
-        android:layout_marginLeft="5dp"
-        android:text="@string/map_symbol_explanation_red" />
+        <TextView
+            android:id="@+id/redTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBaseline="@+id/redSurfaceView"
+            android:layout_alignBottom="@+id/redSurfaceView"
+            android:layout_alignLeft="@+id/blueTextView"
+            android:layout_marginLeft="5dp"
+            android:text="@string/map_symbol_explanation_red" />
 
-    <TextView
-        android:id="@+id/blueTextView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignBaseline="@+id/blueSurfaceView"
-        android:layout_alignBottom="@+id/blueSurfaceView"
-        android:layout_marginLeft="5dp"
-        android:layout_toRightOf="@+id/blueSurfaceView"
-        android:text="@string/map_symbol_explanation_blue" />
+        <TextView
+            android:id="@+id/blueTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBaseline="@+id/blueSurfaceView"
+            android:layout_alignBottom="@+id/blueSurfaceView"
+            android:layout_marginLeft="5dp"
+            android:layout_toRightOf="@+id/blueSurfaceView"
+            android:text="@string/map_symbol_explanation_blue" />
 
-    <TextView
-        android:id="@+id/orangeTextView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignBaseline="@+id/orangeSurfaceView"
-        android:layout_alignBottom="@+id/orangeSurfaceView"
-        android:layout_marginLeft="5dp"
-        android:layout_toRightOf="@+id/orangeSurfaceView"
-        android:text="@string/map_symbol_explanation_orange" />
+        <TextView
+            android:id="@+id/orangeTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBaseline="@+id/orangeSurfaceView"
+            android:layout_alignBottom="@+id/orangeSurfaceView"
+            android:layout_marginLeft="5dp"
+            android:layout_toRightOf="@+id/orangeSurfaceView"
+            android:text="@string/map_symbol_explanation_orange" />
 
-    <TextView
-        android:id="@+id/brownTextView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignBaseline="@+id/brownSurfaceView"
-        android:layout_alignBottom="@+id/brownSurfaceView"
-        android:layout_marginLeft="5dp"
-        android:layout_toRightOf="@+id/brownSurfaceView"
-        android:text="@string/map_symbol_explanation_brown" />
+        <TextView
+            android:id="@+id/brownTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBaseline="@+id/brownSurfaceView"
+            android:layout_alignBottom="@+id/brownSurfaceView"
+            android:layout_marginLeft="5dp"
+            android:layout_toRightOf="@+id/brownSurfaceView"
+            android:text="@string/map_symbol_explanation_brown" />
 
-    <TextView
-        android:id="@+id/darkPurpleTextView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignBaseline="@+id/darkPurpleSurfaceView"
-        android:layout_alignBottom="@+id/darkPurpleSurfaceView"
-        android:layout_alignLeft="@+id/greenTextView"
-        android:layout_marginLeft="5dp"
-        android:text="@string/map_symbol_explanation_darkpurple" />
+        <TextView
+            android:id="@+id/darkPurpleTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBaseline="@+id/darkPurpleSurfaceView"
+            android:layout_alignBottom="@+id/darkPurpleSurfaceView"
+            android:layout_alignLeft="@+id/greenTextView"
+            android:layout_marginLeft="5dp"
+            android:text="@string/map_symbol_explanation_darkpurple" />
 
-    <TextView
-        android:id="@+id/greenTextView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignBaseline="@+id/greenSurfaceView"
-        android:layout_alignBottom="@+id/greenSurfaceView"
-        android:layout_marginLeft="5dp"
-        android:layout_toRightOf="@+id/greenSurfaceView"
-        android:text="@string/map_symbol_explanation_green" />
+        <TextView
+            android:id="@+id/greenTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBaseline="@+id/greenSurfaceView"
+            android:layout_alignBottom="@+id/greenSurfaceView"
+            android:layout_marginLeft="5dp"
+            android:layout_toRightOf="@+id/greenSurfaceView"
+            android:text="@string/map_symbol_explanation_green" />
 
-    <TextView
-        android:id="@+id/pinkTextView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignBaseline="@+id/pinkSurfaceView"
-        android:layout_alignBottom="@+id/pinkSurfaceView"
-        android:layout_marginLeft="5dp"
-        android:layout_toRightOf="@+id/pinkSurfaceView"
-        android:text="@string/map_symbol_explanation_pink" />
+        <TextView
+            android:id="@+id/pinkTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBaseline="@+id/pinkSurfaceView"
+            android:layout_alignBottom="@+id/pinkSurfaceView"
+            android:layout_marginLeft="5dp"
+            android:layout_toRightOf="@+id/pinkSurfaceView"
+            android:text="@string/map_symbol_explanation_pink" />
 
-    <TextView
-        android:id="@+id/blackTextView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignBaseline="@+id/blackSurfaceView"
-        android:layout_alignBottom="@+id/blackSurfaceView"
-        android:layout_alignLeft="@+id/pinkTextView"
-        android:layout_marginLeft="5dp"
-        android:text="@string/map_symbol_explanation_black" />
+        <TextView
+            android:id="@+id/blackTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBaseline="@+id/blackSurfaceView"
+            android:layout_alignBottom="@+id/blackSurfaceView"
+            android:layout_alignLeft="@+id/pinkTextView"
+            android:layout_marginLeft="5dp"
+            android:text="@string/map_symbol_explanation_black" />
 
-</RelativeLayout>
+        <Button
+            android:id="@+id/symbolOkButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/blackTextView"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="@dimen/symbol_explanation_margin_bottom"
+            android:text="@string/ok" />
+
+        <View
+            android:id="@+id/bottom_anchor"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_below="@+id/symbolOkButton"
+            android:layout_marginTop="@dimen/symbol_explanation_margin_bottom"
+            android:visibility="invisible" />
+    </RelativeLayout>
+
+</ScrollView>
