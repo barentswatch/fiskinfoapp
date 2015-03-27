@@ -121,18 +121,6 @@ public class BaseActivity extends ActionBarActivity {
 	private String lastSetEndPosition = null;
 
 	/**
-	 * These variables should really, really, REALLY! Not be here, however
-	 * Barentswatch.no/pilot uses the most incompetent auth scheme since the
-	 * beginning of mankind, this is justified. It uses time-expirable tokens,
-	 * and http with plaintext sending of usr/pwd, therefore we cannot provide
-	 * security for the usr/pwd without causing relogging...... Therefore we
-	 * store the usr/pwd as strings since its sent as plaintext anyways, and we
-	 * reckon its a bit harder to root the phone attach a debugger and listen to
-	 * the app for these variables, rather than fire up wireshark and laugh all
-	 * the way to the bank. Seriously, normally we would only read the token....
-	 * We're not this incompetent, atleast we like to believe this.
-	 * (non-Javadoc)
-	 * 
 	 * @see android.support.v7.app.ActionBarActivity#onCreate(android.os.Bundle)
 	 */
 	private static String storedUsername;

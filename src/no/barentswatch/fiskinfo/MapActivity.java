@@ -532,7 +532,6 @@ public class MapActivity extends BaseActivity {
 							Log.i("GPS-LocationTracker", String.format("longitude: %s", longitude));
 						} else {
 							mGpsLocationTracker.showSettingsAlert();
-							System.out.println("FAKKAKOCK");
 							return;
 						}
 						Point userPosition = new Point(cachedLat, cachedLon);
