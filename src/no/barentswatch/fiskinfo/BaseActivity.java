@@ -164,6 +164,12 @@ public class BaseActivity extends ActionBarActivity {
 
 	private void getAuthenticationCredientialsFromSharedPrefrences() throws Exception {
 		prefs = this.getSharedPreferences("no.barentswatch.fiskinfo", Context.MODE_PRIVATE);
+		
+		Boolean useSpecificPath = prefs.getBoolean("usePath", false);
+		if (useSpecificPath) {
+			setFilePathForExternalStorage(prefs.getString("path", null));
+		}
+		
 		String authWritten = prefs.getString("authWritten", null);
 		if (authWritten != null) {
 			storedUsername = prefs.getString("username", null);
@@ -186,7 +192,6 @@ public class BaseActivity extends ActionBarActivity {
 				invalidateAuthenticationData();
 			}
 		}
-
 	}
 
 	/**
@@ -865,7 +870,15 @@ public class BaseActivity extends ActionBarActivity {
 		editor.putLong("timeOfAuth", timestampSecondsGranularity);
 		editor.commit();
 	}
-
+	
+	private void writeFilePathToDisk(String filePath) {
+		prefs = this.getSharedPreferences("no.barentswatch.fiskinfo", Context.MODE_PRIVATE);
+		SharedPreferences.Editor editor = prefs.edit();
+		editor.putBoolean("usePath", true);
+		editor.putString("path", filePath);
+		editor.commit();
+	}
+	
 	/**
 	 * Loads the activity of the given class
 	 * 
