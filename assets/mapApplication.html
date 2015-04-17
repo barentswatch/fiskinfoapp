@@ -117,16 +117,6 @@
             ls.ascending = false;
             ls.useLegendGraphics = true;
             map.addControl(ls);
-            var tempscript = null, attempts;
-            tempscript = document.createElement("script");
-            tempscript.type = "text/javascript";
-            tempscript.id = "tempscript";
-            tempscript.src = "http://153.44.6.85:8080/geoserver/bwdev/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=bwdev:fishingfacility&maxFeatures=500000&outputFormat=text/javascript";
-            document.body.appendChild(tempscript);
-        };
-
-        function setHTML(response) {
-            document.getElementById('nodelist').innerHTML = response.responseText;
         };
 
         function populateUserPosition(callback) {
@@ -166,7 +156,9 @@
             }
         }
 
-        p {margin:0}
+        p {
+            margin: 0;
+        }
 
         #map {
             width: 100%;
@@ -184,15 +176,15 @@
             padding: 2px 4px;
             border-radius: 5px 0 0 0;
         }
+
         #Redskapsinformasjon_close {
             background-color: cornflowerblue;
-
         }
 
-        #Redskapsinformasjon_close:before {
-            content: "X";
-            text-align: center;
-        }
+            #Redskapsinformasjon_close:before {
+                content: "X";
+                text-align: center;
+            }
 
         #title, #tags, #shortdesc {
             display: none;
@@ -222,7 +214,13 @@
                 padding-bottom: 5px;
                 padding-right: 10px;
                 background-color: darkblue;
+
             }
+
+            .olControlLayerSwitcher .dataLayersDiv {
+                font-size: 20px;
+            }
+                
 
                 .olControlLayerSwitcher .layersDiv .baseLbl,
                 .olControlLayerSwitcher .layersDiv .dataLbl {
@@ -336,6 +334,5 @@
     </p>
     <div id="layerswitcher" class="olControlLayerSwitcher"></div>
     <div id="map"></div>
-    <div id="nodelist"></div>
 </body>
 </html>
