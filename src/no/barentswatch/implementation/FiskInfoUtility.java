@@ -226,7 +226,6 @@ public class FiskInfoUtility implements UtilityInterface {
 				}
 				title = title.substring(0, title.length() - 1);
 				field.add(title);
-				System.out.println("This is info: " + title);
 			} catch (JSONException e) {
 				e.printStackTrace();
 			}

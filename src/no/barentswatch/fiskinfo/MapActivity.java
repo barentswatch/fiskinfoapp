@@ -171,7 +171,8 @@ public class MapActivity extends BaseActivity {
 			// browser.getSettings().setBuiltInZoomControls(true);
 			// return true;
 		case R.id.setProximityAlert:
-			displayScheduledTaskExecutor(currentContext);
+			createFileDialog();
+//			displayScheduledTaskExecutor(currentContext);
 			return true;
 		default:
 			return super.onOptionsItemSelected(item);
@@ -406,6 +407,7 @@ public class MapActivity extends BaseActivity {
 	/**
 	 * Notifies the user through vibration and sound that he is on collision
 	 * course with a object.
+	 * TODO: show dialog and allow user to turn off alarm. Until then, only make phone vibrate.
 	 * 
 	 */
 	private void notifyUserOfProximityAlert() {
@@ -415,11 +417,11 @@ public class MapActivity extends BaseActivity {
 
 		vibrator.vibrate(pattern, -1);
 
-		MediaPlayer mediaPlayer = MediaPlayer.create(getContext(), R.raw.terran_2);
-		if (mediaPlayer == null) {
-			return;
-		}
-		mediaPlayer.start();
+//		MediaPlayer mediaPlayer = MediaPlayer.create(getContext(), R.raw.terran_2);
+//		if (mediaPlayer == null) {
+//			return;
+//		}
+//		mediaPlayer.start();
 
 	}
 

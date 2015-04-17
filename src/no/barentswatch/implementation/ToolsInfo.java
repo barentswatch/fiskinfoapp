@@ -72,7 +72,7 @@ public class ToolsInfo {
 	}
 
 	public static String getStringFromFile(String filePath) throws Exception {
-		 InputStream fin = (ECatchApp.getInstance().getAssets().open(filePath));
+		 InputStream fin = (FiskInfoApp.getInstance().getAssets().open(filePath));
 	     String ret = convertStreamToString(fin);
 	     //Make sure you close all streams.
 	     fin.close();        

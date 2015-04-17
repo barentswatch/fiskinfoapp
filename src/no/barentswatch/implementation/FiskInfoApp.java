@@ -15,12 +15,12 @@ package no.barentswatch.implementation;
 
 import android.app.Application;
 
-public class ECatchApp extends Application {
+public class FiskInfoApp extends Application {
 
-	 private static ECatchApp mInstance;
+	 private static FiskInfoApp mInstance;
 
 
-	 public static ECatchApp getInstance() {
+	 public static FiskInfoApp getInstance() {
 	  return mInstance;
 	 }
 

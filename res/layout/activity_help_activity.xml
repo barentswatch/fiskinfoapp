@@ -48,13 +48,5 @@ limitations under the License.
         android:layout_marginTop="26dp"
         android:text="@string/help_activity_button_text" />
     
-        <Button
-        android:id="@+id/set_file_path_button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/helpStartTutorialButton"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="26dp"
-        android:text="@string/set_file_path" />
 
 </RelativeLayout>

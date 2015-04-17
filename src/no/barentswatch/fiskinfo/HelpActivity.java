@@ -97,17 +97,6 @@ public class HelpActivity extends BaseActivity {
 				return false;
 			}
 		});
-		
-		
-		Button setFilePathButton = (Button) findViewById(R.id.set_file_path_button);
-		setFilePathButton.setOnClickListener(new View.OnClickListener() {
-			
-			@Override
-			public void onClick(View v) {
-				createFileDialog();
-	
-			}
-		});
 	}
 
 	// TODO: the data for this function does not exist. It should be written/created and then implemented.

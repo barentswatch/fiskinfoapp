@@ -167,6 +167,11 @@ public class BaseActivity extends ActionBarActivity {
 	private void getAuthenticationCredientialsFromSharedPrefrences() throws Exception {
 		prefs = this.getSharedPreferences("no.barentswatch.fiskinfo", Context.MODE_PRIVATE);
 		
+		Boolean useSpecificPath = prefs.getBoolean("usePath", false);
+		if (useSpecificPath) {
+			setFilePathForExternalStorage(prefs.getString("path", null));			 
+		}
+		
 		String authWritten = prefs.getString("authWritten", null);
 		if (authWritten != null) {
 			storedUsername = prefs.getString("username", null);
@@ -979,8 +984,6 @@ public class BaseActivity extends ActionBarActivity {
 						List<NameValuePair> getParameters = new ArrayList<NameValuePair>(1);
 						getParameters.add(new BasicNameValuePair("access_token", storedToken.getString("access_token")));
 						String paramsString = URLEncodedUtils.format(getParameters, "UTF-8");
-
-						System.out.println("this is the request: " + paramsString);
 						
 						HttpGet httpGet = new HttpGet(base_url + "?" + paramsString);
 						httpGet.addHeader(HTTP.CONTENT_TYPE, "application/json");
@@ -1012,8 +1015,6 @@ public class BaseActivity extends ActionBarActivity {
 			return null;
 		}
 		try {
-			
-			System.out.println("This is response: " + barentswatchResponse);
 			JSONArray barentswatchAPIJSONResponse = new JSONArray(barentswatchResponse);
 			return barentswatchAPIJSONResponse;
 		} catch (JSONException e) {
@@ -1250,12 +1251,28 @@ public class BaseActivity extends ActionBarActivity {
 				String directoryPath = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).toString();
 				String directoryName = "FiskInfo";
 				String filePath = directoryPath + "/" + directoryName + "/";
-
+				
+				prefs = getContext().getSharedPreferences("no.barentswatch.fiskinfo", Context.MODE_PRIVATE);
+				
+				Boolean useSpecificPath = prefs.getBoolean("usePath", false);
+				if (useSpecificPath) {
+					setFilePathForExternalStorage(prefs.getString("path", null));
+				} 
+				
+				
+				if(getFilePathForExternalStorage() != null) {
+					System.out.println("It was not null: " + getFilePathForExternalStorage());
+					filePath = getFilePathForExternalStorage();
+				} else { 
+					System.out.println("It was totally null, using: " + filePath);
+				}
+				
 				File directory = new File(directoryPath, directoryName);
 
 				if (!(directory.exists())) {
 					directory.mkdirs();
 				}
+				
 				if (!alarmFile) {
 					writeMapLayerToExternalStorage(data, outputStream, filePath);
 				} else {
@@ -1263,13 +1280,13 @@ public class BaseActivity extends ActionBarActivity {
 					writeAlarmFileToExternalStorage(data, outputStream, filePath);
 				}
 			} else {
-				Toast error = Toast.makeText(getContext(), "Nedlastningen feilet, venligst sjekk at du har plass til filen p? mobilen",
+				Toast error = Toast.makeText(getContext(), R.string.map_download_failed,
 						Toast.LENGTH_LONG);
 				error.show();
 				return;
 			}
 
-			Toast toast = Toast.makeText(getContext(), "NedlastningenFullf?rt", Toast.LENGTH_LONG);
+			Toast toast = Toast.makeText(getContext(), R.string.map_download_complete, Toast.LENGTH_LONG);
 			toast.show();
 		}
 
@@ -1370,7 +1387,7 @@ public class BaseActivity extends ActionBarActivity {
 	
 	public void createFileDialog() {
 		Intent intent = new Intent(getBaseContext(), FileDialog.class);
-        intent.putExtra(FileDialog.START_PATH, "/sdcard");
+        intent.putExtra(FileDialog.START_PATH, Environment.getExternalStorageDirectory().getPath());
         
         //can user select directories or not
         intent.putExtra(FileDialog.CAN_SELECT_DIR, true);
@@ -1385,10 +1402,12 @@ public class BaseActivity extends ActionBarActivity {
 	public synchronized void onActivityResult(final int requestCode, int resultCode, final Intent data) {
 
 		if (resultCode == Activity.RESULT_OK) {
-			String filePath = data.getStringExtra(FileDialog.RESULT_PATH);
+			String filePath = data.getStringExtra(FileDialog.RESULT_PATH) + "/";
 			setFilePathForExternalStorage(filePath);
 			Toast mToast = Toast.makeText(getContext(), "SELECTED FILEPATH AT: " + filePath, Toast.LENGTH_LONG);
+			writeFilePathToDisk(filePath);
 			mToast.show();
+			
 		} else if (resultCode == Activity.RESULT_CANCELED) {
 			
 		}

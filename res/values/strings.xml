@@ -114,7 +114,9 @@ limitations under the License.
     <string name="map_ocean_currents_title">Se Havstrømmene ved min posisjon</string>
     <string name="map_set_proximity_alert_title">Sett varsling</string>
     <string name="map_proximity_alert_title">Nærhetsvarsel</string>
-
+    <string name="map_download_complete">Nedlastning fullført</string>
+    <string name="map_download_failed">Nedlastningen feilet, venligst sjekk at du har plass til filen på mobilen.</string>
+    
     <!-- Register redskap dialog -->
     <string name="register_tool_coordinates_start_hint">Start-koordinater</string>
     <string name="register_tool_coordinates_end_hint">Slutt-koordinater</string>
