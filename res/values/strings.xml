@@ -78,9 +78,11 @@ limitations under the License.
     <string name="my_page_no_registered_vessels">Du har ingen registrerte fartøy. Klikk her for å legge til</string>
     <string name="my_page_no_registered_tools">Du har ingen registrerte redskaper. Klikk her for å legge til</string>
     <string name="my_page_service_not_available">Denne tjenesten er ikke tilgjengelig enda.</string>
+    <string name="my_page_no_maps_registered">Du har ikke registrert noen kart.</string>
     <string name="my_page__no_registered_maps">Du har ingen registrerte kart. Klikk her for å legge til</string>
     <string name="my_page_no_registered_notices">Du har ingen registrerte varsler. Klikk her for å legge til</string>
-    <string name="my_page_geo_data_service">v1/geodata/service/subscribable</string>
+    <string name="my_page_geo_data_service">geodata/service/subscribable/</string>
+    <string name="my_page_my_subscriptions">geodata/subscription/</string>
     <string name="subscription_icon">Abonnementikon</string>
     <string name="subscription_name">Abonnementnavn</string>
     <string name="subscription_last_updated_colon">Sist oppdatert:</string>

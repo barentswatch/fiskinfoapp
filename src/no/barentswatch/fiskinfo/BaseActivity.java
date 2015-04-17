@@ -809,9 +809,11 @@ public class BaseActivity extends ActionBarActivity {
 			@Override
 			public void run() {
 				try {
+					
+					System.out.println("user: " + username + ", " + password);
 					CloseableHttpClient httpclient = HttpClients.createDefault();
 					try {
-						HttpPost httpPost = new HttpPost("https://pilot.barentswatch.net/api/token");
+						HttpPost httpPost = new HttpPost("https://www.barentswatch.no/api/token");
 						httpPost.addHeader(HTTP.CONTENT_TYPE, "application/x-www-form-urlencoded");
 						List<NameValuePair> postParameters = new ArrayList<NameValuePair>();
 						postParameters.add(new BasicNameValuePair("grant_type", "password"));
@@ -969,11 +971,13 @@ public class BaseActivity extends ActionBarActivity {
 				try {
 					CloseableHttpClient httpclient = HttpClients.createDefault();
 					try {
-						String base_url = "http://pilot.barentswatch.net/api/" + service;
+						String base_url = "https://www.barentswatch.no/api/v1/" + service;
 						List<NameValuePair> getParameters = new ArrayList<NameValuePair>(1);
 						getParameters.add(new BasicNameValuePair("access_token", storedToken.getString("access_token")));
 						String paramsString = URLEncodedUtils.format(getParameters, "UTF-8");
 
+						System.out.println("this is the request: " + paramsString);
+						
 						HttpGet httpGet = new HttpGet(base_url + "?" + paramsString);
 						httpGet.addHeader(HTTP.CONTENT_TYPE, "application/json");
 
@@ -1004,6 +1008,8 @@ public class BaseActivity extends ActionBarActivity {
 			return null;
 		}
 		try {
+			
+			System.out.println("This is response: " + barentswatchResponse);
 			JSONArray barentswatchAPIJSONResponse = new JSONArray(barentswatchResponse);
 			return barentswatchAPIJSONResponse;
 		} catch (JSONException e) {
@@ -1187,7 +1193,7 @@ public class BaseActivity extends ActionBarActivity {
 				String paramsString = URLEncodedUtils.format(getParameters, "UTF-8");
 				HttpGet httpGet;
 
-				httpGet = new HttpGet("http://pilot.barentswatch.net/api/v1/geodata/" + apiName + "/download?format=" + format + "&"
+				httpGet = new HttpGet("https://www.barentswatch.no/api/v1/geodata/" + apiName + "/download?format=" + format + "&"
 						+ paramsString);
 				httpGet.addHeader(HTTP.CONTENT_TYPE, "application/json");
 				Log.d("FiskInfo GetRequest", "The current get request is: " + httpGet.getRequestLine());

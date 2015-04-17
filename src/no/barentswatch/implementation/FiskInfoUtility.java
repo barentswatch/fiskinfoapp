@@ -215,15 +215,18 @@ public class FiskInfoUtility implements UtilityInterface {
 		if ((subscriptions == null) || (subscriptions.isNull(0))) {
 			return;
 		}
+		
 		String title = "";
 		for (int i = 0; i < subscriptions.length(); i++) {
 			try {
 				JSONObject currentSubscription = subscriptions.getJSONObject(i);
 				for (String fieldValue : fieldsToExtract) {
-					title += currentSubscription.getString(fieldValue) + "\n";
+					
+					title += (fieldValue.equals("LastUpdated") ? currentSubscription.getString(fieldValue).replace('T', ' ') : currentSubscription.getString(fieldValue)) + "\n";
 				}
 				title = title.substring(0, title.length() - 1);
 				field.add(title);
+				System.out.println("This is info: " + title);
 			} catch (JSONException e) {
 				e.printStackTrace();
 			}

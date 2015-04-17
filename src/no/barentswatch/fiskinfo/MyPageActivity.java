@@ -145,14 +145,13 @@ public class MyPageActivity extends BaseActivity {
 		}
 
 		List<String> myMaps = new ArrayList<String>();
-		JSONArray mySubscriptions = authenticatedGetRequestToBarentswatchAPIService("v1/geodata/subscription");
+		JSONArray mySubscriptions = authenticatedGetRequestToBarentswatchAPIService(getString(R.string.my_page_my_subscriptions));
 		List<String> myMapsFieldsToExtract = new ArrayList<String>();
 		myMapsFieldsToExtract.add("GeoDataServiceName");
 		new FiskInfoUtility().appendSubscriptionItemsToView(mySubscriptions, myMaps, myMapsFieldsToExtract);
 
 		if (myMaps.size() == 0) {
-
-			myMaps.add(getString(R.string.my_page_service_not_available));
+			myMaps.add(getString(R.string.my_page_no_maps_registered));
 		} else {
 			myMaps.add(getString(R.string.my_page_add_map));
 		}
