@@ -49,7 +49,11 @@ limitations under the License.
     <string name="title_activity_help_activity">Barentswatch FiskInfo</string>
     <string name="help_activity_introduction">Velkommen til gjennomgang av Barentswatch FiskInfos funksjonalitet. Du kan i menyen ovenfor velge hvilken katagori du ønsker veiledning i\n
         Dersom dette er første gangen du bruker applikasjonen anbefaler vi at du tar en fullstendig gjennomgang av applikasjonens muligheter</string>
-
+    <string name="title_file_dialog">File dialog</string>
+    <string name="set_file_path">Velg lagringsmappe</string>
+    
+    
+    
     <!-- Login dialog strings -->
     <string name="login_user_email_field_hint_string">E-postadresse</string>
     <string name="login_password_field_hint_string">Passord</string>

@@ -53,6 +53,14 @@
                 android:value="android.support.v7.app.ActionBarActivity" />
         </activity>
         <activity
+            android:name=".FileDialog"
+            android:label="@string/title_file_dialog"
+            android:parentActivityName="android.support.v7.app.ActionBarActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="android.support.v7.app.ActionBarActivity" />
+        </activity>
+        <activity
             android:name=".HelpActivity"
             android:configChanges="orientation"
             android:label="@string/title_activity_help_activity"

@@ -7,7 +7,6 @@ import java.util.List;
 import java.util.TreeMap;
 
 import no.barentswatch.implementation.SelectionMode;
-import android.R;
 import android.app.AlertDialog;
 import android.app.ListActivity;
 import android.content.DialogInterface;

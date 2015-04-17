@@ -21,6 +21,7 @@ import no.barentswatch.implementation.ExpandableListAdapter;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ExpandableListView;
 import android.widget.ExpandableListView.OnChildClickListener;
 import android.widget.ExpandableListView.OnGroupClickListener;
@@ -94,6 +95,17 @@ public class HelpActivity extends BaseActivity {
 			public boolean onChildClick(ExpandableListView parent, View v, int groupPosition, int childPosition, long id) {
 				Toast.makeText(getApplicationContext(), listDataHeader.get(groupPosition) + " : " + listDataChild.get(listDataHeader.get(groupPosition)).get(childPosition), Toast.LENGTH_SHORT).show();
 				return false;
+			}
+		});
+		
+		
+		Button setFilePathButton = (Button) findViewById(R.id.set_file_path_button);
+		setFilePathButton.setOnClickListener(new View.OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				createFileDialog();
+	
 			}
 		});
 	}

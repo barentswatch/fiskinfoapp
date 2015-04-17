@@ -37,6 +37,7 @@ import no.barentswatch.implementation.FiskInfoPolygon2D;
 import no.barentswatch.implementation.FiskInfoUtility;
 import no.barentswatch.implementation.GpsLocationTracker;
 import no.barentswatch.implementation.NoDefaultSpinner;
+import no.barentswatch.implementation.SelectionMode;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -1367,7 +1368,7 @@ public class BaseActivity extends ActionBarActivity {
         //alternatively you can set file filter
         //intent.putExtra(FileDialog.FORMAT_FILTER, new String[] { "png" });
         
-        startActivityForResult(intent, REQUEST_SAVE);
+        startActivityForResult(intent, 1);
 	}
 	
 	//PRAY THSI WORKS
