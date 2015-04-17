@@ -140,6 +140,7 @@ public class BaseActivity extends ActionBarActivity {
 		if (applicationStartup) {
 			try {
 				getAuthenticationCredientialsFromSharedPrefrences();
+				getSpecificFilePathFromSharedPreferences();
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
@@ -166,11 +167,6 @@ public class BaseActivity extends ActionBarActivity {
 	private void getAuthenticationCredientialsFromSharedPrefrences() throws Exception {
 		prefs = this.getSharedPreferences("no.barentswatch.fiskinfo", Context.MODE_PRIVATE);
 		
-		Boolean useSpecificPath = prefs.getBoolean("usePath", false);
-		if (useSpecificPath) {
-			setFilePathForExternalStorage(prefs.getString("path", null));
-		}
-		
 		String authWritten = prefs.getString("authWritten", null);
 		if (authWritten != null) {
 			storedUsername = prefs.getString("username", null);
@@ -195,6 +191,14 @@ public class BaseActivity extends ActionBarActivity {
 		}
 	}
 
+	private void getSpecificFilePathFromSharedPreferences() throws Exception {
+		prefs = this.getSharedPreferences("no.barentswatch.fiskinfo", Context.MODE_PRIVATE);		
+		Boolean useSpecificPath = prefs.getBoolean("usePath", false);
+		if (useSpecificPath) {
+			setFilePathForExternalStorage(prefs.getString("path", null));
+		}
+	}
+	
 	/**
 	 * Invalidates the data stored in Shared Preferences
 	 */
