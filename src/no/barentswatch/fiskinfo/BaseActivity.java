@@ -43,6 +43,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -111,6 +112,7 @@ public class BaseActivity extends ActionBarActivity {
 	private int previousSelectionActionBar = -1;
 	private JSONArray sharedCacheOfAvailableSubscriptions;
 	private static final String STATE_SELECTED_NAVIGATION_ITEM = "selectedNavItem";
+	private String filePathForExternalStorage = null;
 
 	/*
 	 * these value refer to the index of the units in the string array
@@ -1341,6 +1343,42 @@ public class BaseActivity extends ActionBarActivity {
 
 	}
 
+	
+	public void createFileDialog() {
+		Intent intent = new Intent(getBaseContext(), FileDialog.class);
+        intent.putExtra(FileDialog.START_PATH, "/sdcard");
+        
+        //can user select directories or not
+        intent.putExtra(FileDialog.CAN_SELECT_DIR, true);
+        intent.putExtra(FileDialog.SELECTION_MODE, SelectionMode.MODE_CREATE);
+        //alternatively you can set file filter
+        //intent.putExtra(FileDialog.FORMAT_FILTER, new String[] { "png" });
+        
+        startActivityForResult(intent, REQUEST_SAVE);
+	}
+	
+	//PRAY THSI WORKS
+	public synchronized void onActivityResult(final int requestCode, int resultCode, final Intent data) {
+
+		if (resultCode == Activity.RESULT_OK) {
+			String filePath = data.getStringExtra(FileDialog.RESULT_PATH);
+			setFilePathForExternalStorage(filePath);
+			Toast mToast = Toast.makeText(getContext(), "SELECTED FILEPATH AT: " + filePath, Toast.LENGTH_LONG);
+			mToast.show();
+		} else if (resultCode == Activity.RESULT_CANCELED) {
+			
+		}
+
+	}
+	
+	public String getFilePathForExternalStorage() {
+		return filePathForExternalStorage;
+	}
+	
+	public void setFilePathForExternalStorage(String path) {
+		filePathForExternalStorage = path;
+	}
+	
 	/**
 	 * Checks if external storage is available for read and write.
 	 * 

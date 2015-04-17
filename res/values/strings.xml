@@ -24,6 +24,16 @@ limitations under the License.
     <string name="register">Registrer</string>
     <string name="no_internet_access">Manglende internettforbindelse</string>
 
+    <string name="location">Sted</string>
+    <string name="cant_read_folder">Kan ikke lese mappen</string>
+    <string name="nnew">Ny</string>
+    <string name="select">Velg</string>
+    <string name="file_name">Filnavn</string>
+    <string name="create">Lagre</string>
+    <string name="no_data">Ingen data</string>
+    <color name="gray">#ffff0000</color>
+    <string name="err">Error</string>
+    
     <!-- Base activity strings -->
     <string name="title_activity_base">BaseActivity</string>
     <string name="actionbar_spinner_menu">Meny</string>
