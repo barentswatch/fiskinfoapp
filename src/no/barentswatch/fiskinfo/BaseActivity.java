@@ -1081,14 +1081,10 @@ public class BaseActivity extends ActionBarActivity {
 			@Override
 			public boolean onChildClick(ExpandableListView parent, View v, int groupPosition, int childPosition, long id) {
 				v.setBackgroundColor(0x666666);
-				String tag = "prevSelected";
 				
-				System.out.println("This happens now");
 				selectedHeader.set(nameToApiNameResolver.get(listDataHeader.get(groupPosition)));
 				selectedHeader.set(listDataHeader.get(groupPosition));
 				selectedFormat.set(listDataChild.get(listDataHeader.get(groupPosition)).get(childPosition));
-
-				//TODO: fix selection color
 				
 				LinearLayout currentlySelected = (LinearLayout) parent.findViewWithTag("currentlySelectedRow");
 				if(currentlySelected != null) {
@@ -1096,52 +1092,10 @@ public class BaseActivity extends ActionBarActivity {
 					currentlySelected.setTag(null);
 				}
 				
-				System.out.println("This is the number of children: " + ((LinearLayout)v).getChildCount());
 				((LinearLayout)v).getChildAt(0).setBackgroundColor(Color.rgb(214, 214, 214));
 				v.setTag("currentlySelectedRow");
-//				.setBackgroundColor(Color.WHITE);
-//				currentSelectedTextView = (TextView)((LinearLayout)v).getChildAt(0);
-				
-//				((LinearLayout)v).setta
 				
 				return true;
-			}
-		});
-		
-		expListView.setOnGroupClickListener(new ExpandableListView.OnGroupClickListener() {
-			
-			@Override
-			public boolean onGroupClick(ExpandableListView parent, View v, int groupPosition, long id) {
-				System.out.println("could this happen?");
-				return false;
-			}
-		});
-
-		expListView.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-
-			@Override
-			public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-				// TODO Auto-generated method stub
-				System.out.println("happen a?");
-
-			}
-
-			@Override
-			public void onNothingSelected(AdapterView<?> parent) {
-				// TODO Auto-generated method stub
-				System.out.println("happen 2?");
-
-			}
-		
-		});
-
-		expListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-
-			@Override
-			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-				// TODO Auto-generated method stub
-				System.out.println("happen 3?");
-
 			}
 		});
 		
