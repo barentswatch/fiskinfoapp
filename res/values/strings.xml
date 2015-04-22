@@ -33,6 +33,7 @@ limitations under the License.
     <string name="no_data">Ingen data</string>
     <color name="gray">#ffff0000</color>
     <string name="err">Error</string>
+    <string name="settings">Innstillinger</string>
     
     <!-- Error strings -->
     <string name="no_folder_name">Feltet kan ikke være tomt.</string>

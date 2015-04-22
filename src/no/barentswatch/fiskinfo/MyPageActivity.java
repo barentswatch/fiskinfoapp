@@ -303,6 +303,43 @@ public class MyPageActivity extends BaseActivity {
 		return retVal;
 	}
 
+	private void createSettingsDialog() {
+		final Dialog dialog = new Dialog(this);
+		dialog.setContentView(R.layout.dialog_settings);
+		dialog.setTitle(R.string.settings);
+
+		Button setStoragePathButton = (Button) dialog.findViewById(R.id.settings_dialog_set_storage_path_button);
+		Button logOutButton = (Button) dialog.findViewById(R.id.settings_dialog_log_out_button);
+		Button okButton = (Button) dialog.findViewById(R.id.settings_dialog_ok_button);
+		
+		setStoragePathButton.setOnClickListener(new View.OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				createFileDialog();
+			}
+		});
+
+		logOutButton.setOnClickListener(new View.OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				createConfirmLogoutDialog(getContext(), R.string.log_out, R.string.confirm_log_out);
+			}
+		});
+
+		okButton.setOnClickListener(new View.OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				dialog.dismiss();
+			}
+		});
+
+		dialog.setCanceledOnTouchOutside(false);
+		dialog.show();
+	}
+	
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		getMenuInflater().inflate(R.menu.my_page, menu);
@@ -313,12 +350,8 @@ public class MyPageActivity extends BaseActivity {
 	public boolean onOptionsItemSelected(MenuItem item) {
 		// Handle item selection
 		switch (item.getItemId()) {
-		case R.id.action_set_file_path:
-			createFileDialog();
-			return true;
-		case R.id.action_log_out:
-//			invalidateAuthenticationData();
-			createConfirmLogoutDialog(getContext(), R.string.log_out, R.string.confirm_log_out);
+		case R.id.action_settings:
+			createSettingsDialog();
 		default:
 			return super.onOptionsItemSelected(item);
 		}
