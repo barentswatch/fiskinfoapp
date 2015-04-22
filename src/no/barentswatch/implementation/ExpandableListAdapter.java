@@ -33,7 +33,7 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter {
     private List<String> _listDataHeader; // header titles
     // child data in format of header title, child title
     private HashMap<String, List<String>> _listDataChild;
-    private TextView _mTextView = null;
+//    private TextView _mTextView = null;
     
     public ExpandableListAdapter(Context context, List<String> listDataHeader,
             HashMap<String, List<String>> listChildData) {
@@ -78,6 +78,9 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter {
  
         txtListChild.setText(childText);
         
+        /*
+         * NOTE: While this can be used to highlight selected items, it also breaks the onclicks of subscriptions used in MyPage.
+         */
 //        convertView.setOnClickListener(new View.OnClickListener() {
 //			
 //			@Override

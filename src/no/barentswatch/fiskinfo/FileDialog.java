@@ -128,10 +128,19 @@ public class FileDialog extends ListActivity {
 
 			@Override
 			public void onClick(View v) {
+				mFileName.setError(null);
 				if (mFileName.getText().length() > 0) {
+					File directory = new File(currentPath + "/" + mFileName.getText());
+										
+					if (!(directory.exists())) {
+						directory.mkdirs();
+					} 
+					
 					getIntent().putExtra(RESULT_PATH, currentPath + "/" + mFileName.getText());
 					setResult(RESULT_OK, getIntent());
 					finish();
+				} else {
+					mFileName.setError(getString(R.string.no_folder_name));
 				}
 			}
 		});

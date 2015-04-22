@@ -316,6 +316,9 @@ public class MyPageActivity extends BaseActivity {
 		case R.id.action_set_file_path:
 			createFileDialog();
 			return true;
+		case R.id.action_log_out:
+//			invalidateAuthenticationData();
+			createConfirmLogoutDialog(getContext(), R.string.log_out, R.string.confirm_log_out);
 		default:
 			return super.onOptionsItemSelected(item);
 		}

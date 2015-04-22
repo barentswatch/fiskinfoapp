@@ -171,8 +171,7 @@ public class MapActivity extends BaseActivity {
 			// browser.getSettings().setBuiltInZoomControls(true);
 			// return true;
 		case R.id.setProximityAlert:
-			createFileDialog();
-//			displayScheduledTaskExecutor(currentContext);
+			displayScheduledTaskExecutor(currentContext);
 			return true;
 		default:
 			return super.onOptionsItemSelected(item);

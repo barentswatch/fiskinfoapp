@@ -34,6 +34,9 @@ limitations under the License.
     <color name="gray">#ffff0000</color>
     <string name="err">Error</string>
     
+    <!-- Error strings -->
+    <string name="no_folder_name">Feltet kan ikke være tomt.</string>
+    
     <!-- Base activity strings -->
     <string name="title_activity_base">BaseActivity</string>
     <string name="actionbar_spinner_menu">Meny</string>

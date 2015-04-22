@@ -67,10 +67,12 @@ import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ExpandableListView;
+import android.widget.LinearLayout;
 import android.widget.ExpandableListView.OnChildClickListener;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -347,10 +349,6 @@ public class BaseActivity extends ActionBarActivity {
 					break;
 				case 3: // hjelp
 					loadView(HelpActivity.class);
-					break;
-				case 4: // logg ut
-
-					createConfirmLogoutDialog(mContext, R.string.log_out, R.string.confirm_log_out);
 					break;
 				default:
 					return false;
@@ -1047,6 +1045,7 @@ public class BaseActivity extends ActionBarActivity {
 		final List<String> listDataHeader = new ArrayList<String>();
 		final HashMap<String, List<String>> listDataChild = new HashMap<String, List<String>>();
 		final Map<String, String> nameToApiNameResolver = new HashMap<String, String>();
+		TextView currentSelectedTextView = null;
 
 		JSONArray availableSubscriptions = getSharedCacheOfAvailableSubscriptions();
 		if (availableSubscriptions == null) {
@@ -1073,7 +1072,7 @@ public class BaseActivity extends ActionBarActivity {
 				return false;
 			}
 		}
-		ExpandableListAdapter listAdapter = new ExpandableListAdapter(activityContext, listDataHeader, listDataChild);
+		final ExpandableListAdapter listAdapter = new ExpandableListAdapter(activityContext, listDataHeader, listDataChild);
 		expListView.setAdapter(listAdapter);
 
 		// Listview on child click listener
@@ -1081,15 +1080,71 @@ public class BaseActivity extends ActionBarActivity {
 
 			@Override
 			public boolean onChildClick(ExpandableListView parent, View v, int groupPosition, int childPosition, long id) {
+				v.setBackgroundColor(0x666666);
 				String tag = "prevSelected";
+				
+				System.out.println("This happens now");
 				selectedHeader.set(nameToApiNameResolver.get(listDataHeader.get(groupPosition)));
 				selectedHeader.set(listDataHeader.get(groupPosition));
 				selectedFormat.set(listDataChild.get(listDataHeader.get(groupPosition)).get(childPosition));
 
+				//TODO: fix selection color
+				
+				LinearLayout currentlySelected = (LinearLayout) parent.findViewWithTag("currentlySelectedRow");
+				if(currentlySelected != null) {
+					currentlySelected.getChildAt(0).setBackgroundColor(Color.WHITE);
+					currentlySelected.setTag(null);
+				}
+				
+				System.out.println("This is the number of children: " + ((LinearLayout)v).getChildCount());
+				((LinearLayout)v).getChildAt(0).setBackgroundColor(Color.rgb(214, 214, 214));
+				v.setTag("currentlySelectedRow");
+//				.setBackgroundColor(Color.WHITE);
+//				currentSelectedTextView = (TextView)((LinearLayout)v).getChildAt(0);
+				
+//				((LinearLayout)v).setta
+				
 				return true;
 			}
 		});
+		
+		expListView.setOnGroupClickListener(new ExpandableListView.OnGroupClickListener() {
+			
+			@Override
+			public boolean onGroupClick(ExpandableListView parent, View v, int groupPosition, long id) {
+				System.out.println("could this happen?");
+				return false;
+			}
+		});
 
+		expListView.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+
+			@Override
+			public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+				// TODO Auto-generated method stub
+				System.out.println("happen a?");
+
+			}
+
+			@Override
+			public void onNothingSelected(AdapterView<?> parent) {
+				// TODO Auto-generated method stub
+				System.out.println("happen 2?");
+
+			}
+		
+		});
+
+		expListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+
+			@Override
+			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+				// TODO Auto-generated method stub
+				System.out.println("happen 3?");
+
+			}
+		});
+		
 		downloadButton.setOnClickListener(new View.OnClickListener() {
 			public void onClick(View v) {
 				new DownloadMapLayerFromBarentswatchApiInBackground().execute(nameToApiNameResolver.get(selectedHeader.get()), selectedFormat.get());
@@ -1259,12 +1314,8 @@ public class BaseActivity extends ActionBarActivity {
 					setFilePathForExternalStorage(prefs.getString("path", null));
 				} 
 				
-				
 				if(getFilePathForExternalStorage() != null) {
-					System.out.println("It was not null: " + getFilePathForExternalStorage());
 					filePath = getFilePathForExternalStorage();
-				} else { 
-					System.out.println("It was totally null, using: " + filePath);
 				}
 				
 				File directory = new File(directoryPath, directoryName);
