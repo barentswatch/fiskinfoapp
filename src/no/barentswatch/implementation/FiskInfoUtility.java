@@ -183,14 +183,14 @@ public class FiskInfoUtility implements UtilityInterface {
 		}
 		return polygon;
 	}
-	
+
 	/**
 	 * Truncates a double value to the number of decimals given
 	 * 
 	 * @param number
-	 * 			The number to truncate
+	 *            The number to truncate
 	 * @param numberofDecimals
-	 * 			Number of decimals of the truncated number
+	 *            Number of decimals of the truncated number
 	 * @return
 	 */
 	public Double truncateDecimal(double number, int numberofDecimals) {
@@ -200,29 +200,31 @@ public class FiskInfoUtility implements UtilityInterface {
 			return new BigDecimal(String.valueOf(number)).setScale(numberofDecimals, BigDecimal.ROUND_CEILING).doubleValue();
 		}
 	}
-	
+
 	/**
 	 * Appends a item from a JsonArray to a <code>ExpandableListAdapater</code>
 	 * 
 	 * @param subscriptions
-	 * 			A JSON array containing all the available subscriptions
+	 *            A JSON array containing all the available subscriptions
 	 * @param field
-	 * 			The field name in the <code>ExpandableListAdapater</code>
+	 *            The field name in the <code>ExpandableListAdapater</code>
 	 * @param fieldsToExtract
-	 * 			The fields from the subscriptions to retrieve and store in the <code>ExpandableListAdapater</code>
+	 *            The fields from the subscriptions to retrieve and store in the
+	 *            <code>ExpandableListAdapater</code>
 	 */
 	public void appendSubscriptionItemsToView(JSONArray subscriptions, List<String> field, List<String> fieldsToExtract) {
 		if ((subscriptions == null) || (subscriptions.isNull(0))) {
 			return;
 		}
-		
+
 		String title = "";
 		for (int i = 0; i < subscriptions.length(); i++) {
 			try {
 				JSONObject currentSubscription = subscriptions.getJSONObject(i);
 				for (String fieldValue : fieldsToExtract) {
-					
-					title += (fieldValue.equals("LastUpdated") ? currentSubscription.getString(fieldValue).replace('T', ' ') : currentSubscription.getString(fieldValue)) + "\n";
+
+					title += (fieldValue.equals("LastUpdated") ? currentSubscription.getString(fieldValue).replace('T', ' ')
+							: currentSubscription.getString(fieldValue)) + "\n";
 				}
 				title = title.substring(0, title.length() - 1);
 				field.add(title);
@@ -232,7 +234,7 @@ public class FiskInfoUtility implements UtilityInterface {
 			title = "";
 		}
 	}
-	
+
 	/**
 	 * 
 	 */
@@ -267,6 +269,7 @@ public class FiskInfoUtility implements UtilityInterface {
 			return true;
 		}
 	}
+
 	/**
 	 * Checks that the given string contains coordinates in a valid format in
 	 * regards to the given projection.
@@ -275,7 +278,7 @@ public class FiskInfoUtility implements UtilityInterface {
 	 *            the coordinates to be checked.
 	 * @return true if coordinates are in a valid format.
 	 */
-	
+
 	private boolean checkProjectionEPSG3857(String coordinates) {
 		try {
 			int commaSeperatorIndex = coordinates.indexOf(",");

@@ -17,7 +17,6 @@ import java.security.InvalidParameterException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import no.barentswatch.implementation.ExpandableListAdapter;
 import no.barentswatch.implementation.FiskInfoUtility;
@@ -27,7 +26,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.app.Dialog;
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
@@ -37,11 +35,7 @@ import android.view.Window;
 import android.widget.Button;
 import android.widget.ExpandableListView;
 import android.widget.ExpandableListView.OnChildClickListener;
-import android.widget.ExpandableListView.OnGroupClickListener;
-import android.widget.ExpandableListView.OnGroupCollapseListener;
-import android.widget.ExpandableListView.OnGroupExpandListener;
 import android.widget.TextView;
-import android.widget.Toast;
 
 public class MyPageActivity extends BaseActivity {
 	private ExpandableListAdapter listAdapter;
@@ -71,53 +65,6 @@ public class MyPageActivity extends BaseActivity {
 		createSubscriptionOnClickListeners();
 
 		expListView.setAdapter(listAdapter);
-
-		// Listview Group click listener
-		expListView.setOnGroupClickListener(new OnGroupClickListener() {
-
-			@Override
-			public boolean onGroupClick(ExpandableListView parent, View v, int groupPosition, long id) {
-//				Toast.makeText(getApplicationContext(), "Group Clicked " + listDataHeader.get(groupPosition), Toast.LENGTH_SHORT).show();
-				return false;
-			}
-		});
-
-		// Listview Group expanded listener
-		expListView.setOnGroupExpandListener(new OnGroupExpandListener() {
-
-			@Override
-			public void onGroupExpand(int groupPosition) {
-//				Toast.makeText(getApplicationContext(), listDataHeader.get(groupPosition) + " Expanded", Toast.LENGTH_SHORT).show();
-			}
-		});
-
-		// Listview Group collasped listener
-		expListView.setOnGroupCollapseListener(new OnGroupCollapseListener() {
-
-			@Override
-			public void onGroupCollapse(int groupPosition) {
-//				Toast.makeText(getApplicationContext(), listDataHeader.get(groupPosition) + " Collapsed", Toast.LENGTH_SHORT).show();
-
-			}
-		});
-
-		// Listview on child click listener
-		// expListView.setOnChildClickListener(new OnChildClickListener() {
-		//
-		// @Override
-		// public boolean onChildClick(ExpandableListView parent, View v, int
-		// groupPosition, int childPosition, long id) {
-		// System.out.println("This happenu!");
-		// System.out.println("This happened! \nGroupPos: " + groupPosition +
-		// ", childPosition: " + childPosition + ", id: " + id);
-		// Toast.makeText(getApplicationContext(),
-		// listDataHeader.get(groupPosition) + " : " +
-		// listDataChild.get(listDataHeader.get(groupPosition)).get(childPosition),
-		// Toast.LENGTH_SHORT).show();
-		// return false;
-		// }
-		// });
-
 	}
 
 	private void loadListData() {
@@ -155,7 +102,7 @@ public class MyPageActivity extends BaseActivity {
 		if (myMaps.size() == 0) {
 			myMaps.add(getString(R.string.my_page_no_maps_registered));
 		} else {
-			myMaps.add(getString(R.string.my_page_add_map));
+			//myMaps.add(getString(R.string.my_page_add_map));
 		}
 
 		List<String> myNotices = new ArrayList<String>();

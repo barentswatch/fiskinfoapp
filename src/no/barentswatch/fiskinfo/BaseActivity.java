@@ -1079,9 +1079,7 @@ public class BaseActivity extends ActionBarActivity {
 		expListView.setOnChildClickListener(new OnChildClickListener() {
 
 			@Override
-			public boolean onChildClick(ExpandableListView parent, View v, int groupPosition, int childPosition, long id) {
-				v.setBackgroundColor(0x666666);
-				
+			public boolean onChildClick(ExpandableListView parent, View v, int groupPosition, int childPosition, long id) {				
 				selectedHeader.set(nameToApiNameResolver.get(listDataHeader.get(groupPosition)));
 				selectedHeader.set(listDataHeader.get(groupPosition));
 				selectedFormat.set(listDataChild.get(listDataHeader.get(groupPosition)).get(childPosition));

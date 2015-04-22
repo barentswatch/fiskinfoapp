@@ -21,10 +21,12 @@ import android.R.raw;
 import android.content.Context;
 import android.graphics.Color;
 import android.graphics.Typeface;
+import android.graphics.drawable.Drawable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseExpandableListAdapter;
+import android.widget.LinearLayout;
 import android.widget.TextView;
  
 public class ExpandableListAdapter extends BaseExpandableListAdapter {
@@ -67,31 +69,12 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter {
             LayoutInflater infalInflater = (LayoutInflater) this._context
                     .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             convertView = infalInflater.inflate(R.layout.list_item, null);
-//            if(getGroup(groupPosition).equals("Tilgjengelige abonnementer")) {
-//            	TextView titleView = (TextView) convertView.findViewById(R.id.lblListItem);
-//            	titleView.setCompoundDrawables(R.drawable.ikon_kystfiske, null, null, null);
-//            }
         }
  
         final TextView txtListChild = (TextView) convertView
                 .findViewById(R.id.lblListItem);
  
         txtListChild.setText(childText);
-        
-        /*
-         * NOTE: While this can be used to highlight selected items, it also breaks the onclicks of subscriptions used in MyPage.
-         */
-//        convertView.setOnClickListener(new View.OnClickListener() {
-//			
-//			@Override
-//			public void onClick(View v) {
-//				if(_mTextView != null) {
-//					_mTextView.setBackgroundColor(Color.WHITE);
-//				}
-//				_mTextView = txtListChild;
-//				_mTextView.setBackgroundColor(Color.rgb(214, 214, 214));
-//			}
-//		});
         
         return convertView;
     }
