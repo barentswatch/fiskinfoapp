@@ -69,6 +69,13 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter {
             LayoutInflater infalInflater = (LayoutInflater) this._context
                     .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             convertView = infalInflater.inflate(R.layout.list_item, null);
+            if(getGroup(groupPosition).equals("Tilgjengelige abonnementer")) {
+            	TextView titleView = (TextView) convertView.findViewById(R.id.lblListItem);
+//            	Drawable icon = convertView.getContext().getResources().getDrawable(R.drawable.ikon_kystfiske);
+//            	icon.setBounds(10,10,10,10);
+//            	titleView.setCompoundDrawables(icon, null, null, null);
+//            	((TextView)((LinearLayout) convertView).getChildAt(0)).setCompoundDrawables(icon, null, null, null);
+            }
         }
  
         final TextView txtListChild = (TextView) convertView

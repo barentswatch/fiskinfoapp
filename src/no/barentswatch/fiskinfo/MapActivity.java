@@ -32,6 +32,7 @@ import no.barentswatch.implementation.GpsLocationTracker;
 import no.barentswatch.implementation.ToolsInfo;
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.Context;
 import android.media.MediaPlayer;
 import android.os.AsyncTask;
@@ -43,6 +44,7 @@ import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.Window;
 import android.webkit.GeolocationPermissions;
 import android.webkit.JsResult;
 import android.webkit.WebChromeClient;
@@ -52,8 +54,12 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.SeekBar;
+import android.widget.TableRow;
+import android.widget.TextView;
 import android.widget.SeekBar.OnSeekBarChangeListener;
 import android.widget.Spinner;
 import ch.boye.httpclientandroidlib.client.methods.CloseableHttpResponse;
@@ -171,7 +177,13 @@ public class MapActivity extends BaseActivity {
 			// browser.getSettings().setBuiltInZoomControls(true);
 			// return true;
 		case R.id.setProximityAlert:
-			displayScheduledTaskExecutor(currentContext);
+			setProximityAlertDialog(currentContext);
+			return true;
+		case R.id.check_polar_low:
+			showPolarLowDialog();
+			return true;
+		case R.id.choose_map_layers:
+			showMapLayersDialog();
 			return true;
 		default:
 			return super.onOptionsItemSelected(item);
@@ -180,11 +192,70 @@ public class MapActivity extends BaseActivity {
 
 	/**
 	 * 
+	 */
+	public void showMapLayersDialog() {
+		final Dialog dialog = new Dialog(this);
+		dialog.requestWindowFeature(Window.FEATURE_LEFT_ICON);
+		dialog.setContentView(R.layout.dialog_select_map_layers);
+
+		final LinearLayout mapLayerLayout = (LinearLayout) dialog.findViewById(R.id.map_layers_checkbox_layout);
+		Button okButton = (Button) dialog.findViewById(R.id.dismiss_dialog_button);
+		Button cancelButton = (Button) dialog.findViewById(R.id.go_to_map_button);
+
+		for(int i = 0; i < 5; i++) {
+			View mapLayerRow = getMapLayerCheckBoxRow(getContext(), Integer.toString(i));
+			mapLayerLayout.addView(mapLayerRow);
+		}
+		
+		okButton.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+
+				for(int i = 0; i < mapLayerLayout.getChildCount(); i++) {
+					if(((CheckBox)((TableRow)mapLayerLayout.getChildAt(i)).getChildAt(0)).isChecked()) {
+						// TODO: Add layer to list
+						
+					}
+				}
+				// TODO: Implement logic for adding map layers here.				
+				
+				
+				
+				dialog.dismiss();
+			}
+		});
+
+		cancelButton.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				dialog.dismiss();
+			}
+		});
+
+		dialog.setTitle(R.string.choose_map_layers);
+		dialog.setCanceledOnTouchOutside(false);
+		dialog.show();
+	}
+	
+	
+	public View getMapLayerCheckBoxRow(Context context, String mapLayerName) {
+		TableRow tr = new TableRow(context);
+		View v = LayoutInflater.from(context).inflate(R.layout.map_layer_check_box_row, tr, false);
+		final int tablePadding = 5;
+		TextView textView = (TextView) v.findViewById(R.id.map_layer_row_text_view);
+		textView.setText(mapLayerName);
+		v.setPadding(tablePadding, tablePadding, tablePadding, tablePadding);
+		
+		return v;
+	}
+	
+	/**
+	 * 
 	 * @param activityContext
 	 *            The context of the current activity
 	 */
 	@SuppressLint("InflateParams")
-	public void displayScheduledTaskExecutor(Context activityContext) {
+	public void setProximityAlertDialog(Context activityContext) {
 		LayoutInflater layoutInflater = getLayoutInflater();
 		View view = layoutInflater.inflate(R.layout.dialog_scheduled_task_executor, null);
 		final AlertDialog builder = new AlertDialog.Builder(activityContext).create();
@@ -306,6 +377,8 @@ public class MapActivity extends BaseActivity {
 
 		builder.show();
 	}
+	
+	
 
 	public void showProximityAlertDialog(Context activityContext) {
 		LayoutInflater layoutInflater = getLayoutInflater();
@@ -336,71 +409,6 @@ public class MapActivity extends BaseActivity {
 		});
 
 		builder.show();
-	}
-
-	/**
-	 * This function might be ported to a popup if the view for the SVG is
-	 * not-satisfactory as is.
-	 * 
-	 * @param activityContext
-	 * @return
-	 */
-	public String displayCurrentOceanCurrents(Context activityContext) {
-		final AtomicReference<String> responseAsString = new AtomicReference<String>();
-		GpsLocationTracker mGpsLocationTracker = new GpsLocationTracker(getContext());
-		final double latitude;
-		final double longitude;
-		/**
-		 * Set GPS Location fetched address and place them in the input for
-		 * coordinates. As GPS-coordinates are locale independent this function
-		 * uses hardcoded values for separators to avoid dependency issues. Note
-		 * that the Android location API gives coordinates in WGS84 - ellipsoid,
-		 * which is the same as EPSG:4326!
-		 */
-		if (mGpsLocationTracker.canGetLocation()) {
-			latitude = mGpsLocationTracker.getLatitude();
-			longitude = mGpsLocationTracker.getLongitude();
-			Log.i("GPS-LocationTracker", String.format("latitude: %s", latitude));
-			Log.i("GPS-LocationTracker", String.format("longitude: %s", longitude));
-		} else {
-			mGpsLocationTracker.showSettingsAlert();
-			return null;
-		}
-
-		Thread thread = new Thread(new Runnable() {
-			@Override
-			public void run() {
-				try {
-					CloseableHttpClient httpclient = HttpClients.createDefault();
-					try {
-						HttpGet httpGet = new HttpGet("http://192.168.255.213:8080" + "/GET" + "?" + "x="
-								+ new FiskInfoUtility().truncateDecimal(latitude, 2) + "&y="
-								+ new FiskInfoUtility().truncateDecimal(longitude, 2));
-
-						CloseableHttpResponse response = httpclient.execute(httpGet);
-						try {
-							responseAsString.set(EntityUtils.toString(response.getEntity()));
-						} finally {
-							response.close();
-						}
-					} finally {
-						httpclient.close();
-					}
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
-
-		thread.start();
-		try {
-			thread.join();
-		} catch (InterruptedException e) {
-			e.printStackTrace();
-		}
-
-		String sinmodServiceProvierResponse = responseAsString.get();
-		return sinmodServiceProvierResponse;
 	}
 
 	/**
@@ -569,14 +577,12 @@ public class MapActivity extends BaseActivity {
 		public JSONObject getGeoJson() {
 			JSONObject mordi = null;
 			try {
-				System.out.println("DO I FAIL?");
 				JSONObject fnName = getStringFromFile(getAssets().open("redskapsInfoJSON.json"));
 				mordi = fnName;
 			} catch (IOException e) {
 				System.out.println("I FAILED");
 				e.printStackTrace();
 			} catch (Exception e) {
-				// TODO Auto-generated catch block
 				System.out.println("I FAILED");
 				e.printStackTrace();
 			}

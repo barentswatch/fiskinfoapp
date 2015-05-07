@@ -176,9 +176,6 @@ public class MyPageActivity extends BaseActivity {
 		if (subscriptions != null) {
 			try {
 				currentSubscription = getSharedCacheOfAvailableSubscriptions().getJSONObject(JSONObjectIndex);
-				System.out.println(currentSubscription.getString("Name") + "\n" + currentSubscription.getString("DataOwner") + "\n"
-						+ currentSubscription.getString("LastUpdated") + "\n" + currentSubscription.getString("UpdateFrequencyText") + "\n"
-						+ currentSubscription.getString("Description"));
 				subscriptionName = currentSubscription.getString("Name");
 				subscriptionOwner = currentSubscription.getString("DataOwner");
 				subscriptionDescription = currentSubscription.getString("Description");

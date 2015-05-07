@@ -11,8 +11,10 @@ distributed under the License is distributed on an "AS IS" BASIS,
 WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
+
 -->
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout 
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -20,49 +22,61 @@ limitations under the License.
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
+    android:orientation="vertical"
     tools:context=".HelpActivity" >
 
-    <TextView
-        android:id="@+id/exportMetadataHelpText"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/exportMetadataMapServices"
-        android:layout_alignRight="@+id/exportMetadataMapServices"
-        android:layout_below="@+id/exportMetadataMapServices"
-        android:layout_marginTop="20dp"
-        android:layout_centerVertical="true"
-        android:ems="10"
-        android:text="@string/map_export_metadata_help_text" />
-
-    <ExpandableListView
+   	<ExpandableListView
         android:id="@+id/exportMetadataMapServices"
-                android:layout_height="wrap_content"
-                android:layout_width="match_parent"/>
+       	android:layout_height="wrap_content"
+        android:layout_width="match_parent"/>
+   
+	<ScrollView 
+	    android:layout_width="match_parent"
+	    android:layout_height="match_parent">
+	    
+	    <RelativeLayout 
+	        android:layout_width="match_parent"
+	    	android:layout_height="wrap_content" >
 
-        <LinearLayout
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/exportMetadataHelpText"
-            android:layout_marginTop="50dp"
-            android:orientation="horizontal"
-            android:paddingBottom="1.0dip"
-            android:paddingLeft="4.0dip"
-            android:paddingRight="4.0dip"
-            android:paddingTop="5.0dip" >
+	        <LinearLayout
+	            android:id="@+id/export_metadata_button_layout"
+	            android:layout_width="fill_parent"
+	            android:layout_height="wrap_content"
+	            android:layout_marginTop="10dp"
+	            android:orientation="horizontal"
+	            android:paddingBottom="1.0dip"
+	            android:paddingLeft="4.0dip"
+	            android:paddingRight="4.0dip"
+	            android:paddingTop="5.0dip" >
+	
+	            <Button
+	                android:id="@+id/metadataDownloadButton"
+	                android:layout_width="0.0dip"
+	                android:layout_height="wrap_content"
+	                android:layout_weight="1.0"
+	                android:text="@string/download" />
+	
+	            <Button
+	                android:id="@+id/cancel_button"
+	                android:layout_width="0.0dip"
+	                android:layout_height="wrap_content"
+	                android:layout_weight="1.0"
+	                android:text="@string/cancel" />
+	        </LinearLayout>
+	        			
+		    <TextView
+		        android:id="@+id/exportMetadataHelpText"
+		        android:layout_width="match_parent"
+		        android:layout_height="wrap_content"
+	            android:layout_below="@+id/export_metadata_button_layout"
+		        android:layout_marginTop="10dp"
+		        android:layout_centerVertical="true"
+		        android:ems="10"
+		        android:text="@string/map_export_metadata_help_text" />
+	
+	        
+		</RelativeLayout>
+	</ScrollView>
 
-            <Button
-                android:id="@+id/metadataDownloadButton"
-                android:layout_width="0.0dip"
-                android:layout_height="wrap_content"
-                android:layout_weight="1.0"
-                android:text="@string/download" />
+</LinearLayout>
 
-            <Button
-                android:id="@+id/cancel_button"
-                android:layout_width="0.0dip"
-                android:layout_height="wrap_content"
-                android:layout_weight="1.0"
-                android:text="@string/cancel" />
-        </LinearLayout>
-
-</RelativeLayout>

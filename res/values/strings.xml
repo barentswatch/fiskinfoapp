@@ -45,8 +45,7 @@ limitations under the License.
     <string name="confirm_log_out">Er du sikker på at du vil logge ut?</string>
 
     <!-- About dialog strings -->
-    <string name="about_page_welcome_text">Velkommen til barentswatch Fiskinfo. Denne appen er forsatt under utvikling, men støttet funksjonalitet på nåværende tidspunk 
-	    er å kunne registrer redskap i sjøen og alltid ha nyeste kart tilgjengelig for navigasjon i norske-havet.</string>
+    <string name="about_page_welcome_text">Velkommen til barentswatch Fiskinfo. Denne appen er forsatt under utvikling og funksjonaliteten som tilbys kan variere i hvorvidt den fungerer.</string>
     <string name="title_activity_about">Barentswatch FiskInfo</string>
 
     <!-- Help activity strings -->
@@ -104,7 +103,7 @@ limitations under the License.
     <string name="map_update_button">Oppdater kartet</string>
     <string name="map_export_metadata">Eksporter data</string>
     <string name="map_register_popup_text">Venligst oppgi koordinatene, og hvilket redskap som ble benyttet</string>
-    <string name="map_symbol_explanation">Tegnforklaring</string>
+    <string name="map_symbol_explanation">Tegnforklaring for redskaper</string>
     <string name="map_symbol_explanation_red"> - Long line</string>
     <string name="map_symbol_explanation_blue"> - Nets</string>
     <string name="map_symbol_explanation_orange"> - Crab pot</string>
@@ -114,12 +113,18 @@ limitations under the License.
     <string name="map_symbol_explanation_pink"> - Mooring System</string>
     <string name="map_symbol_explanation_black"> - Unknown</string>
     <string name="map_export_metadata_title">Last ned kartlag</string>
-    <string name="map_export_metadata_help_text">Her kan du laste ned forskjellige kartlag i enten shape- eller OleX format. Velg et kartlag og klikk last ned, deretter lagres kartet på din mobil i mappen FiskInfo/Kartlag</string>
+    <string name="map_export_metadata_help_text">Her kan du laste ned kartlag i forskjellige formater. Velg et kartlag og klikk last ned. Kartlaget lagres som standard i mappen Downloads/fiskinfo med mindre du har valgt en annen mappe i instillingene.</string>
     <string name="map_ocean_currents_title">Se Havstrømmene ved min posisjon</string>
     <string name="map_set_proximity_alert_title">Sett varsling</string>
     <string name="map_proximity_alert_title">Nærhetsvarsel</string>
     <string name="map_download_complete">Nedlastning fullført</string>
     <string name="map_download_failed">Nedlastningen feilet, venligst sjekk at du har plass til filen på mobilen.</string>
+    <string name="polar_low">Polart lavtrykk</string>
+    <string name="check_polar_low">Sjekk polart lavtrykk</string>
+    <string name="check_polar_low_info">Dette er polart lavtrykksdata for din posisjon:\n</string>
+    <string name="check_polar_low_error">Det oppstod en feil og vi kunne ikke finne informasjonen du så etter. Vennligst prøv igjen senere.</string>
+    <string name="choose_map_layers">Velg kartlag</string>
+    <string name="choose_map_layers_info">Her velger du hvilke kartlag du ser på kartet.</string>
     
     <!-- Register redskap dialog -->
     <string name="register_tool_coordinates_start_hint">Start-koordinater</string>
@@ -158,7 +163,6 @@ limitations under the License.
         <item>Kart</item>
         <item>Om</item>
         <item>Hjelp</item>
-        <item>Logg ut</item>
     </string-array>
     <string-array name="projections">
         <item>EPSG:3857</item>

@@ -46,6 +46,7 @@ import org.json.JSONObject;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -67,12 +68,16 @@ import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ExpandableListView;
 import android.widget.LinearLayout;
+import android.widget.TableLayout;
+import android.widget.TableRow;
 import android.widget.ExpandableListView.OnChildClickListener;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -391,6 +396,51 @@ public class BaseActivity extends ActionBarActivity {
 		messageView.setGravity(Gravity.CENTER);
 	}
 
+	/**
+	 * Displays a dialog which informs the user of polar low information in their current position.
+	 */
+	public void showPolarLowDialog() {
+		boolean success = false;
+		GpsLocationTracker mGpsLocationTracker = new GpsLocationTracker(getContext());
+		double latitude, longitude = 0;
+		if (mGpsLocationTracker.canGetLocation()) {
+			latitude = mGpsLocationTracker.getLatitude();
+			longitude = mGpsLocationTracker.getLongitude();
+			System.out.println("This is lat: " + latitude + "\nThis is lon: " + longitude);
+			
+		} else {
+			mGpsLocationTracker.showSettingsAlert();
+			return;
+		}
+
+		// TODO: add polar low API call using current position here.
+		
+		
+		
+		AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+		AlertDialog dialog;
+		builder.setTitle(R.string.polar_low);
+		if(success) {
+			// TODO: add results from API call here.
+			builder.setMessage(getText(R.string.check_polar_low_info) + "");
+		} else {
+			builder.setMessage(R.string.check_polar_low_error);
+		}
+		
+		builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+
+			@Override
+			public void onClick(DialogInterface dialog, int which) {
+				dialog.dismiss();
+			}
+		});
+
+		dialog = builder.create();
+		dialog.show();
+		dialog.setCanceledOnTouchOutside(false);
+
+	}
+	
 	public void createConfirmLogoutDialog(Context activityContext, int rPathToTitleOfPopup, int rPathToTextInTheBodyOfThePopup) {
 		AlertDialog.Builder builder = new AlertDialog.Builder(activityContext);
 		AlertDialog dialog;
@@ -854,7 +904,7 @@ public class BaseActivity extends ActionBarActivity {
 		String barentswatchResponse = responseAsString.get();
 		JSONObject barentsWatchResponseToken = new JSONObject(barentswatchResponse);
 
-		saveUserCredentialsToSharedPreferences(barentsWatchResponseToken);
+		saveUserCredentialsToSharedPreferences(barentsWatchResponseToken, username, password);
 		getAuthenticationCredientialsFromSharedPrefrences();
 
 		setAuthentication(true);
@@ -868,12 +918,12 @@ public class BaseActivity extends ActionBarActivity {
 	 * @param barentsWatchResponseToken
 	 *            The responsetoken given by the Barentswatch authentication API
 	 */
-	private void saveUserCredentialsToSharedPreferences(JSONObject barentsWatchResponseToken) {
+	private void saveUserCredentialsToSharedPreferences(JSONObject barentsWatchResponseToken, String username, String password) {
 		prefs = this.getSharedPreferences("no.barentswatch.fiskinfo", Context.MODE_PRIVATE);
 		SharedPreferences.Editor editor = prefs.edit();
 		editor.putString("authWritten", "Ishould not return null should I now");
-		editor.putString("username", "crono142@gmail.com");
-		editor.putString("password", "8fgP8pDuhFcespv");
+		editor.putString("username", username);
+		editor.putString("password", password);
 
 		editor.putString("token", barentsWatchResponseToken.toString());
 		long timestampSecondsGranularity = System.currentTimeMillis() / 1000L;
@@ -1045,7 +1095,6 @@ public class BaseActivity extends ActionBarActivity {
 		final List<String> listDataHeader = new ArrayList<String>();
 		final HashMap<String, List<String>> listDataChild = new HashMap<String, List<String>>();
 		final Map<String, String> nameToApiNameResolver = new HashMap<String, String>();
-		TextView currentSelectedTextView = null;
 
 		JSONArray availableSubscriptions = getSharedCacheOfAvailableSubscriptions();
 		if (availableSubscriptions == null) {
