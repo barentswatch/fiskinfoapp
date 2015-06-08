@@ -21,6 +21,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
+import java.io.StringWriter;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -1270,9 +1271,23 @@ public class BaseActivity extends ActionBarActivity {
 				}
 
 				HttpEntity responseEntity = httpResponse.getEntity();
-
+				Reader reader = null;
+				StringWriter writer = null;
+				String charset = "UTF-8"; // TODO: DO BASED ON RESPONSE HEADER
+				
 				if (responseEntity instanceof HttpEntity && responseEntity != null) {
 					data = responseEntity.getContent();
+					if (format.equals("JSON")) {
+						InputStream ungzippedResponse = new GZIPInputStream(data);
+					    reader = new InputStreamReader(ungzippedResponse, charset);
+					    writer = new StringWriter();
+
+					    char[] buffer = new char[10240];
+					    for (int length = 0; (length = reader.read(buffer)) > 0;) {
+					        writer.write(buffer, 0, length);
+					    }
+						setGeoJsonFile(writer.toString());
+					}
 					try {
 						rawData = new FiskInfoUtility().toByteArray(data);
 					} catch (IOException e) {
@@ -1295,7 +1310,6 @@ public class BaseActivity extends ActionBarActivity {
 			if (data == null) {
 				Log.d("FiskInfo", "ApiError. Did not recieve data from Barentswatch");
 			}
-			setGeoJsonFile(rawData.toString());
 			return rawData;
 		}
 
