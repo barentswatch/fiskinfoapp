@@ -121,6 +121,7 @@ public class BaseActivity extends ActionBarActivity {
 	private JSONArray sharedCacheOfAvailableSubscriptions;
 	private static final String STATE_SELECTED_NAVIGATION_ITEM = "selectedNavItem";
 	private String filePathForExternalStorage = null;
+	private String geoJsonFile = null;
 
 	/*
 	 * these value refer to the index of the units in the string array
@@ -1213,7 +1214,7 @@ public class BaseActivity extends ActionBarActivity {
 		protected String distance = null;
 		protected String apiName = null;
 		protected boolean alarmFile;
-
+		
 		protected void parseParameters(String[] params) {
 			apiName = params[0];
 			
@@ -1294,6 +1295,7 @@ public class BaseActivity extends ActionBarActivity {
 			if (data == null) {
 				Log.d("FiskInfo", "ApiError. Did not recieve data from Barentswatch");
 			}
+			setGeoJsonFile(rawData.toString());
 			return rawData;
 		}
 
@@ -1341,7 +1343,7 @@ public class BaseActivity extends ActionBarActivity {
 			Toast toast = Toast.makeText(getContext(), R.string.map_download_complete, Toast.LENGTH_LONG);
 			toast.show();
 		}
-
+		
 		private void writeMapLayerToExternalStorage(byte[] data, OutputStream outputStream, String filePath) {
 			try {
 				outputStream = new FileOutputStream(new File(filePath + writableName + "." + format));
@@ -1373,7 +1375,7 @@ public class BaseActivity extends ActionBarActivity {
 					// We are supporting API 8, so this is:
 					// IsNullOrEmpty();
 					Point currPoint = new Point();
-					if (line == "" || line.length() == 0 || line == null) {
+					if ( line == null|| line.length() == 0 || line == "") {
 						continue;
 					}
 					if (Character.isLetter(line.charAt(0))) {
@@ -1493,6 +1495,14 @@ public class BaseActivity extends ActionBarActivity {
 	 */
 	public JSONArray getSharedCacheOfAvailableSubscriptions() {
 		return sharedCacheOfAvailableSubscriptions;
+	}
+	
+	public void setGeoJsonFile(String geoJson) {
+		this.geoJsonFile = geoJson;
+	}
+	
+	public String getGeoJsonFile() {
+		return geoJsonFile;
 	}
 
 	/**

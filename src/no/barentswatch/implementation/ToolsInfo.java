@@ -26,6 +26,7 @@ public class ToolsInfo {
 	private static ToolsInfo instance = null;
 
 	String geoJson;
+	private String versionNumber;
 
 	private ToolsInfo() {
 		try {

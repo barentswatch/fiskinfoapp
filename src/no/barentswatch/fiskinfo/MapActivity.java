@@ -19,12 +19,15 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicReference;
 
 import org.json.JSONObject;
 
 import no.barentswatch.baseclasses.Point;
+import no.barentswatch.baseclasses.ToolsGeoJson;
 import no.barentswatch.implementation.FiskInfoPolygon2D;
 import no.barentswatch.implementation.FiskInfoUtility;
 import no.barentswatch.implementation.FiskinfoScheduledTaskExecutor;
@@ -82,6 +85,7 @@ public class MapActivity extends BaseActivity {
 	private boolean alarmFiring = false;
 	private FiskInfoPolygon2D tools = null;
 	private boolean cacheDeserialized = false;
+	private ToolsGeoJson mTools = new ToolsGeoJson(getContext());
 
 	/*
 	 * these value refer to the index of the units in the string array
@@ -102,6 +106,7 @@ public class MapActivity extends BaseActivity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.setContext(this);
 		super.onCreate(savedInstanceState);
+		getMapTools();
 		setContentView(R.layout.activity_map);
 		configureWebParametersAndLoadDefaultMapApplication();
 	}
@@ -130,6 +135,7 @@ public class MapActivity extends BaseActivity {
 				return super.onJsAlert(view, url, message, result);
 			}
 		});
+		updateMapTools();
 		browser.loadUrl("file:///android_asset/mapApplication.html");
 
 	}
@@ -556,7 +562,7 @@ public class MapActivity extends BaseActivity {
 				System.out.println("BEEP");
 			}
 
-		}, 5, 20, TimeUnit.SECONDS); // 1, 30 is initial_delay, delay
+		}, 5, 20, TimeUnit.SECONDS); // <num1> is initial delay,<num2> is the subsequent delay between each call
 	}
 
 	private boolean checkCacheWriterStatus() {
@@ -566,6 +572,24 @@ public class MapActivity extends BaseActivity {
 		return false;
 	}
 
+	private void getMapTools() {
+		if (mTools.getVersionNumber().equals(ToolsGeoJson.INVALID_VERSION)) {
+			new DownloadMapLayerFromBarentswatchApiInBackground().execute("fishingfacility", "JSON");
+		} else {
+			//Do versioning
+		}
+	}
+	
+	private void updateMapTools() {
+		String tools = null;
+		tools = getGeoJsonFile();
+		setGeoJsonFile(null);
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-ddTHH:mm:ss");
+	    Date now = new Date();
+	    String strDate = sdf.format(now);
+		mTools.setTools(new JSONObject(tools), strDate, getContext());
+	}
+	
 	public class JavaScriptInterface {
 		Context mContext;
 
@@ -577,7 +601,8 @@ public class MapActivity extends BaseActivity {
 		public JSONObject getGeoJson() {
 			JSONObject mordi = null;
 			try {
-				JSONObject fnName = getStringFromFile(getAssets().open("redskapsInfoJSON.json"));
+				System.out.println("DO I FAIL?");
+				JSONObject fnName = mTools.getTools();
 				mordi = fnName;
 			} catch (IOException e) {
 				System.out.println("I FAILED");
