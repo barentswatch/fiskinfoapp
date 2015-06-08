@@ -24,6 +24,7 @@ import java.util.Date;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicReference;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import no.barentswatch.baseclasses.Point;
@@ -85,7 +86,7 @@ public class MapActivity extends BaseActivity {
 	private boolean alarmFiring = false;
 	private FiskInfoPolygon2D tools = null;
 	private boolean cacheDeserialized = false;
-	private ToolsGeoJson mTools = new ToolsGeoJson(getContext());
+	private ToolsGeoJson mTools = null;
 
 	/*
 	 * these value refer to the index of the units in the string array
@@ -105,6 +106,8 @@ public class MapActivity extends BaseActivity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.setContext(this);
+		mTools = new ToolsGeoJson(getContext());
+		setGeoJsonFile(null);
 		super.onCreate(savedInstanceState);
 		getMapTools();
 		setContentView(R.layout.activity_map);
@@ -584,10 +587,17 @@ public class MapActivity extends BaseActivity {
 		String tools = null;
 		tools = getGeoJsonFile();
 		setGeoJsonFile(null);
-		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-ddTHH:mm:ss");
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 	    Date now = new Date();
 	    String strDate = sdf.format(now);
-		mTools.setTools(new JSONObject(tools), strDate, getContext());
+	    System.out.println("TIS BETTER FCKIN WORK");
+	    System.out.println(tools);
+		try {
+			mTools.setTools(new JSONObject(tools), strDate, getContext());
+		} catch (JSONException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 	
 	public class JavaScriptInterface {
@@ -604,9 +614,6 @@ public class MapActivity extends BaseActivity {
 				System.out.println("DO I FAIL?");
 				JSONObject fnName = mTools.getTools();
 				mordi = fnName;
-			} catch (IOException e) {
-				System.out.println("I FAILED");
-				e.printStackTrace();
 			} catch (Exception e) {
 				System.out.println("I FAILED");
 				e.printStackTrace();
