@@ -21,6 +21,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicReference;
 
@@ -577,7 +578,15 @@ public class MapActivity extends BaseActivity {
 
 	private void getMapTools() {
 		if (mTools.getVersionNumber().equals(ToolsGeoJson.INVALID_VERSION)) {
-			new DownloadMapLayerFromBarentswatchApiInBackground().execute("fishingfacility", "JSON");
+			try {
+				new DownloadMapLayerFromBarentswatchApiInBackground().execute("fishingfacility", "JSON").get();
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (ExecutionException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		} else {
 			//Do versioning
 		}
@@ -591,7 +600,7 @@ public class MapActivity extends BaseActivity {
 	    Date now = new Date();
 	    String strDate = sdf.format(now);
 	    System.out.println("TIS BETTER FCKIN WORK");
-	    System.out.println(tools);
+	    System.out.println(tools.toString());
 		try {
 			mTools.setTools(new JSONObject(tools), strDate, getContext());
 		} catch (JSONException e) {
