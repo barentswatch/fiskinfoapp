@@ -595,10 +595,6 @@ public class MapActivity extends BaseActivity {
 	private void updateMapTools() {
 		String tools = null;
 		tools = getGeoJsonFile();
-		while(tools == null) {
-			tools = getGeoJsonFile();
-		}
-		setGeoJsonFile(null);
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 	    Date now = new Date();
 	    String strDate = sdf.format(now);

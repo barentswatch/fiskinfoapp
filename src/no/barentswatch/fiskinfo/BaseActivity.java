@@ -30,7 +30,6 @@ import java.util.Map;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import java.util.zip.GZIPInputStream;
 
 import no.barentswatch.baseclasses.Line;
 import no.barentswatch.baseclasses.Point;
@@ -46,9 +45,13 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import android.R;
 import android.annotation.SuppressLint;
+import android.app.ActionBar;
+import android.app.ActionBar.OnNavigationListener;
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -61,9 +64,6 @@ import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
-import android.support.v7.app.ActionBar;
-import android.support.v7.app.ActionBar.OnNavigationListener;
-import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -1211,6 +1211,7 @@ public class BaseActivity extends ActionBarActivity {
 		protected String distance = null;
 		protected String apiName = null;
 		protected boolean alarmFile;
+		private final ProgressDialog progressDialog = new ProgressDialog(getContext());
 		
 		protected void parseParameters(String[] params) {
 			apiName = params[0];
@@ -1231,7 +1232,14 @@ public class BaseActivity extends ActionBarActivity {
 				alarmFile = params[6].equalsIgnoreCase("true") ? true : false;
 			}
 		}
-
+		
+		@Override
+		protected void onPreExecute() {
+			this.progressDialog.setMessage("Processing..."); 
+			this.progressDialog.show();
+			
+		}
+		
 		@Override
 		protected byte[] doInBackground(String... params) {
 			parseParameters(params);
@@ -1347,10 +1355,12 @@ public class BaseActivity extends ActionBarActivity {
 				Toast error = Toast.makeText(getContext(), R.string.map_download_failed,
 						Toast.LENGTH_LONG);
 				error.show();
+				progressDialog.dismiss();
 				return;
 			}
 
 			Toast toast = Toast.makeText(getContext(), R.string.map_download_complete, Toast.LENGTH_LONG);
+			progressDialog.dismiss();
 			toast.show();
 		}
 		
