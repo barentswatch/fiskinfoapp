@@ -1255,7 +1255,7 @@ public class BaseActivity extends ActionBarActivity {
 				String paramsString = URLEncodedUtils.format(getParameters, "UTF-8");
 				HttpGet httpGet;
 
-				httpGet = new HttpGet("https://www.barentswatch.no/api/v1/geodata/" + apiName + "/download?format=" + format + "&"
+				httpGet = new HttpGet("https://www.barentswatch.no/api/v1/geodata/download/" + apiName + "/?format=" + format + "&"
 						+ paramsString);
 				httpGet.addHeader(HTTP.CONTENT_TYPE, "application/json");
 				Log.d("FiskInfo GetRequest", "The current get request is: " + httpGet.getRequestLine());
