@@ -595,14 +595,17 @@ public class MapActivity extends BaseActivity {
 	private void updateMapTools() {
 		String tools = null;
 		tools = getGeoJsonFile();
+		while(tools == null) {
+			tools = getGeoJsonFile();
+		}
 		setGeoJsonFile(null);
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 	    Date now = new Date();
 	    String strDate = sdf.format(now);
 	    System.out.println("TIS BETTER FCKIN WORK");
-	    System.out.println(tools.toString());
 		try {
 			mTools.setTools(new JSONObject(tools), strDate, getContext());
+			System.out.println("Right vegeta");
 		} catch (JSONException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

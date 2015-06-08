@@ -1270,12 +1270,11 @@ public class BaseActivity extends ActionBarActivity {
 				Reader reader = null;
 				StringWriter writer = null;
 				String charset = "UTF-8"; // TODO: DO BASED ON RESPONSE HEADER
-				
+				System.out.println("seriously...");
+				System.out.println(format);
 				if (responseEntity instanceof HttpEntity && responseEntity != null) {
 					data = responseEntity.getContent();
-					if (format.equals("JSON")) {
-						InputStream ungzippedResponse = new GZIPInputStream(data);
-					    reader = new InputStreamReader(ungzippedResponse, charset);
+					    reader = new InputStreamReader(data, charset);
 					    writer = new StringWriter();
 
 					    char[] buffer = new char[10240];
@@ -1284,8 +1283,7 @@ public class BaseActivity extends ActionBarActivity {
 					    }
 					    System.out.println("SUPFOOL");
 					    System.out.println(writer.toString());
-						setGeoJsonFile(writer.toString());
-					}
+						setGeoJsonFile(writer.toString());				
 					try {
 						rawData = new FiskInfoUtility().toByteArray(data);
 					} catch (IOException e) {
